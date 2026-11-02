@@ -297,5 +297,5 @@ Ao finalizar, informe:
 > 1. Grave/mescle em `global/PATTERNS.md` e registre-o em "Arquivos globais de
 >    referência" do `MASTER.md` (se ainda não estiver).
 > 2. Leve as convenções listadas para o `MASTER.md` (Convenções de código) / `NFR.md`.
-> 3. Daqui em diante, o **PROMPT_SDD** referencia este catálogo em vez de reinventar
+> 3. Daqui em diante, o desenho técnico de cada funcionalidade referencia este catálogo em vez de reinventar
 >    os padrões por funcionalidade."

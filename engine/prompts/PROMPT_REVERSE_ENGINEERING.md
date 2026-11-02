@@ -932,8 +932,8 @@ Ao finalizar, informe:
 >
 > **Próximos passos:**
 > 1. Adicione as entidades ao `global/data-models/[dominio].md`
-> 2. Use o **PROMPT_3A** para cada N3 rascunhado — o PO valida e
+> 2. Especifique cada funcionalidade rascunhada — o PO valida e
 >    preenche as lacunas em linguagem de negócio (CP1 na esteira)
 > 3. Depois da validação, a contagem fica com o agente de contagem, fora do Docqui
-> 4. Repita o PROMPT_REVERSE_ENGINEERING para o próximo repositório:
+> 4. Extraia os requisitos do próximo repositório:
 >    **[nome do próximo repo sugerido]**"

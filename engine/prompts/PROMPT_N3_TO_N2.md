@@ -185,5 +185,5 @@ Perfis: **[Perfil A]**, **[Perfil B]**, **[Perfil C]**.
 
 Ao finalizar, informe:
 > "✅ N2 de **[Agrupamento Funcional]** gerado. Salve em `modules/[dominio]/[agrupamento-funcional]/README.md`.
-> Para sintetizar o N1 do domínio, use PROMPT_N3_TO_N1 passando este N2
-> junto com os demais N2s do domínio."
+> O próximo passo é resumir os agrupamentos no domínio, com este agrupamento
+> e os demais do domínio."

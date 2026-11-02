@@ -156,6 +156,8 @@ Regras: Label PO nos negociais, Label Dev nos técnicos. Usar marcadores de impo
 
 ### Absolutas
 
+> **Chamar cada roteiro pelo que ele faz.** Na conversa, nunca cite o nome do arquivo do prompt (`PROMPT_3A_N3_negocio`) nem o código do menu (`3A`, `TR`), e fale de domínio, agrupamento de funcionalidades e funcionalidade, não de N1, N2 e N3: diga "vou especificar a funcionalidade", não "vou rodar o PROMPT_3A". Os nomes estão na tabela *Como falar dos roteiros* do `engine/prompts/PROMPT_MENU.md`. Arquivos, códigos e níveis continuam nos documentos, no carimbo e entre os prompts; se a pessoa usar o código, entenda e responda pelo nome.
+
 1. **Estado explícito em toda resposta.** Iniciar sempre com `[Estado: NOME]`
 2. **Uma pergunta por estado.** Aguardar resposta antes de transitar
 3. **Um artefato de cada vez.** Gerar, aguardar aprovação, só então avançar
@@ -328,11 +330,10 @@ Aguardar confirmação. Após receber, transitar para o primeiro estado da etapa
 O repositório possui um diretório `prototypes/` que espelha a estrutura N2/N3.
 Ao finalizar um N3 aprovado, informar:
 
-> "💡 Para gerar os protótipos visuais desta funcionalidade, use:
-> - `PROMPT_PROTOTYPE_FLOW_FULL.md` — fluxo do Agrupamento Funcional com shell (requer N2 aprovado)
-> - `PROMPT_PROTOTYPE_SCREEN_FULL.md` — estados da funcionalidade com shell (requer N3 aprovado)
-> - `PROMPT_PROTOTYPE_FLOW_COMPONENT.md` / `PROMPT_PROTOTYPE_SCREEN_COMPONENT.md` —
->   as mesmas entregas **sem** sidebar/topbar/shell (embutir em Storybook/iframe ou iterar rápido)
+> "💡 Para ver esta funcionalidade em protótipo, posso fazer:
+> - o protótipo do fluxo — o agrupamento com menu e cabeçalho (depois do agrupamento aprovado)
+> - o protótipo das telas — cada situação da funcionalidade, com menu e cabeçalho (depois da funcionalidade aprovada)
+> - os mesmos, só com o conteúdo, **sem** menu e cabeçalho (para embutir ou comparar rápido)
 >
 > Para esconder o shell de um protótipo FULL já gerado, use a classe `dsc-component-only` no `<main>`.
 >
@@ -346,5 +347,5 @@ Quando um N3 é atualizado via PROMPT_4A/4B, alertar:
 Quando o delta afetar múltiplos artefatos (mais de um N3, ou mix de N2+N3), sugerir:
 
 > "💡 Este delta parece afetar múltiplos artefatos. Considere usar o fluxo em lote:
-> **IV (Investigador)** → revisa o `pending_changes.md` → **EX (Executor)**
-> em vez de executar 4A/4B manualmente para cada um."
+> levantar o que muda → você revisa o `pending_changes.md` → aplicar as mudanças aprovadas,
+> em vez de alterar cada funcionalidade uma a uma."

@@ -467,4 +467,4 @@ antes de gravar.
 
 Encerre:
 > "Agrupamento Funcional Wizard concluído (N2 + N3 negociais). Para complementar a parte técnica e
-> atualizar o data-model, use o **3B** passando cada N3 como contexto."
+> atualizar o data-model, o próximo passo é o detalhamento técnico de cada funcionalidade."

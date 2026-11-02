@@ -217,14 +217,14 @@ Apresente a recomendação final:
 
 > "**Triagem concluída.** Recomendação por item:
 >
-> | Parte da necessidade | Veredito | Artefato alvo | Prompt | Observação |
+> | Parte da necessidade | Veredito | Artefato alvo | Próximo passo | Observação |
 > |---|---|---|---|---|
-> | [sub-necessidade] | Criar / Alterar / Manter / Lote / Decidir | [novo · ou `caminho/do/artefato.md`] | [3A / 4A / IV / AIMM / …] | [⚠️ se houver] |
+> | [sub-necessidade] | Criar / Alterar / Manter / Lote / Decidir | [novo · ou `caminho/do/artefato.md`] | [Especificar a funcionalidade / Alterar uma funcionalidade existente / Levantar o que muda / Análise de impacto do ticket / …] | [⚠️ se houver] |
 >
 > **Em resumo:** sua necessidade é atendida [criando X / alterando `caminho/Y` / parte
 > criando e parte alterando — caso de lote].
 >
-> Quer que eu **já inicie** o prompt recomendado para o primeiro item, ou prefere registrar
+> Quer que eu **já inicie** o passo recomendado para o primeiro item, ou prefere registrar
 > a triagem antes? *(posso salvar este relatório em `modules/_triagem/[slug].md` para
 > rastreabilidade — opcional.)*"
 

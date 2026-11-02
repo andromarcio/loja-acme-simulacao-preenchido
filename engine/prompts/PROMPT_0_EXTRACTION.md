@@ -173,4 +173,4 @@ Use a estrutura abaixo (espelho do template
 Após gerar, conclua com:
 > "✅ Extração concluída e salva em
 > `modules/_base-conhecimento/[assunto-central].md`.
-> Utilize-a como contexto adicional ao executar o PROMPT_1A, PROMPT_2A ou PROMPT_3A."
+> Ela serve de contexto para especificar o domínio, o agrupamento de funcionalidades ou a funcionalidade."

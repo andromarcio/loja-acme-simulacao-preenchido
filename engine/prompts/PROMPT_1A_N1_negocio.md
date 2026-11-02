@@ -231,9 +231,9 @@ O N0 é um documento de visão — não o reestruture; limite-se a alinhar e a
 registrar divergências, pedindo aprovação antes de qualquer ajuste no N0.
 
 Ao finalizar, informe:
-> "Parte negocial do N1 concluída. Para complementar com os campos,
-> entidades e integrações técnicas, use o PROMPT_1B passando
-> cada README.md gerado aqui como contexto."
+> "Parte negocial do domínio concluída. Para complementar com os campos,
+> entidades e integrações técnicas, o próximo passo é o detalhamento técnico do domínio,
+> com cada README.md gerado aqui como contexto."
 
 ---
 

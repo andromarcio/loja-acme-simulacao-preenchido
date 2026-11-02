@@ -205,7 +205,7 @@ Apresente a proposta:
 > |---|---|---|---|
 > | [Nome no infinitivo] | [MFS · FS] *(novo/existente)* | Criação / Alteração | `CA-1, CA-3` |
 >
-> Fluxo recomendado: **[top-down 3A modo A | bottom-up 3A modo B]**.
+> Caminho recomendado: **[do domínio para a funcionalidade | da funcionalidade para o domínio]**.
 > Confirma este mapeamento?"
 
 Se algum critério não couber em nenhuma funcionalidade, sinalize com ⚠️ e pergunte.
@@ -386,8 +386,8 @@ Conclua:
 > "✅ AIM **[CHAVE]** aberta em `analise-impacto/AIM-[CHAVE].md`, com [N] funcionalidade(s) e [M]
 > artefato(s) no changeset, avalizada por [PO].
 >
-> **Próximo passo:** o **PROMPT_3A** (ou o 4A, numa alteração) para cada funcionalidade, com
-> esta AIM como contexto. Ele preenche a **`## Origem`** do N3 com a chave e o link para
+> **Próximo passo:** especificar cada funcionalidade (ou alterá-la, se ela já existe), com
+> esta AIMM como contexto. Isso preenche a **`## Origem`** do N3 com a chave e o link para
 > a AIM, e desdobra cada **critério de aceite** em regra de negócio, `## Cenários` ou os
 > dois.
 >

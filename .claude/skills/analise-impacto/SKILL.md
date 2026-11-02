@@ -36,6 +36,10 @@ Se o ticket ainda não virou código, é o PROMPT_AIMM. Se a sprint entregou, é
 
 ---
 
+## Os roteiros pelo que fazem, não pelo arquivo
+
+Ao falar com a pessoa, chame cada roteiro pelo que ele faz — "a análise de impacto do ticket", "especificar a funcionalidade" —, nunca pelo arquivo (`PROMPT_AIMM`) nem pelo código do menu (`3A`). Os nomes estão na tabela *Como falar dos roteiros* do `engine/prompts/PROMPT_MENU.md`. No documento, no carimbo e nas referências entre prompts, o arquivo continua.
+
 ## Toda funcionalidade aparece com código **e** nome
 
 `TEM-ASO-03` não diz nada a quem lê. *Exportar Atendimento Social* diz. Quem recebe a análise — PO, métrica, chefia — não tem a árvore de IDs na cabeça, e uma tabela de códigos obriga a abrir os N3 um a um só para saber do que se está falando.

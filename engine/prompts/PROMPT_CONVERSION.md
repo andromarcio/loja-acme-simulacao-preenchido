@@ -249,5 +249,5 @@ Conclua com:
 
 > "✅ Conversão de **[Domínio]** gerada em lote.
 > Sem marcador = alta confiança (doc+código concordam). Foque a revisão nos
-> **[N] ⚠️** e **[N] ❓**. Para as lacunas de negócio, rode o **PROMPT_3A**
-> na funcionalidade específica. Próximo sistema a converter: **[sugestão]**."
+> **[N] ⚠️** e **[N] ❓**. Para as lacunas de negócio, especifique a funcionalidade
+> em questão. Próximo sistema a converter: **[sugestão]**."

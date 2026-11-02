@@ -260,4 +260,4 @@ Após os patches aprovados, conclua:
 >
 > O caminho inverso — ticket → funcionalidades impactadas — agora está consistente nas
 > três fontes. Agende a próxima auditoria para [próximo release / após a próxima
-> rodada de 3A/4A]."
+> rodada de especificações e alterações de funcionalidades]."

@@ -251,9 +251,9 @@ Ao final, confirme o que mudou:
 > - Existência (falta N3): [N]
 > - Conteúdo (⚠️ aberto): [N]
 >
-> **Próximo passo:** ataque as pendências pela rota indicada — **3A/CRUD/2A/1A** para
-> as de existência, **4A/4B** para as de conteúdo. Rode o **PD** de novo depois para
-> ver o painel encolher."
+> **Próximo passo:** ataque as pendências pela rota indicada — especificar a funcionalidade,
+> o cadastro, o agrupamento ou o domínio para as de existência; alterar a funcionalidade para
+> as de conteúdo. Depois, peça de novo para ver o que falta especificar e o painel encolher."
 
 ---
 

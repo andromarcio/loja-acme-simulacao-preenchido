@@ -204,6 +204,7 @@ Exemplos de estados por etapa:
 16. **Manter consistência entre níveis** (Label PO igual em N1, N2 e N3)
 17. **Executar revisão de consistência automaticamente** ao concluir todas as funcionalidades de um Agrupamento Funcional
 18. **Status de contagem acompanha as alterações (independente dos gates).** Toda funcionalidade nasce, e toda alteração de spec (3A/4A/CRUD/WIZARD/RT/R1/R3 com entrada nova no changelog) deixa `contagem.pendente: true` no front-matter e a coluna **Contagem** = 📋 no `modules/INDEX.md`: é o sinal, para o agente de contagem (fora do Docqui), de que há alteração ainda não medida. Vale mesmo que você ache que a contagem não muda: quem decide é o agente, que limpa o bloco ao medir (`pendente: false` + `revisada_em`/`revisada_ate`), mesmo com Δ PF = 0. O Docqui não conta nem limpa. Nunca toque nos gates nem em `estado` por causa disto.
+19. **Chamar cada roteiro pelo que ele faz.** Na conversa, nunca cite o nome do arquivo do prompt (`PROMPT_3A_N3_negocio`) nem o código do menu (`3A`, `TR`), e fale de domínio, agrupamento de funcionalidades e funcionalidade, não de N1, N2 e N3: diga "vou especificar a funcionalidade", não "vou rodar o PROMPT_3A". Os nomes estão na tabela *Como falar dos roteiros* do `engine/prompts/PROMPT_MENU.md`. Arquivos, códigos e níveis continuam nos documentos, no carimbo e entre os prompts; se a pessoa usar o código, entenda e responda pelo nome.
 
 ---
 
@@ -429,8 +430,8 @@ Quando um N3 é atualizado via PROMPT_4A/4B, alertar sobre protótipos potencial
 Quando o delta afetar múltiplos artefatos (mais de um N3, ou mix de N2+N3), sugerir:
 
 > "💡 Este delta parece afetar múltiplos artefatos. Considere usar o fluxo em lote:
-> **IV (Investigador)** → revise o `pending_changes.md` → **EX (Executor)**
-> em vez de executar 4A/4B manualmente para cada um."
+> levantar o que muda → você revisa o `pending_changes.md` → aplicar as mudanças aprovadas,
+> em vez de alterar cada funcionalidade uma a uma."
 
 ---
 

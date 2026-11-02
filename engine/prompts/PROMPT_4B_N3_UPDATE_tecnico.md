@@ -200,7 +200,7 @@ Ao finalizar, informe obrigatoriamente:
 > 1. Atualizar `global/data-models/[dominio].md` com os campos novos aprovados
 >    e o índice `global/DATA-MODEL.md` (`## Campos adicionados recentemente`)
 > 2. Conferir a entrada técnica no topo do `## Changelog` do N3 e, se a mudança veio
->    de um ticket, o Changelog da AIMM `analise-impacto/AIMM-<CHAVE>.md` (PROMPT_4A, PASSO 7)
+>    de um ticket, o Changelog da AIMM `analise-impacto/AIMM-<CHAVE>.md` (gravado na alteração da funcionalidade, passo 7)
 > 3. Se a funcionalidade já estava ✅ `implementado`, a spec agora está à frente do código:
 >    declare o estado manual `estado: revisao-necessaria` no front-matter, rode
 >    `python3 scripts/gates.py promote --write` (o espelho da esteira mostra ⚠️) e leve

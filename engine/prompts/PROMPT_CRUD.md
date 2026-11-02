@@ -422,4 +422,4 @@ antes de gravar.
 
 Encerre:
 > "Agrupamento Funcional CRUD concluído (N2 + 5 N3 negociais). Para complementar a parte
-> técnica e atualizar o data-model, use o **3B** passando cada N3 como contexto."
+> técnica e atualizar o data-model, o próximo passo é o detalhamento técnico de cada funcionalidade."

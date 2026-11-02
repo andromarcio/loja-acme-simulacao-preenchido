@@ -225,5 +225,5 @@ Ao finalizar, informe:
 > **Próximos passos recomendados:**
 > - Atualize o `modules/INDEX.md` com este domínio
 > - Adicione ao DATA-MODEL.md as entidades marcadas com ⚠️
-> - Rode PROMPT_AUDIT_RULES_DEDUP para verificar se alguma regra transversal
+> - Procure regras repetidas ou conflitantes, para ver se alguma regra transversal
 >   identificada aqui já existe em outro domínio"

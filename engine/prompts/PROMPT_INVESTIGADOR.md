@@ -226,4 +226,4 @@ Ao final, informe:
 > Próximos passos:
 > 1. Revise os itens **modify** acima e altere `aprovado: false` → `aprovado: true` para cada um que aprovar.
 > 2. Itens **create** não precisam de aprovação e serão executados diretamente.
-> 3. Quando pronto, use o **PROMPT_EXECUTOR** passando este arquivo como insumo."
+> 3. Quando estiver pronto, peça para aplicar as mudanças aprovadas."

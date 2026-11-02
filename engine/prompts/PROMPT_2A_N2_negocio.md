@@ -325,7 +325,7 @@ Apresente as alterações propostas e peça aprovação antes de gravar:
 
 Após todos os Agrupamentos Funcionais do domínio aprovados, confirme:
 > "Todos os Agrupamentos Funcionais do domínio [nome] foram detalhados.
-> Para especificar as funcionalidades individualmente, use o PROMPT_3A."
+> O próximo passo é especificar cada funcionalidade."
 
 ---
 

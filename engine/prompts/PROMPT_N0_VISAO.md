@@ -247,14 +247,14 @@ Ao gerar ou alterar qualquer N1/N2/N3:
 > confirma e reaproveita. Não detalhe Agrupamentos Funcionais nem funcionalidades aqui.
 
 Após apresentar, pergunte:
-> "A Visão de Produto (N0) está correta? Ajusta algo ou aprovo para derivar os domínios (N1) com o PROMPT_1A?"
+> "A Visão de Produto (N0) está correta? Ajusta algo ou aprovo para seguir especificando os domínios?"
 
 ---
 
 ## PASSO 9 — Próximo passo
 
 Após aprovação, informe:
-> "Visão de Produto (N0) concluída e gravada em `global/N0_PRODUCT_VISION.md`. Para derivar as grandes áreas em domínios (N1), use o **PROMPT_1A** — ele já confronta cada domínio contra este N0 e reaproveita as siglas propostas aqui."
+> "Visão de Produto (N0) concluída e gravada em `global/N0_PRODUCT_VISION.md`. O próximo passo é especificar os domínios a partir das grandes áreas — cada um já é confrontado cada domínio contra este N0 e reaproveita as siglas propostas aqui."
 
 ---
 

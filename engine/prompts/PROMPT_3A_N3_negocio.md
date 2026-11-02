@@ -172,9 +172,9 @@ Se o N2 **não** foi fornecido, confronte os N3s e os IDs já usados. IDs existe
 
 > "Vou especificar a funcionalidade **[nome da funcionalidade]** do Agrupamento Funcional
 > **[Agrupamento Funcional]** no domínio **[Domínio]**.
-> ID reservado no N2: **[SIGLA]-[SAF]-[NN]** — imutável; a síntese via B2 não o renumera.
+> ID reservado no agrupamento: **[SIGLA]-[SAF]-[NN]** — imutável; resumir as funcionalidades no agrupamento depois não o renumera.
 >
-> ⚠️ O contexto completo do N1/N2 ainda será consolidado. A tabela da jornada e as reservas do N2 são registradas antes de atribuir IDs novos; as demais informações coletadas servirão à síntese via **B2** e **B1**, sem renumerar as identidades já usadas.
+> ⚠️ O contexto completo do domínio e do agrupamento ainda será consolidado. A tabela da jornada e as reservas do agrupamento são registradas antes de atribuir IDs novos; as demais informações coletadas servirão para resumir as funcionalidades no agrupamento e os agrupamentos no domínio, sem renumerar as identidades já usadas.
 >
 > Podemos começar?"
 
@@ -861,7 +861,7 @@ Confirme ao final:
 > "Elo recíproco fechado: a funcionalidade consta na `## Origem` do N3, na
 > `## Funcionalidades` da AIM `[STRYxxxxxxx]` e no `INDEX.md`. O caminho
 > inverso ticket → funcionalidades está rastreável.
-> 💡 Para auditar todos os elos de uma vez (e detectar unilaterais), use a opção **AT**."
+> 💡 Para conferir todos os vínculos entre tickets e funcionalidades de uma vez (e achar os de um lado só), é só pedir."
 
 ---
 
@@ -895,16 +895,16 @@ Após todas as funcionalidades aprovadas, bifurque conforme o modo da sessão:
 **Modo A (top-down):**
 > "Parte negocial do N3 concluída para todas as funcionalidades de [Agrupamento Funcional].
 > Para complementar com a parte técnica e atualizar o DATA-MODEL.md,
-> use o PROMPT_3B passando cada .md gerado aqui como contexto."
+> o próximo passo é o detalhamento técnico de cada funcionalidade, com cada .md gerado aqui como contexto."
 
 **Modo B (bottom-up):**
 > "Parte negocial do N3 concluída para todas as funcionalidades de [Agrupamento Funcional].
 >
 > **Próximos passos recomendados:**
-> 1. Use o **PROMPT_3B** para complementar cada N3 com a parte técnica
-> 2. Quando tiver N3s suficientes do Agrupamento Funcional, use **B2** para gerar o N2
-> 3. Com os N2s prontos, use **B1** para gerar o N1 do domínio
-> 4. Rode **AU** para verificar duplicatas de regras entre as funcionalidades especificadas"
+> 1. Detalhamento técnico de cada funcionalidade
+> 2. Com funcionalidades suficientes, resumir as funcionalidades no agrupamento
+> 3. Com os agrupamentos prontos, resumir os agrupamentos no domínio
+> 4. Procurar regras repetidas ou conflitantes entre as funcionalidades especificadas"
 
 ---
 

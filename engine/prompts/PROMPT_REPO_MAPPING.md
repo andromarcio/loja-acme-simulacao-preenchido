@@ -257,7 +257,7 @@ Ao finalizar, informe:
 > - `modules/INDEX.md` (rascunho)
 > - `MASTER.md` (rascunho, se aplicável)
 >
-> **Próximo passo**: execute o **PROMPT_REVERSE_ENGINEERING** para cada
+> **Próximo passo**: extrair os requisitos do código de cada
 > repositório, na seguinte ordem sugerida:
 >
 > **Sistema transacional/web (Trilha A):**

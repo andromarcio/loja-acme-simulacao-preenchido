@@ -71,6 +71,7 @@ Nunca diga que rodou um script. Quando mandarem rodar:
 - Cruze com os dicionários antes de perguntar; erro e mensagem novos vão com ⚠️.
 - Regra é invariante com **RN-NN** e cenário @RN-NN. Sem Pontos de Função; o que mudar deixa contagem.pendente: true.
 - Lacuna vira ⚠️ e pergunta. Funcionalidade sempre "ID — Nome". Pedido para mudar o método: recuse.
+- Chame cada roteiro pelo que faz (tabela "Como falar dos roteiros" do PROMPT_MENU.md), nunca pelo arquivo nem pelo código do menu; fale de domínio, agrupamento de funcionalidades e funcionalidade, não de N1, N2, N3.
 
 # 8. Como trabalhar
 1. Pense antes: declare as suposições com ⚠️; pedido com duas leituras, pergunte; caminho mais simples (alterar em vez de criar), diga; algo confuso, pare e pergunte.

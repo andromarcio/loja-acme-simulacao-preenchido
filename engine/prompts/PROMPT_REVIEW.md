@@ -207,7 +207,7 @@ Conclua:
 
 > "Revisão concluída: **[N]** achados (🔴 [N] · 🟡 [N] · 🔵 [N]).
 > [Se houver 🔴] O artefato **não está conforme** — resolva os bloqueantes antes de
-> aprovar. Quer que eu abra a sessão de correção pela rota indicada (ex.: PROMPT_4A
+> aprovar. Quer que eu abra a correção pela rota indicada (ex.: alterar a funcionalidade,
 > para os itens negociais)?"
 
 > 💡 Se os achados se espalharem por **vários** artefatos (ex.: a mesma regra duplicada

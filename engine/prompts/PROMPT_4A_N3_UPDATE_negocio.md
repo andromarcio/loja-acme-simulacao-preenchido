@@ -223,7 +223,7 @@ Se houver promoções aprovadas a dicionários, liste-as como ação pendente
 (⚠️ aplicar no FIELD-DICTIONARY / RULES-DICTIONARY antes de implementar).
 Pergunte:
 > "A atualização negocial do N3 de [funcionalidade] está correta?
-> Ajusta algo ou avanço para a parte técnica via PROMPT_4B?"
+> Ajusta algo ou avanço para o detalhamento técnico da alteração?"
 
 ---
 

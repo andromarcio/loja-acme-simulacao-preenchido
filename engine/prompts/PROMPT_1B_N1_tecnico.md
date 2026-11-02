@@ -143,5 +143,5 @@ entidades e integrações técnicas do domínio. Peça aprovação antes de ajus
 o N0.
 
 Ao finalizar, informe:
-> "N1 de [domínio] completo. Atualize o DATA-MODEL.md com os campos
-> acima antes de iniciar os N2. Use o PROMPT_2A para detalhar os Agrupamentos Funcionais."
+> "Domínio [domínio] completo. Atualize o DATA-MODEL.md com os campos
+> acima antes de seguir para os agrupamentos. O próximo passo é especificar cada agrupamento de funcionalidades."
