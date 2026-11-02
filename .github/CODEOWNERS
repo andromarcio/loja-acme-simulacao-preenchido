@@ -19,18 +19,6 @@
 /global/DATA-MODEL.md           @androlouredo
 /global/data-models/            @androlouredo
 
-# CP3 — Casos de teste → QA
-# (o PR que conclui o CP3 deve incluir o plano de testes em qa/ — o gate-check
-#  EXIGE um arquivo de qa/ no diff quando o gate `testes` é aprovado.)
-/qa/                            @androlouredo
-
-# CP4 — Registro da implementação → Tech Lead
-# (o PR que conclui o CP4 deve incluir o registro em repos/ — o gate-check
-#  EXIGE um arquivo de repos/ no diff quando o gate `codigo` é aprovado.
-#  O code review do código em si acontece no repositório de implementação,
-#  com CODEOWNERS próprio apontando para @org/tech-leads.)
-/repos/                         @androlouredo
-
 # Esteira/automação → Tech Lead / Plataforma
 /scripts/gates.py               @androlouredo
 /.github/                       @androlouredo
