@@ -20,6 +20,7 @@
 /global/DATA-MODEL.md           @org/dba
 /global/data-models/            @org/dba
 
+# perfil:completo
 # CP3 — Casos de teste → QA
 # (o PR que conclui o CP3 deve incluir o plano de testes em qa/ — o gate-check
 #  EXIGE um arquivo de qa/ no diff quando o gate `testes` é aprovado.)
@@ -31,6 +32,7 @@
 #  O code review do código em si acontece no repositório de implementação,
 #  com CODEOWNERS próprio apontando para @org/tech-leads.)
 /repos/                         @org/tech-leads
+# /perfil:completo
 
 # Esteira/automação → Tech Lead / Plataforma
 /scripts/gates.py               @org/tech-leads

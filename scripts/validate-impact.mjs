@@ -23,8 +23,8 @@
 //     C2  linha `funcional`     → linha `QA`   (mudança funcional é testada)
 //     C3  linha `não-funcional` → linha `NFR` E linha `QA` (NFR verificável)
 //     AIMM aberta na entrega (`aberta-na-entrega: true`): C2 e C3 viram aviso — não houve
-//     escopo prévio a cobrir. No perfil `requisitos`, a falta da linha QA (C2 e a metade
-//     QA do C3) é aviso: a esteira dele não tem o checkpoint de testes.
+//     escopo prévio a cobrir. No perfil `requisitos` não há QA (9.2.2): o C2 não se aplica
+//     e o C3 cobra só o NFR — a esteira dele termina no modelo de dados.
 //     Existência: `alterar` sobre arquivo que não existe é erro; `criar` sobre arquivo que
 //     já existe é aviso só até `escopo-aprovado` — depois, a execução o criou.
 //   escopo-aprovado|em-execução|concluído → `avalizado-por`
@@ -364,20 +364,16 @@ if (depoisDe('em-analise') && temSecao('Artefatos impactados')) {
   const isFunc = (n) => n.startsWith('funcional');
   const isNF = (n) => n.includes('nao-funcional') || n.startsWith('nao');
   const cobertura = (msg) => (naEntrega ? warns : errors).push(msg + (naEntrega ? ' (AIMM aberta na entrega: aviso)' : ''));
-  // No perfil `requisitos` a esteira não tem o checkpoint de testes nem a opção 5B, e o
-  // plano de testes fica com quem constrói: a falta da linha QA avisa. O NFR do C3
-  // continua exigido nos dois perfis.
+  // No perfil `requisitos` não há QA (decisão do PO, 2026-11-02): a esteira termina no modelo
+  // de dados, sem checkpoint de testes. O C2 não se aplica, e o C3 cobra só o NFR.
   const semQA = perfilDa(ROOT) === 'requisitos';
-  const faltaQA = (achado, completo, requisitos) => (semQA
-    ? warns.push(`${achado} — no perfil \`requisitos\`, aviso: ${requisitos}`)
-    : cobertura(achado + completo));
   if (!has((r) => r.tipo === 'N3')) errors.push('C1: nenhuma linha `N3` — todo ticket ancora em ao menos uma funcionalidade.');
-  if (has((r) => isFunc(r.natureza)) && !has((r) => r.tipo === 'QA'))
-    faltaQA('C2: há mudança `funcional` sem linha `QA`', ' — mudança funcional deve ser testada (gate CP3).', 'o plano de testes fica com quem constrói.');
+  if (!semQA && has((r) => isFunc(r.natureza)) && !has((r) => r.tipo === 'QA'))
+    cobertura('C2: há mudança `funcional` sem linha `QA` — mudança funcional deve ser testada (gate CP3).');
   if (has((r) => isNF(r.natureza))) {
     if (!has((r) => r.tipo === 'NFR')) cobertura('C3: há mudança `não-funcional` sem linha `NFR`.');
-    if (!has((r) => r.tipo === 'QA'))
-      faltaQA('C3: há mudança `não-funcional` sem linha `QA`', ' (teste não-funcional que a verifique).', 'o teste do NFR fica com quem constrói.');
+    if (!semQA && !has((r) => r.tipo === 'QA'))
+      cobertura('C3: há mudança `não-funcional` sem linha `QA` (teste não-funcional que a verifique).');
   }
 }
 

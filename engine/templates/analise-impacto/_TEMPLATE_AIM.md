@@ -121,8 +121,8 @@ Scenario: [resultado esperado em linguagem de negócio]
 >
 > Invariantes (o `validate-impact` cobra): **C1** ao menos uma linha `N3`; **C2** toda
 > linha `funcional` tem uma linha `QA`; **C3** toda linha `não-funcional` tem `NFR`
-> **e** `QA`. No perfil `requisitos` não há linha `QA` (sem checkpoint de testes): a falta
-> dela é aviso, e a linha de exemplo abaixo sai.
+> **e** `QA`. No perfil `requisitos` não há QA (a esteira termina no modelo de dados): o C2
+> não se aplica, o C3 cobra só o `NFR`, e a linha de exemplo `QA` abaixo sai.
 >
 > **Status** de cada artefato: `Pendente` (ainda não especificado) → `Especificado` (o agente
 > gravou e avisou que está pronto para revisar) → `Validado` (a pessoa revisou e aprovou,

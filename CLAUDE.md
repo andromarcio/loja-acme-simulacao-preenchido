@@ -15,7 +15,7 @@
 - **Sigla**: LACME
 - **Nome**: Loja ACME
 - **Descrição**: Loja virtual fictícia em que o cliente compra sozinho, conhecendo o valor da entrega antes de confirmar.
-- **Repositório de docs**: loja-acme-simulacao (este repositório — a instância; cópia da `loja-acme-doc` para simular o agente do Copilot Studio e o Copilot CLI)
+- **Repositório de docs**: loja-acme-simulacao-preenchido (este repositório — a instância; cópia da `loja-acme-doc` para simular o agente do Copilot Studio e o Copilot CLI)
 
 Este repositório é uma **instância do framework Docqui Caixa**: contém a documentação específica deste sistema (N0–N3, dicionários, data-models) e consome os prompts/templates do `docqui-caixa-engine` mais a skill `analista-requisitos`.
 

@@ -350,7 +350,7 @@ Depois, a **passada dimensional** com o PO/analista — o derivador **não adivi
    disponibilidade, escalabilidade**? Se sim, adicione/ajuste a linha `NFR` e torne o
    limiar **mensurável** (ex.: "rápido" → "p95 < 2 s sob carga X").
 2. **Teste não-funcional**: todo NFR novo/alterado exige a linha `QA` que o **verifique**
-   (no perfil `requisitos`, não: o NFR fica, o teste é de quem constrói).
+   (no perfil `requisitos` não há QA: o NFR fica, sem linha de teste).
 3. **Ripples que o elo não pega**: integrações entre domínios, migração de dados
    existentes, mudança de contrato de evento. Registre como linha com a natureza correta.
 4. **Poda**: remova linhas `candidato` que a análise concluiu que **não** mudam.
@@ -372,8 +372,8 @@ node scripts/validate-impact.mjs analise-impacto/AIM-<CHAVE>.md --root .
 
 O validador cobra a estrutura e as invariantes: **C1** ao menos um `N3`; **C2** todo
 `funcional` tem `QA`; **C3** todo `não-funcional` tem `NFR` **e** `QA`; a existência dos
-caminhos; e o portão de estado. No perfil `requisitos`, a falta da `QA` (C2 e metade do
-C3) é aviso; o `NFR` do C3 continua exigido.
+caminhos; e o portão de estado. No perfil `requisitos` não há QA: o C2 não se aplica e o C3
+cobra só o `NFR`.
 
 Com a AIM verde, **apresente-a ao PO**. No aval:
 - mude `estado:` para `escopo-aprovado`, preencha `avalizado-por:` e `estado-por:` (quem deu o aval) e `estado-em:` e registre a versão no Changelog;

@@ -38,7 +38,7 @@ Os arquivos abaixo entram no contexto automaticamente a cada sessão (sintaxe de
 
 ## Regras da instância
 
-- A documentação gerada vai sempre para `modules/`, `global/`, `prototypes/`, `qa/`, `repos/` — **nunca** para dentro de `engine/` (somente-leitura).
+- A documentação gerada vai sempre para `modules/`, `global/`, `prototypes/`, `repos/` (e `qa/`, só no perfil `completo`) — **nunca** para dentro de `engine/` (somente-leitura).
 - **Sempre que a sessão envolver especificação de requisitos** — N0/N1/N2/N3, funcionalidade, agrupamento funcional, domínio, CRUD, wizard, campos/regras de negócio, cenários Gherkin, dicionários, ou qualquer `PROMPT_*` de especificação — **acione a skill `analista-requisitos` antes de responder** e siga o roteiro do prompt correspondente em `engine/prompts/`. Não conduza a especificação "na mão".
   > Reforço necessário em modelos menores (ex.: Haiku), que acionam skills por
   > descrição de forma menos agressiva. Se mesmo assim a skill não aparecer ao

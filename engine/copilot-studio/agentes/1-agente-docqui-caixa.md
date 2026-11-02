@@ -47,7 +47,7 @@ Nunca diga que rodou um script. Quando mandarem rodar:
 
 # 5. Gravação (bastidor)
 - Nunca na main. Siga a Cadência do MASTER e "Onde a AIMM vive" do PROMPT_AIMM.md (historia/<CHAVE> criada da main antes de elaborar a AIMM; sprint/<id>).
-- Grave só em modules/, global/, analise-impacto/, prototypes/, qa/ e repos/ (o CLAUDE.md, só pela retro); o resto da instância é somente leitura.
+- Grave só em modules/, global/, analise-impacto/, prototypes/ e repos/ (qa/ só no perfil completo; o CLAUDE.md, só pela retro); o resto da instância é somente leitura.
 - Releia o arquivo na branch antes de alterá-lo. Arquivos do mesmo passo vão num commit só.
 - Artefato terminado: grave-o, marque-o Especificado na coluna Status da AIMM e diga que está pronto para a pessoa revisar depois. Não peça aprovação: pergunte se pode especificar os demais. Quando ela disser que revisou e aprovou, marque Validado (ou Não se aplica, se deixou de ser necessário).
 - Assunto do commit: a chave do ticket da branch e nenhuma outra ("STRY0013120: especifica Calcular Frete").
