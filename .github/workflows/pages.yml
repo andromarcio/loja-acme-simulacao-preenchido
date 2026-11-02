@@ -1,0 +1,113 @@
+name: Deploy GitHub Pages
+
+# Publica o site da instância: a `main` na raiz (o que está em produção) e, ao lado,
+# cada branch de entrega ainda não mesclada — `sprint/<id>` em /sprint/<id>/,
+# `historia/<CHAVE>` em /historia/<CHAVE>/ —, para os requisitos em andamento serem
+# consultados no mesmo site até o merge (MASTER → ## Cadência de entrega). Cada versão
+# traz o seletor **Branch**; nos previews, **Ver alterações** e **Destacar alterações**
+# comparam com a base do PR aberto desde o ancestral comum (sem PR, com a `main`).
+#
+# O Pages guarda um artefato só, substituído a cada deploy: por isso todo deploy remonta
+# tudo (scripts/monta-site-preview.mjs) a partir dos commits, venha o push da main, de uma
+# branch de entrega ou de uma mudança de PR. A branch mesclada sai do site no deploy
+# seguinte. Na montagem, cada snapshot regenera no próprio worktree os artefatos derivados
+# (scripts/atualiza-pages.mjs) e o dashboard com o nome da branch.
+# pull_request_target lê a base do PR pelo workflow da base, sem dar escrita ao build;
+# apenas PRs do próprio repositório são publicados, forks não ganham preview.
+#
+# Pré-requisito (1x): Settings > Pages > Source = "GitHub Actions". Em Settings >
+# Environments > github-pages, libere as branches `sprint/*` e `historia/*` além da main
+# ("Deployment branches and tags") — sem isso o deploy disparado por elas é recusado.
+
+on:
+  push:
+    branches: [main, "sprint/**", "historia/**"]
+  delete:
+  pull_request_target:
+    types: [opened, synchronize, reopened, closed, edited, ready_for_review, converted_to_draft]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  pages: read
+
+# Um deploy por vez, sem cancelar o que está em andamento.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: >-
+      github.event_name != 'pull_request_target' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+      (startsWith(github.event.pull_request.head.ref, 'sprint/') ||
+      startsWith(github.event.pull_request.head.ref, 'historia/')))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main          # a raiz do site é sempre a main, venha o evento de onde vier
+          fetch-depth: 0     # as branches de entrega e o histórico para saber quais já foram mescladas
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Dependências dos artefatos derivados
+        run: pip install pyyaml
+
+      - name: Verificar indicadores do dashboard
+        run: |
+          python -m unittest discover -s scripts -p "test_verifica_dashboard.py"
+          python scripts/verifica-dashboard.py
+
+      - name: Ler as bases dos PRs de entrega
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const pulls = await github.paginate(github.rest.pulls.list, {
+              ...context.repo, state: 'all', per_page: 100
+            });
+            const repo = `${context.repo.owner}/${context.repo.repo}`.toLowerCase();
+            const metadata = pulls.filter(p =>
+              p.head.repo?.full_name.toLowerCase() === repo &&
+              /^(sprint|historia)\//.test(p.head.ref)
+            ).map(p => ({
+              branch: p.head.ref, head: p.head.sha, base: p.base.ref,
+              number: p.number, url: p.html_url, state: p.state,
+              draft: p.draft, merged: Boolean(p.merged_at)
+            }));
+            fs.writeFileSync(path.join(process.env.RUNNER_TEMP, 'pages-prs.json'), JSON.stringify(metadata));
+
+      - name: Montar o site — main + branches de entrega abertas
+        env:
+          PR_FILE: ${{ runner.temp }}/pages-prs.json
+        run: node scripts/monta-site-preview.mjs --out _site --pull-requests "$PR_FILE"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

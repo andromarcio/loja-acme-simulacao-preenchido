@@ -1,0 +1,61 @@
+name: Esteira de gates — check
+
+# Valida, em cada Pull Request, que nenhum checkpoint foi pulado e que a
+# transição de estado é legal (a próxima etapa só após a aprovação da anterior).
+# Torne este check obrigatório no branch protection da `main`.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    # O branch protection casa pelo nome do CHECK RUN (= nome do job, não do
+    # workflow). Este name é a string exata que o README/CODEOWNERS mandam
+    # selecionar em "Require status checks to pass" — não renomear sem
+    # atualizar os dois.
+    name: Esteira de gates — check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch base
+        run: git fetch --no-tags --prune origin "+refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Dependências
+        run: pip install pyyaml
+
+      # No PR de uma branch de entrega (sprint/… ou historia/…), o gates.py confere
+      # commit a commit — um gate por commit, na ordem —, pois a sprint acumula vários
+      # checkpoints por funcionalidade. O checkout é o merge sintético do PR; --head e --branch
+      # dizem qual é a ponta da branch e o nome dela.
+      - name: Validar transições de gate
+        run: >-
+          python scripts/gates.py check --base "origin/${{ github.base_ref }}"
+          --head "${{ github.event.pull_request.head.sha }}" --branch "${{ github.head_ref }}"
+
+      # O espelho da esteira viaja DENTRO do PR: quem flipa um gate roda
+      # `python scripts/gates.py promote --write` e inclui o modules/INDEX.md
+      # atualizado. Aqui só se VERIFICA — nenhum push na main, compatível com
+      # o branch protection "Require a pull request before merging".
+      - name: Espelho do INDEX em dia
+        run: |
+          python scripts/gates.py promote --write
+          if ! git diff --quiet -- modules/INDEX.md; then
+            echo "::error file=modules/INDEX.md::Espelho da esteira defasado do front-matter dos N3."
+            echo "Rode 'python scripts/gates.py promote --write' e inclua o modules/INDEX.md atualizado neste PR."
+            git --no-pager diff -- modules/INDEX.md | head -60
+            exit 1
+          fi
+          echo "Espelho do INDEX em dia."

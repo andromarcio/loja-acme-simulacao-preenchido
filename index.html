@@ -1,0 +1,3914 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentação — Loja ACME</title>
+  <meta name="theme-color" content="#005CA9">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+  <!-- Configuração por repositório (nome do projeto) -->
+  <script src="assets/js/config.js"></script>
+
+  <!-- Estilos oficiais do Design System da CAIXA localizados no repositório -->
+  <link rel="stylesheet" href="prototypes/_biblioteca-caixa/caixa-ds.css">
+
+  <!-- Bibliotecas externas locais -->
+  <script src="assets/vendor/marked.min.js"></script>
+  <script src="assets/vendor/mermaid.min.js"></script>
+  <!-- Com ?v=, como o docqui-theme.css e os scripts do dashboard: sem ele, o navegador juntava
+       o CSS em cache (o Pages guarda 10 min) com o JS novo depois de um deploy. -->
+  <script>
+    ['assets/css/mapa.css', 'assets/css/dashboard.css'].forEach(href => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href + '?v=' + Date.now();
+      document.head.appendChild(link);
+    });
+  </script>
+  <noscript><link rel="stylesheet" href="assets/css/mapa.css"><link rel="stylesheet" href="assets/css/dashboard.css"></noscript>
+
+  <style>
+    /* ==========================================================================
+       TOKENS & VARIÁVEIS — Design System CAIXA + Clean Doc Theme
+       ========================================================================== */
+    :root {
+      /* Identidade CAIXA */
+      --brand-blue: #005CA9;
+      --brand-blue-dark: #003B70;
+      --brand-blue-light: #EBF4FC;
+      --brand-blue-hover: #004b8a;
+      --brand-orange: #F37021;
+      --brand-orange-light: #FFF4EC;
+      
+      /* Superfícies & Bordas */
+      --bg-app: #F8F9FA;
+      --bg-sidebar: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-hover: #F1F4F8;
+      --bg-active: #E3EEF9;
+      --border-color: #E2E8F0;
+      --border-subtle: #EDF2F7;
+      
+      /* Compatibilidade mapa.css */
+      --primary-color: #005CA9;
+      --surface-ground: #F8F9FA;
+      --surface-card: #FFFFFF;
+      --surface-border: #E2E8F0;
+      --surface-hover: #F1F4F8;
+      --text-color: #1E293B;
+      --shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --focus-ring: 0 0 0 3px rgba(0, 92, 169, 0.15);
+      --dsc-font-family-1: "CAIXA Std", "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+      --dsc-font-title: var(--dsc-font-family-1);
+      --dsc-font-mono: ui-monospace, "SFMono-Regular", "Courier New", monospace;
+      --dsc-border-radius-pill: 9999px;
+      --dsc-border-radius-medium: 8px;
+      --transition-duration: 0.15s;
+      
+      /* Tipografia & Cores */
+      --text-main: #1E293B;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      --text-blue: #005CA9;
+      
+      /* Status & Badges */
+      --badge-success-bg: #ECFDF5;
+      --badge-success-text: #047857;
+      --badge-success-border: #A7F3D0;
+      
+      --badge-warning-bg: #FFFBEB;
+      --badge-warning-text: #B45309;
+      --badge-warning-border: #FDE68A;
+      
+      --badge-info-bg: #EFF6FF;
+      --badge-info-text: #1D4ED8;
+      --badge-info-border: #BFDBFE;
+      
+      --badge-purple-bg: #F5F3FF;
+      --badge-purple-text: #6D28D9;
+      --badge-purple-border: #DDD6FE;
+
+      /* Sombras & Raios */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-full: 9999px;
+
+      /* Dimensões */
+      --header-height: 60px;
+      --sidebar-width: 320px;
+    }
+
+    /* ---- Modo Árvore Sintética (Exclusivo para os cards do canvas abaixo) ---- */
+    .mm-wrap.mm-synthetic .mm-card {
+      width: auto !important;
+      min-width: 160px !important;
+      max-width: 400px !important;
+      flex: 0 0 auto !important;
+      padding: 4px 10px !important;
+      display: inline-flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 6px !important;
+      border-radius: var(--radius-sm) !important;
+    }
+    .mm-wrap.mm-synthetic .mm-card .mm-badge {
+      margin-bottom: 0 !important;
+      font-size: 9.5px !important;
+      padding: 1px 5px !important;
+      border-radius: 3px !important;
+      background: var(--bg-hover) !important;
+      border: 1px solid var(--border-color) !important;
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
+    }
+    .mm-wrap.mm-synthetic .mm-card .mm-name {
+      font-size: 11.5px !important;
+      font-weight: 600 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      flex: 1 1 auto !important;
+    }
+    .mm-wrap.mm-synthetic .mm-card .mm-desc,
+    .mm-wrap.mm-synthetic .mm-card .mm-foot,
+    .mm-wrap.mm-synthetic .mm-card .mm-open {
+      display: none !important;
+    }
+    .mm-btn.is-on {
+      background: var(--brand-blue) !important;
+      color: #ffffff !important;
+      border-color: var(--brand-blue) !important;
+    }
+
+    /* Alinhamento à direita uniforme para os controles e botões do Mapa */
+    .mm-right {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+      align-items: flex-end !important;
+    }
+    .mm-controls {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      flex-wrap: wrap !important;
+      justify-content: flex-end !important;
+    }
+    .mm-actions {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      flex-wrap: wrap !important;
+      justify-content: flex-end !important;
+    }
+
+    /* Linhas conectoras dos cards do Mapa (Escurecidas em 30%) */
+    .mm-bus,
+    .mm-node:not(.mm-collapsed):not(.mm-leaf) > .mm-card::after,
+    .mm-kids > .mm-node > .mm-card::before {
+      background: #94A3B8 !important;
+    }
+    [data-theme="dark"] .mm-bus,
+    [data-theme="dark"] .mm-node:not(.mm-collapsed):not(.mm-leaf) > .mm-card::after,
+    [data-theme="dark"] .mm-kids > .mm-node > .mm-card::before {
+      background: #64748B !important;
+    }
+
+    [data-theme="dark"] {
+      --bg-app: #0F172A;
+      --bg-sidebar: #1E293B;
+      --bg-card: #1E293B;
+      --bg-hover: #334155;
+      --bg-active: #1E3A5F;
+      --border-color: #334155;
+      --border-subtle: #243044;
+      
+      --text-main: #F1F5F9;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --text-blue: #38BDF8;
+      
+      --brand-blue-light: #1E3A5F;
+      --brand-orange-light: #45210D;
+
+      --primary-color: #38BDF8;
+      --surface-ground: #0F172A;
+      --surface-card: #1E293B;
+      --surface-border: #334155;
+      --surface-hover: #334155;
+      --text-color: #F1F5F9;
+    }
+
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--dsc-font-family-1);
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Layout Estrutural */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ==========================================================================
+       HEADER FULL-WIDTH
+       ========================================================================== */
+    .app-header {
+      height: var(--header-height);
+      background: var(--bg-sidebar);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--brand-blue);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--brand-blue);
+      border-radius: var(--radius-sm);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      padding: 4px;
+    }
+
+    .brand-badge {
+      font-size: 10px;
+      background: var(--brand-orange-light);
+      color: var(--brand-orange);
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(243, 112, 33, 0.2);
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .btn-icon:hover {
+      background: var(--bg-hover);
+      color: var(--text-main);
+      border-color: var(--text-muted);
+    }
+
+    .header-center {
+      flex: 1;
+      max-width: 580px;
+      margin: 0 24px;
+      position: relative;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-box input {
+      width: 100%;
+      height: 38px;
+      padding: 0 40px 0 36px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: var(--text-main);
+      transition: all 0.2s;
+      outline: none;
+    }
+    .search-box input:focus {
+      background: var(--bg-sidebar);
+      border-color: var(--brand-blue);
+      box-shadow: 0 0 0 3px rgba(0, 92, 169, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-shortcut {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-sidebar);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Modal / Popover de Busca */
+    .search-results-modal {
+      position: absolute;
+      top: 44px;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      max-height: 380px;
+      overflow-y: auto;
+      z-index: 100;
+      display: none;
+    }
+    .search-results-modal.show {
+      display: block;
+    }
+    .search-result-item {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      text-decoration: none;
+    }
+    .search-result-item:hover, .search-result-item.selected {
+      background: var(--bg-hover);
+    }
+    .search-result-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-blue);
+    }
+    .search-result-path {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Toggle Modo PO vs Técnico */
+    .view-mode-toggle {
+      display: flex;
+      background: var(--bg-app);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .mode-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mode-btn.active {
+      background: var(--bg-sidebar);
+      color: var(--brand-blue);
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ==========================================================================
+       APP BODY: SIDEBAR + RESIZER + CONTEÚDO 100%
+       ========================================================================== */
+    .app-body {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - var(--header-height));
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-width);
+      min-width: 220px;
+      max-width: 640px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      flex-shrink: 0;
+      transition: margin-left 0.2s ease;
+    }
+    .sidebar.collapsed {
+      display: none;
+    }
+
+    /* RESIZER (Alça de redimensionamento da sidebar) */
+    .sidebar-resizer {
+      width: 5px;
+      cursor: col-resize;
+      background: transparent;
+      position: relative;
+      flex-shrink: 0;
+      transition: background 0.15s;
+      z-index: 20;
+    }
+    .sidebar-resizer:hover,
+    .sidebar-resizer.is-resizing {
+      background: var(--brand-blue);
+    }
+    .sidebar-resizer::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -3px;
+      right: -3px;
+    }
+    body.is-resizing-sidebar {
+      cursor: col-resize !important;
+      user-select: none !important;
+    }
+
+    .sidebar-section {
+      padding: 8px 12px 4px 12px;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      padding: 0 8px 8px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-item-fixed a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+    .nav-item-fixed a:hover {
+      background: var(--bg-hover);
+      color: var(--text-main);
+    }
+    .nav-item-fixed a.active {
+      background: var(--brand-blue-light);
+      color: var(--brand-blue);
+      font-weight: 600;
+    }
+
+    /* FDD Hierarquia em Árvore */
+    .fdd-tree {
+      margin-top: 4px;
+    }
+
+    /* Nível 1: Domínio */
+    .fdd-domain {
+      margin-bottom: 6px;
+    }
+
+    .domain-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      user-select: none;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-main);
+      transition: background 0.15s;
+    }
+    .domain-header:hover {
+      background: var(--bg-hover);
+    }
+    .domain-header .title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .domain-tag {
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--brand-blue);
+      color: #fff;
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+    .chevron-icon {
+      color: var(--text-muted);
+      transition: transform 0.2s, background 0.15s, color 0.15s;
+      flex-shrink: 0;
+      /* Alvo de clique maior que o desenho. A seta é o único jeito de expandir um
+         menu SEM trocar a página aberta (o resto do summary navega), e 11px é alvo
+         difícil: errar por um pixel navega — exatamente o que a seta evita. O
+         padding cresce a área sensível e a margem negativa devolve o espaço, então
+         o leiaute não muda. */
+      box-sizing: content-box;
+      padding: 7px;
+      margin: -7px;
+      border-radius: var(--radius-sm);
+    }
+    .chevron-icon:hover {
+      background: var(--bg-app);
+      color: var(--text-main);
+    }
+    .fdd-domain.open .chevron-icon {
+      transform: rotate(90deg);
+    }
+
+    .domain-body {
+      padding-left: 14px;
+      margin-left: 14px;
+      border-left: 1px solid var(--border-color);
+      display: none;
+    }
+    .fdd-domain.open .domain-body {
+      display: block;
+    }
+
+    /* Pastas de navegação internas (Global / Protótipos) */
+    .nav-folder {
+      margin: 2px 0;
+    }
+    .nav-folder summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .nav-folder summary::-webkit-details-marker {
+      display: none;
+    }
+    .nav-folder summary:hover {
+      background: var(--bg-hover);
+      color: var(--text-main);
+    }
+    .nav-folder summary.active {
+      background: var(--brand-blue-light);
+      color: var(--brand-blue);
+      font-weight: 600;
+    }
+    .nav-folder-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      overflow: hidden;
+      white-space: nowrap;
+      /* Sem isto o título não encolhe abaixo do próprio conteúdo e empurra o
+         contador e a seta para fora do menu. */
+      min-width: 0;
+    }
+    /* O `text-outflow` vivia no contêiner flex, onde não tem efeito: quem corta é
+       o item de texto. Sem isto o nome longo era cortado a seco, sem reticências —
+       e a seta, que ocupa ~19px à direita, deixou o corte visível. */
+    .nav-folder-title > span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
+    /* Descendente, não filho direto: no feature set a seta fica dentro de
+       .nav-folder-aside, ao lado do contador. Só alcança o summary do próprio
+       nó — o summary de um filho não é descendente do summary do pai. */
+    .nav-folder[open] > summary .chevron-icon {
+      transform: rotate(90deg);
+    }
+    /* Contador e seta juntos, à direita, sem brigar pelo espaço do título. */
+    .nav-folder-aside {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .nav-folder-content {
+      padding-left: 12px;
+      margin-left: 10px;
+      border-left: 1px dashed var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 2px;
+      margin-bottom: 4px;
+    }
+
+    /* Nível 2: Feature Set */
+    .fdd-featureset {
+      margin: 4px 0;
+    }
+
+    .featureset-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+    .featureset-header:hover {
+      background: var(--bg-hover);
+      color: var(--text-main);
+    }
+    .featureset-header .fs-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .fs-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-app);
+      padding: 1px 6px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .featureset-body {
+      padding-left: 12px;
+      margin-left: 10px;
+      border-left: 1px dashed var(--border-color);
+      display: none;
+    }
+    .fdd-featureset.open .featureset-body {
+      display: block;
+    }
+
+    /* Nível 3: Feature (MD) e Itens de Navegação */
+    .feature-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      margin: 2px 0;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .feature-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-main);
+    }
+    .feature-item.active,
+    .nav-item-fixed a.active,
+    .nav-folder summary.active {
+      background: var(--brand-blue-light) !important;
+      color: var(--brand-blue) !important;
+      font-weight: 700 !important;
+      border-left: 3px solid var(--brand-blue) !important;
+      box-shadow: inset 0 0 0 1px rgba(0, 92, 169, 0.15);
+    }
+    .feature-item.active .feature-code {
+      background: var(--brand-blue) !important;
+      color: #ffffff !important;
+      border-color: var(--brand-blue) !important;
+    }
+    [data-theme="dark"] .feature-item.active,
+    [data-theme="dark"] .nav-item-fixed a.active,
+    [data-theme="dark"] .nav-folder summary.active {
+      background: rgba(56, 189, 248, 0.15) !important;
+      color: var(--text-blue) !important;
+      border-left: 3px solid var(--text-blue) !important;
+    }
+    [data-theme="dark"] .feature-item.active .feature-code {
+      background: var(--text-blue) !important;
+      color: #0F172A !important;
+      border-color: var(--text-blue) !important;
+    }
+    .feature-title-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-right: 6px;
+    }
+    .feature-code {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      background: var(--bg-sidebar);
+      padding: 1px 4px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+
+    /* ==========================================================================
+       CONTEÚDO PRINCIPAL (100% LARGURA ÚTIL)
+       ========================================================================== */
+    .main-viewport {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 32px;
+      background: var(--bg-app);
+      scroll-behavior: smooth;
+    }
+
+    .content-wrapper {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+    }
+
+    /* Breadcrumbs semânticos */
+    .breadcrumb-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .breadcrumb-bar a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    .breadcrumb-bar a:hover {
+      color: var(--brand-blue);
+    }
+    .breadcrumb-sep {
+      color: var(--text-muted);
+    }
+    .breadcrumb-current {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* HERO DO DOCUMENTO */
+    .doc-hero-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px 32px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .doc-meta-tags {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      line-height: 1.3;
+    }
+
+    /* AIMM: o estado, quem levou a AIMM até ele e quando, logo abaixo do título */
+    .aimm-estado {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin-top: 12px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+    .aimm-estado strong { color: var(--text-main); font-weight: 600; }
+
+    .badge-fdd-level {
+      background: var(--brand-blue-light);
+      color: var(--brand-blue);
+      border: 1px solid rgba(0, 92, 169, 0.25);
+    }
+    .badge-id {
+      background: var(--bg-app);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .badge-id:hover {
+      background: var(--border-subtle);
+      border-color: var(--brand-blue);
+    }
+
+    .doc-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+
+    .doc-hierarchy-info {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hero-description-block {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* SEÇÕES DE CONTEÚDO PRINCIPAIS */
+    .doc-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 26px 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* REGRAS DE NEGÓCIO ESTRUTURADAS */
+    .rn-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .rn-card {
+      background: var(--bg-app);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      transition: all 0.2s;
+    }
+    .rn-card:hover {
+      border-color: var(--brand-blue);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .rn-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .rn-num {
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--brand-blue);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .rn-name {
+      font-weight: 600;
+      font-size: 13.5px;
+      color: var(--text-main);
+    }
+
+    .rn-body {
+      font-size: 13.5px;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .rn-tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: var(--badge-purple-bg);
+      color: var(--badge-purple-text);
+      border: 1px solid var(--badge-purple-border);
+      text-decoration: none;
+    }
+
+    /* CENÁRIOS GHERKIN FORMATADOS */
+    .scenario-group-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin: 18px 0 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scenario-card {
+      background: var(--bg-app);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .scenario-header {
+      background: var(--bg-sidebar);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 600;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .scenario-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-left: auto;
+    }
+    .scenario-tags > span { white-space: nowrap; }
+
+    .scenario-body {
+      padding: 14px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      line-height: 1.7;
+    }
+
+    .gherkin-keyword {
+      font-weight: 700;
+    }
+    .gherkin-given { color: #0284C7; }
+    .gherkin-when { color: #D97706; }
+    .gherkin-then { color: #059669; }
+    .gherkin-and { color: #64748B; }
+
+    /* TABELAS (Design System CAIXA) */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .custom-table th {
+      background: var(--bg-hover);
+      color: var(--text-main);
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .custom-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    /* Coluna de Data e primeira coluna sem quebra de linha */
+    .custom-table th:first-child,
+    .custom-table td:first-child,
+    .changelog-table th:first-child,
+    .changelog-table td:first-child,
+    .table-container table th:first-child,
+    .table-container table td:first-child {
+      white-space: nowrap !important;
+    }
+
+    .custom-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .custom-table tbody tr:hover {
+      background: var(--bg-hover);
+    }
+
+    .req-tag {
+      font-weight: 600;
+      color: #E11D48;
+      font-size: 11px;
+      background: #FFE4E6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .opt-tag {
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-size: 11px;
+      background: var(--bg-hover);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* CHANGELOG FORMATADO */
+    .changelog-table td {
+      font-size: 12.5px;
+    }
+    .changelog-table th:first-child,
+    .changelog-table td:first-child {
+      white-space: nowrap;
+      width: 120px;
+      min-width: 110px;
+    }
+    .changelog-table th:nth-child(2),
+    .changelog-table td:nth-child(2) {
+      white-space: nowrap;
+      width: 100px;
+    }
+    .changelog-table th:nth-child(3),
+    .changelog-table td:nth-child(3) {
+      white-space: nowrap;
+      width: 170px;
+    }
+    /* DIAGRAMAS MERMAID (Fundo estilo Mapa de Features e Centralização) */
+    .mermaid {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      text-align: center !important;
+      padding: 32px 20px !important;
+      margin: 20px 0 !important;
+      border: 1px solid var(--border-color) !important;
+      border-radius: var(--radius-lg) !important;
+      background: radial-gradient(circle at 1.5px 1.5px, var(--border-color) 1.5px, transparent 0) 0 0 / 22px 22px, var(--bg-app) !important;
+      overflow-x: auto !important;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    }
+
+    /* O Mermaid roda com `useMaxWidth: true` e emite `width="100%"` mais um
+       `max-width` inline com a largura NATURAL do diagrama. Um
+       `max-width: 100% !important` aqui atropelava essa medida — regra de folha
+       de estilo com `!important` vence estilo inline sem `!important` — e todo
+       diagrama era esticado até a largura do container: o fluxo do N2 Painel do
+       Gestor, natural de 586px, abria com 1103px (1,88x), texto gigante. Os que
+       pareciam certos só eram largos o bastante para a conta dar ~1x. A trava
+       abaixo mantém as duas restrições ao mesmo tempo: nunca mais largo que o
+       container, nunca maior que o tamanho natural. `--largura-natural` é gravada
+       por `ajustaLarguraDiagramas()` a partir do viewBox; sem ela o valor cai
+       para 100% e o comportamento é o de antes. */
+    .mermaid svg {
+      width: 100% !important;
+      max-width: min(100%, var(--largura-natural, 100%)) !important;
+      height: auto !important;
+      margin: 0 auto !important;
+      display: block !important;
+    }
+
+    .changelog-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--bg-hover);
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    /* DETALHES TÉCNICOS (DEV ONLY) */
+    .dev-only, .dev-only-container {
+      border: 1px dashed var(--brand-orange);
+      background: var(--brand-orange-light);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin: 16px 0;
+      display: block;
+      transition: all 0.3s;
+    }
+    html:not(.app-show-dev) .dev-only,
+    html:not(.app-show-dev) .dev-only-container {
+      display: none !important;
+    }
+    /* Lista dentro da Superfície: inventário de telas, não texto corrido.
+       Um N3 pode ter várias rotas — uma por Tipo de Fornecedor, por canal, por
+       variante — e em parágrafo corrido não se percebe quantas são. Em lista,
+       conta-se de relance. O estilo é deliberadamente mais compacto que a lista
+       comum do documento, para a Superfície não competir com as regras. */
+    .dev-only ul {
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dev-only ul li {
+      position: relative;
+      padding: 4px 0 4px 18px;
+      line-height: 1.55;
+      border-bottom: 1px solid var(--brand-gold);
+    }
+    .dev-only ul li:last-child { border-bottom: 0; }
+    /* O marcador é um "├" de árvore, não um bullet: cada linha é uma rota do
+       mesmo processo, não um item solto. */
+    .dev-only ul li::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 12px;
+      width: 8px;
+      height: 1px;
+      background: var(--brand-gold);
+      opacity: 0.8;
+    }
+    .dev-only ul li code {
+      white-space: nowrap;
+    }
+    .dev-badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      background: var(--brand-orange);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    /* Ocultar réguas horizontais residuais */
+    hr {
+      display: none !important;
+    }
+
+    /* Estilos Gerais de Markdown Renderizado */
+    .generic-markdown-body h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 20px 0 12px 0;
+      color: var(--text-main);
+    }
+    .generic-markdown-body h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 24px 0 10px 0;
+      color: var(--text-main);
+    }
+    .generic-markdown-body h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 16px 0 8px 0;
+      color: var(--text-main);
+    }
+    .generic-markdown-body p, .generic-markdown-body ul, .generic-markdown-body ol {
+      margin-bottom: 14px;
+    }
+    .generic-markdown-body ul, .generic-markdown-body ol {
+      padding-left: 24px;
+    }
+    .generic-markdown-body blockquote {
+      border-left: 4px solid var(--brand-blue);
+      background: var(--brand-blue-light);
+      padding: 12px 16px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin-bottom: 16px;
+    }
+    .generic-markdown-body pre {
+      background: #0F172A;
+      color: #F8FAFC;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      margin-bottom: 16px;
+    }
+    .generic-markdown-body code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: var(--bg-hover);
+      padding: 2px 5px;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+    .generic-markdown-body pre code {
+      background: transparent;
+      padding: 0;
+      border: none;
+      color: inherit;
+    }
+
+    /* IFRAME DE PROTÓTIPOS */
+    .prototype-iframe-container {
+      width: 100%;
+      height: calc(100vh - var(--header-height) - 100px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: #fff;
+      overflow: hidden;
+    }
+    .prototype-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* RODAPÉ DO DOCUMENTO */
+    .doc-footer {
+      margin-top: 32px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .doc-footer a {
+      color: var(--brand-blue);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .doc-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Loader */
+    .doc-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      gap: 14px;
+      color: var(--text-secondary);
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--brand-blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Toast de feedback de cópia */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1E293B;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      font-size: 12.5px;
+      font-weight: 500;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      transform: translateY(10px);
+      z-index: 100;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+  <script>
+    const docquiTheme = document.createElement('link');
+    docquiTheme.rel = 'stylesheet';
+    docquiTheme.href = 'assets/css/docqui-theme.css?v=' + Date.now();
+    document.head.appendChild(docquiTheme);
+  </script>
+  <noscript><link rel="stylesheet" href="assets/css/docqui-theme.css"></noscript>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ========================================================================
+       1. HEADER FULL-WIDTH
+       ======================================================================== -->
+  <header class="app-header">
+    <div class="header-left">
+      <button class="btn-icon" id="toggleSidebarBtn" title="Recolher/expandir menu lateral" aria-label="Menu lateral" aria-controls="sidebar" aria-expanded="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <!-- A sigla do sistema (global/MASTER.md) em destaque; à direita, a assinatura Docqui Caixa,
+           com a marca oficial da Caixa (positiva no tema claro, negativa no escuro). -->
+      <a class="brand-logo" id="brandLink" href="#__dashboard__" onclick="navigateTo('__dashboard__'); return false;" aria-label="Loja ACME — Docqui Caixa — início">
+        <span class="brand-sigla" id="brandSigla" aria-hidden="true">LACME</span>
+        <span class="brand__divider" aria-hidden="true"></span>
+        <span class="brand-marca" aria-hidden="true">
+          <img class="brand__docqui" src="assets/img/docqui.svg" alt="" width="356" height="128">
+          <img class="brand__caixa brand__caixa--positiva" src="assets/img/caixa/CAIXA_2cores_positiva.png" alt="" width="1023" height="232">
+          <img class="brand__caixa brand__caixa--negativa" src="assets/img/caixa/CAIXA_2cores_negativa.png" alt="" width="1023" height="232">
+        </span>
+      </a>
+    </div>
+
+    <nav class="breadcrumb-bar" id="breadcrumbBar" aria-label="Hierarquia FDD">
+      <a href="#__dashboard__" onclick="navigateTo('__dashboard__'); return false;">Início</a>
+    </nav>
+
+    <div class="header-right">
+      <!-- Toggle Modo PO / Desenvolvedor -->
+      <div class="view-mode-toggle" title="Alternar visão entre Foco de Negócio (PO) e Visão Técnica">
+        <button class="mode-btn active" id="btnModePO" onclick="setDocMode('po')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="mode-label">Visão PO</span>
+        </button>
+        <button class="mode-btn" id="btnModeTech" onclick="setDocMode('tech')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span class="mode-label">Técnico</span>
+        </button>
+      </div>
+
+      <!-- Toggle Dark/Light Mode -->
+      <button class="btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="Alternar tema claro/escuro">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <!-- Repositório no GitHub -->
+      <a class="btn-github" href="https://github.com/CAIXA-EFRS/loja-acme-doc" target="_blank" rel="noopener" title="CAIXA-EFRS/loja-acme-doc no GitHub" aria-label="Repositório CAIXA-EFRS/loja-acme-doc no GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+        </svg>
+        <span class="btn-github__label">GitHub</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       2. CORPO PRINCIPAL
+       ======================================================================== -->
+  <div class="app-body">
+    
+    <!-- SIDEBAR DE NAVEGAÇÃO EM 3 NÍVEIS -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__search">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="search" id="searchInput" aria-label="Buscar na documentação" placeholder="Buscar na documentação" autocomplete="off" oninput="handleSearch(this.value)">
+          <span class="search-shortcut">Ctrl K</span>
+        </div>
+        <div class="search-results-modal" id="searchResultsModal"></div>
+      </div>
+
+      <div class="sidebar-navigation">
+      <!-- Visões Fixas -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">Visões do Sistema</div>
+        <ul class="nav-list">
+          <li class="nav-item-fixed">
+            <a href="#__dashboard__" data-path="__dashboard__" onclick="navigateTo('__dashboard__'); return false;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              Dashboard de gestão
+            </a>
+          </li>
+          <li class="nav-item-fixed">
+            <a href="#global/N0_PRODUCT_VISION.md" data-path="global/N0_PRODUCT_VISION.md" onclick="navigateTo('global/N0_PRODUCT_VISION.md'); return false;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              Visão do Produto (N0)
+            </a>
+          </li>
+          <li class="nav-item-fixed">
+            <a href="#__mapa__" data-path="__mapa__" onclick="navigateTo('__mapa__'); return false;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="6" cy="6" r="3"></circle>
+                <circle cx="18" cy="18" r="3"></circle>
+                <path d="M6 9v12M18 9a9 9 0 0 0-9 9"></path>
+              </svg>
+              Mapa de Funcionalidades (Árvore)
+            </a>
+          </li>
+          <li class="nav-item-fixed">
+            <a href="#analise-impacto/INDEX.md" data-path="analise-impacto/INDEX.md" title="AIMM — Análise de Impacto de Mudança para Manutenção" onclick="navigateTo('analise-impacto/INDEX.md'); return false;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="8" y1="13" x2="16" y2="13"></line>
+                <line x1="8" y1="17" x2="16" y2="17"></line>
+              </svg>
+              Análises de impacto (AIMM)
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Seção Principal de Navegação (Requisitos por Domínio, Global e Protótipos no mesmo estilo unificado) -->
+      <div class="sidebar-section" style="padding-top: 4px; padding-bottom: 4px;">
+        <!-- Requisitos por Domínio (FDD) -->
+        <details class="nav-folder" id="fddFolder" open style="margin-bottom: 3px;">
+          <summary>
+            <div class="nav-folder-title">
+              <svg class="nav-folder-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span style="font-weight:600; color:var(--text-main);">Requisitos por Domínio</span>
+            </div>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </summary>
+          <div class="nav-folder-content" id="fddTreeContainer">
+            <div class="doc-loader">
+              <div class="spinner"></div>
+              <span>Carregando requisitos...</span>
+            </div>
+          </div>
+        </details>
+
+        <!-- Global -->
+        <details class="nav-folder" id="globalFolder" style="margin-bottom: 3px;">
+          <summary>
+            <div class="nav-folder-title">
+              <svg class="nav-folder-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span style="font-weight:600; color:var(--text-main);">Global</span>
+            </div>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </summary>
+          <div class="nav-folder-content" id="globalNavList">
+            <!-- Renderizado dinamicamente -->
+          </div>
+        </details>
+
+        <!-- Protótipos -->
+        <details class="nav-folder" id="prototypesFolder">
+          <summary>
+            <div class="nav-folder-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-blue);">
+                <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+              <span style="font-weight:600; color:var(--text-main);">Protótipos</span>
+            </div>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </summary>
+          <div class="nav-folder-content" id="prototypesNavList">
+            <!-- Renderizado dinamicamente -->
+          </div>
+        </details>
+
+        <!-- Outros: o que não é Dashboard, Visão do Produto, Mapa de Funcionalidades, Análises de impacto nem as árvores -->
+        <details class="nav-folder" id="outrosFolder">
+          <summary>
+            <div class="nav-folder-title">
+              <svg class="nav-folder-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span style="font-weight:600; color:var(--text-main);">Outros</span>
+            </div>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </summary>
+          <div class="nav-folder-content">
+            <ul class="nav-list">
+              <li class="nav-item-fixed">
+                <a href="#arquivos/levantamentos/INDEX.md" data-path="arquivos/levantamentos/INDEX.md" onclick="navigateTo('arquivos/levantamentos/INDEX.md'); return false;">
+                  Insumos de levantamento
+                </a>
+              </li>
+              <li class="nav-item-fixed">
+                <a href="#mentoria/README.md" data-path="mentoria/README.md" onclick="navigateTo('mentoria/README.md'); return false;">
+                  Roteiro da demonstração
+                </a>
+              </li>
+              <li class="nav-item-fixed">
+                <a href="mentoria/simulador.html" target="_blank" rel="noopener">
+                  Simulador Docqui Caixa ↗
+                </a>
+              </li>
+              <li class="nav-item-fixed">
+                <a href="rastreabilidade/index.html" target="_blank" rel="noopener">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.5" y1="10.5" x2="15.5" y2="6.5"></line>
+                    <line x1="8.5" y1="13.5" x2="15.5" y2="17.5"></line>
+                  </svg>
+                  Grafo de Rastreabilidade ↗
+                </a>
+              </li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      </div>
+    </aside>
+
+    <!-- Alça arrastável de redimensionamento da sidebar -->
+    <div class="sidebar-resizer" id="sidebarResizer" role="separator" aria-orientation="vertical" aria-label="Redimensionar menu lateral" title="Arraste para ajustar a largura do menu"></div>
+
+    <!-- CONTEÚDO PRINCIPAL (100% LARGURA ÚTIL) -->
+    <main class="main-viewport">
+      <div class="content-wrapper" id="contentWrapper">
+        
+        <!-- Container do Documento -->
+        <div id="documentContainer">
+          <div class="doc-loader">
+            <div class="spinner"></div>
+            <span>Carregando documento...</span>
+          </div>
+        </div>
+
+        <button class="sidebar-backdrop" id="sidebarBackdrop" type="button" aria-label="Fechar menu lateral"></button>
+      </div>
+    </main>
+
+  </div>
+
+</div>
+
+<!-- Toast de Notificação -->
+<div class="toast" id="toastMessage">Identificador copiado!</div>
+
+<!-- Dados do repositório gerados por assets/generate-tree.js -->
+<script src="assets/tree.js"></script>
+
+<!-- Dados do mapa de funcionalidades se existirem -->
+<script src="assets/mapa-data.js"></script>
+<script>
+  ['assets/dashboard-data.js', 'assets/js/dashboard.js'].forEach(src => {
+    document.write('<script src="' + src + '?v=' + Date.now() + '"><\/script>');
+  });
+</script>
+
+<script>
+  // ============================================================================
+  // LOGICA DO COMPORTAMENTO DO TEMPLATE FDD (GEMINI)
+  // ============================================================================
+
+  const APP_NAME = (globalThis.DOCS_CONFIG && DOCS_CONFIG.name) || "Loja ACME";
+  const masterMd = (typeof repoFilesContent !== 'undefined' && repoFilesContent['global/MASTER.md']) || '';
+  // A sigla vem do global/MASTER.md (Identificação do sistema); com o MASTER ainda no template,
+  // o header mostra o nome do sistema.
+  const SIGLA = (masterMd.match(/\*\*Sigla\*\*\s*:\s*`?([A-Z0-9]{2,10})`?\s*$/m) || [])[1] || APP_NAME;
+  document.getElementById('brandSigla').textContent = SIGLA;
+  document.getElementById('brandLink').setAttribute('aria-label', `${SIGLA === APP_NAME ? APP_NAME : `${SIGLA} — ${APP_NAME}`} — Docqui Caixa — início`);
+  document.getElementById('brandLink').title = APP_NAME;
+
+  let currentFilePath = "";
+  let changesRequest = 0;
+  let fddStructure = {};
+
+  // Inicializar Marked com renderizador customizado
+  const renderer = new marked.Renderer();
+  const origCode = renderer.code;
+  renderer.code = function(code, language, escaped) {
+    let lang = language;
+    let text = code;
+    if (typeof code === 'object' && code !== null) {
+      text = code.text;
+      lang = code.lang;
+    }
+    if (lang === 'mermaid') {
+      return `<div class="mermaid">${text}</div>`;
+    }
+    return origCode.call(this, code, language, escaped);
+  };
+
+  marked.setOptions({
+    renderer: renderer,
+    gfm: true,
+    breaks: false,
+    headerIds: true,
+    mangle: false
+  });
+
+  // Tema Claro / Escuro
+  function initTheme() {
+    const savedTheme = localStorage.getItem('theme-pref') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }
+  initTheme();
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme-pref', next);
+    initMermaid();
+  }
+
+  // Inicializar Mermaid
+  function initMermaid() {
+    if (typeof mermaid === 'undefined') return;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: isDark ? 'dark' : 'default',
+      securityLevel: 'loose',
+      // O Mermaid 12 traz o ELK no próprio arquivo, como layout padrão; fica explícito aqui. Ele
+      // também trocou o estilo (neo) e a quebra dos textos do fluxograma (120 px, com largura
+      // mínima de caixa): look, wrappingWidth e minNodeWidth mantêm o desenho de antes.
+      layout: 'elk',
+      look: 'classic',
+      flowchart: { useMaxWidth: true, htmlLabels: true, wrappingWidth: 200, minNodeWidth: 0 }
+    });
+  }
+  initMermaid();
+
+  // Grava em cada SVG a largura natural que o Mermaid calculou, lida do viewBox,
+  // para o CSS travar o diagrama nela (ver `.mermaid svg`). Sem isso um fluxo
+  // estreito é esticado até a largura do container e fica ilegível de tão grande.
+  function ajustaLarguraDiagramas(container) {
+    container.querySelectorAll('.mermaid svg').forEach(svg => {
+      const viewBox = (svg.getAttribute('viewBox') || '').trim().split(/[\s,]+/);
+      const natural = Number(viewBox[2]);
+      if (!Number.isFinite(natural) || natural <= 0) return;
+      svg.style.setProperty('--largura-natural', Math.ceil(natural) + 'px');
+    });
+  }
+
+  // Modo PO vs Técnico
+  function setDocMode(mode) {
+    const btnPO = document.getElementById('btnModePO');
+    const btnTech = document.getElementById('btnModeTech');
+    
+    if (mode === 'tech') {
+      document.documentElement.classList.add('app-show-dev');
+      btnTech.classList.add('active');
+      btnPO.classList.remove('active');
+      localStorage.setItem('dev-only-pref', 'show');
+      showToast('Modo Técnico ativo: detalhes de rotas e superfícies exibidos.');
+    } else {
+      document.documentElement.classList.remove('app-show-dev');
+      btnPO.classList.add('active');
+      btnTech.classList.remove('active');
+      localStorage.setItem('dev-only-pref', 'hide');
+      showToast('Modo PO ativo: detalhes técnicos ocultados.');
+    }
+  }
+
+  // O botão PO/Técnico só existe no perfil completo. O perfil vem do global/MASTER.md, como no
+  // gates.py: ausente ou desconhecido conta como completo. No requisitos, a página fica na Visão PO,
+  // e a preferência "Técnico" gravada antes é ignorada — sem o botão, não haveria como desligá-la.
+  const perfilMaster = (masterMd.match(/\*\*Perfil\*\*\s*:?\s*`?([a-z][a-z-]*)`?/i) || [])[1];
+  if (String(perfilMaster).toLowerCase() === 'requisitos') {
+    document.querySelector('.view-mode-toggle').remove();
+  } else if (localStorage.getItem('dev-only-pref') === 'show') {
+    setDocMode('tech');
+  }
+
+  const mobileSidebar = window.matchMedia('(max-width: 820px)');
+
+  function setSidebarExpanded(expanded) {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('collapsed', !mobileSidebar.matches && !expanded);
+    sidebar.classList.toggle('is-open', mobileSidebar.matches && expanded);
+    document.body.classList.toggle('sidebar-open', mobileSidebar.matches && expanded);
+    document.getElementById('toggleSidebarBtn').setAttribute('aria-expanded', String(expanded));
+    document.getElementById('sidebarResizer').style.display = mobileSidebar.matches || !expanded ? 'none' : '';
+  }
+
+  // Ao abrir o site, o menu começa recolhido (o botão do header e o Ctrl+K o abrem).
+  setSidebarExpanded(false);
+  mobileSidebar.addEventListener('change', () => setSidebarExpanded(!mobileSidebar.matches));
+  document.getElementById('sidebarBackdrop').addEventListener('click', () => setSidebarExpanded(false));
+
+  // Redimensionamento da Sidebar
+  (function initResizer() {
+    const sidebar = document.getElementById('sidebar');
+    const resizer = document.getElementById('sidebarResizer');
+    const MIN_SIDEBAR_WIDTH = 220;
+    const MAX_SIDEBAR_WIDTH = 640;
+
+    const savedWidth = localStorage.getItem('loja-acme-sidebar-width');
+    if (savedWidth) {
+      const widthNum = parseInt(savedWidth, 10);
+      if (widthNum >= MIN_SIDEBAR_WIDTH && widthNum <= MAX_SIDEBAR_WIDTH) {
+        sidebar.style.width = `${widthNum}px`;
+      }
+    }
+
+    let isResizing = false;
+
+    resizer.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      document.body.classList.add('is-resizing-sidebar');
+      resizer.classList.add('is-resizing');
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      e.preventDefault();
+    });
+
+    function handleMouseMove(e) {
+      if (!isResizing) return;
+      let newWidth = e.clientX;
+      if (newWidth < MIN_SIDEBAR_WIDTH) newWidth = MIN_SIDEBAR_WIDTH;
+      if (newWidth > MAX_SIDEBAR_WIDTH) newWidth = MAX_SIDEBAR_WIDTH;
+      sidebar.style.width = `${newWidth}px`;
+    }
+
+    function handleMouseUp() {
+      if (!isResizing) return;
+      isResizing = false;
+      document.body.classList.remove('is-resizing-sidebar');
+      resizer.classList.remove('is-resizing');
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      localStorage.setItem('loja-acme-sidebar-width', parseInt(sidebar.style.width, 10));
+    }
+
+    document.getElementById('toggleSidebarBtn').addEventListener('click', () => {
+      const expanded = document.getElementById('toggleSidebarBtn').getAttribute('aria-expanded') === 'true';
+      setSidebarExpanded(!expanded);
+    });
+  })();
+
+  // Parser de YAML Frontmatter
+  function parseFrontMatter(content) {
+    if (!content) return { data: {}, content: "" };
+    const match = content.match(/^\uFEFF?(?:\s*<!--[\s\S]*?-->)*\s*---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?\n?/);
+    if (!match) return { data: {}, content };
+
+    const yamlStr = match[1];
+    const rest = content.slice(match[0].length);
+    const data = {};
+
+    yamlStr.split('\n').forEach(line => {
+      const parts = line.split(':');
+      if (parts.length >= 2) {
+        const key = parts[0].trim();
+        const val = parts.slice(1).join(':').trim().replace(/^["']|["']$/g, '');
+        if (key && !key.startsWith('#')) {
+          data[key] = val;
+        }
+      }
+    });
+
+    return { data, content: rest };
+  }
+
+  // Extrair título Markdown
+  function extractTitle(content) {
+    if (!content) return "";
+    const match = content.match(/^#\s+(.+)$/m);
+    if (!match) return "";
+    return match[1].replace(/^\s*(Major Feature Set|Domínio|Dominio|Agrupamento Funcional|Feature Set|Data[\s-]Model)\s*[:\-—]*\s*/i, '').replace(/`/g, '').trim();
+  }
+
+  // Formatar data em dd/mm/aaaa
+  function formatDateBR(dateStr) {
+    if (!dateStr) return "";
+    const m = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) {
+      return `${m[3]}/${m[2]}/${m[1]}`;
+    }
+    return dateStr;
+  }
+
+  // ============================================================================
+  // CONSTRUÇÃO DA ÁRVORE FDD EM 3 NÍVEIS E SEÇÕES RECOLHÍVEIS
+  // ============================================================================
+  function buildFDDTree() {
+    if (typeof repoFiles === 'undefined' || typeof repoFilesContent === 'undefined') {
+      document.getElementById('fddTreeContainer').innerHTML = `<p style="padding:10px; color:var(--text-muted); font-size:12px;">Árvore não disponível (execute assets/generate-tree.js).</p>`;
+      return;
+    }
+
+    const domains = {};
+    const globalFiles = [];
+    const prototypeFiles = [];
+
+    // Modelos em branco do framework (`_template-*`, `_TEMPLATE_*`) moram no
+    // repositório de propósito — são a partida de um artefato novo — mas não são
+    // documentação e não entram no menu. O mesmo corte já valia para os domínios
+    // `modules/_*` e para o `_TEMPLATE_IMPACTO`; aqui ele passa a valer em todas as
+    // seções. Nenhuma pasta `_` é cortada por ser `_`: `prototypes/_capturas` e
+    // `prototypes/_biblioteca-ds` são conteúdo e continuam visíveis.
+    const eModeloEmBranco = (caminho) =>
+      caminho.split('/').some(parte => parte.toLowerCase().startsWith('_template'));
+
+    repoFiles.forEach(file => {
+      if (eModeloEmBranco(file)) return;
+      if (file.startsWith('modules/')) {
+        const parts = file.split('/');
+        // Ocultar arquivos soltos em modules/ (ex: modules/INDEX.md)
+        if (parts.length <= 2 || parts[1].toLowerCase().endsWith('.md')) return;
+        const domainKey = parts[1];
+        if (!domainKey || domainKey.startsWith('_')) return;
+
+        if (!domains[domainKey]) {
+          domains[domainKey] = {
+            key: domainKey,
+            title: domainKey,
+            sigla: domainKey.toUpperCase().slice(0, 4),
+            readme: `modules/${domainKey}/README.md`,
+            featureSets: {}
+          };
+        }
+
+        if (parts.length === 3 && parts[2] === 'README.md') {
+          const content = repoFilesContent[file] || "";
+          const t = extractTitle(content);
+          if (t) domains[domainKey].title = t;
+          const siglaMatch = content.match(/- `([A-Z0-9]+)`/);
+          if (siglaMatch) domains[domainKey].sigla = siglaMatch[1];
+        } else if (parts.length >= 3) {
+          const fsKey = parts[2];
+          if (!domains[domainKey].featureSets[fsKey]) {
+            domains[domainKey].featureSets[fsKey] = {
+              key: fsKey,
+              title: fsKey,
+              readme: `modules/${domainKey}/${fsKey}/README.md`,
+              features: []
+            };
+          }
+
+          if (parts.length === 4 && parts[3] === 'README.md') {
+            const content = repoFilesContent[file] || "";
+            const t = extractTitle(content);
+            if (t) domains[domainKey].featureSets[fsKey].title = t;
+            const siglaFS = content.match(/\*\*Nível 2\*\*.*`[A-Z0-9]+-([A-Z0-9]+)`/);
+            if (siglaFS) domains[domainKey].featureSets[fsKey].sigla = siglaFS[1];
+          } else if (parts.length === 4 && parts[3].endsWith('.md')) {
+            const content = repoFilesContent[file] || "";
+            const { data } = parseFrontMatter(content);
+            const title = extractTitle(content) || parts[3].replace(/^f-|\.md$/g, '');
+            const code = (data.id ? data.id.split('-').pop() : parts[3].replace(/^f-|\.md$/g, '')).slice(0, 4);
+
+            domains[domainKey].featureSets[fsKey].features.push({
+              path: file,
+              title,
+              id: data.id || "",
+              code
+            });
+          }
+        }
+      } else if (file.startsWith('global/')) {
+        globalFiles.push(file);
+      } else if (file.startsWith('prototypes/')) {
+        prototypeFiles.push(file);
+      }
+    });
+
+    // No menu, os N3 de cada Agrupamento Funcional seguem a ordem do ID (VND-CHK-01, -02…), não a do
+    // nome do arquivo; o N3 sem ID vai para o fim, na ordem do caminho.
+    Object.values(domains).forEach(dom => Object.values(dom.featureSets).forEach(fs => {
+      fs.features.sort((a, b) => (!a.id - !b.id) || a.id.localeCompare(b.id, 'pt', { numeric: true }));
+    }));
+
+    fddStructure = domains;
+    renderFDDTreeHTML(domains);
+    renderGlobalFiles(globalFiles);
+    renderPrototypeFiles(prototypeFiles);
+  }
+
+  function renderFDDTreeHTML(domains) {
+    const container = document.getElementById('fddTreeContainer');
+    let html = '';
+
+    Object.values(domains).forEach((dom, dIdx) => {
+      const domId = `dom-${dom.key}`;
+      // Recolhido por padrão: na carga só "Requisitos por Domínio" abre; domínios e
+      // feature-sets expandem pelo clique ou pelo loadFile ao ativar um item.
+      const isOpen = '';
+      const clickHandler = dom.readme ? `onclick="if(event.target.closest('.chevron-icon')) return; navigateTo('${dom.readme}');"` : '';
+
+      html += `
+        <details class="nav-folder" id="${domId}" data-path="${dom.readme}" ${isOpen}>
+          <summary ${clickHandler}>
+            <div class="nav-folder-title">
+              <svg class="nav-folder-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span class="domain-tag">${dom.sigla}</span>
+              <span title="${dom.title}">${dom.title}</span>
+            </div>
+            <svg class="chevron-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </summary>
+          
+          <div class="nav-folder-content">
+      `;
+
+      Object.values(dom.featureSets).forEach((fs, fsIdx) => {
+        const fsId = `fs-${dom.key}-${fs.key}`;
+        const isFSOpen = '';
+        const fsClickHandler = fs.readme ? `onclick="if(event.target.closest('.chevron-icon')) return; navigateTo('${fs.readme}');"` : '';
+
+        html += `
+          <details class="nav-folder" id="${fsId}" data-path="${fs.readme}" ${isFSOpen}>
+            <summary ${fsClickHandler}>
+              <div class="nav-folder-title">
+                <svg class="nav-folder-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                ${fs.sigla ? `<span class="domain-tag">${fs.sigla}</span>` : ''}
+                <span title="${fs.title}">${fs.title}</span>
+              </div>
+              <div class="nav-folder-aside">
+                <span class="fs-count">${fs.features.length}</span>
+                <svg class="chevron-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </div>
+            </summary>
+            
+            <div class="nav-folder-content">
+        `;
+
+        fs.features.forEach(f => {
+          html += `
+            <a class="feature-item" href="#${f.path}" data-path="${f.path}" onclick="navigateTo('${f.path}'); return false;">
+              <span class="feature-title-text" title="${f.title}">${f.title}</span>
+              <span class="feature-code">${f.code}</span>
+            </a>
+          `;
+        });
+
+        html += `
+            </div>
+          </details>
+        `;
+      });
+
+      html += `
+          </div>
+        </details>
+      `;
+    });
+
+    container.innerHTML = html;
+  }
+
+  const FOLDER_LABELS = {
+    'global': 'Global',
+    'global/data-models': 'Mapa de Entidades por Domínio',
+    'prototypes': 'Protótipos',
+    'prototypes/_biblioteca-caixa': 'Biblioteca CAIXA',
+    'prototypes/analise-impacto': 'Análise de Impacto',
+    'prototypes/analise-impacto/analises-impacto': 'Manutenção de Análises',
+    'prototypes/contratos-fabricas': 'Contratos e Fábricas',
+    'prototypes/contratos-fabricas/contratos': 'Contratos',
+    'prototypes/parametrizacao': 'Parametrização',
+    'prototypes/parametrizacao/maquina-estado': 'Máquina de Estado',
+    'prototypes/parametrizacao/maquina-estado/pesquisar-transicao': 'Pesquisar Transição',
+    'prototypes/parametrizacao/metodos-mensuracao': 'Métodos de Mensuração',
+    'prototypes/aval': 'Avaliação e Mapas',
+    'scripts': 'Scripts de Manutenção',
+    'repos': 'Repositórios'
+  };
+
+  const FILE_LABELS = {
+    'global/API-PATTERNS.md': 'Padrões de API',
+    'global/AUTHZ.md': 'Autorização e Acessos (AUTHZ)',
+    'global/CODE-STYLE.md': 'Guia de Estilo de Código',
+    'global/CONTAGEM-PF.md': 'Contagem de Pontos de Função',
+    'global/DATA-MODEL.md': 'Modelo de Dados Global',
+    'global/DESIGN-SYSTEM.md': 'Design System CAIXA',
+    'global/ERROR-DICTIONARY.md': 'Dicionário de Erros',
+    'global/FIELD-DICTIONARY.md': 'Dicionário de Campos',
+    'global/MASTER.md': 'Artefato Master',
+    'global/MESSAGE-DICTIONARY.md': 'Dicionário de Mensagens',
+    'global/N0_PRODUCT_VISION.md': 'Visão do Produto (N0)',
+    'global/NFR.md': 'Requisitos Não Funcionais (NFR)',
+    'global/RULES-DICTIONARY.md': 'Dicionário de Regras de Negócio',
+    'global/SIZING.md': 'Dimensionamento (Sizing)',
+    'global/VOCABULARY-OVERRIDES.md': 'Sobrescrita de Vocabulário',
+    'global/data-models/contratos-fabricas.md': 'Contratos e Fábricas',
+    'global/data-models/parametrizacao.md': 'Parametrização',
+    'prototypes/design-fdd-proposal.html': 'Proposta de Design FDD',
+    'prototypes/_biblioteca-caixa/shell-responsive.html': 'Shell Responsivo CAIXA',
+    'prototypes/_biblioteca-caixa/index.html': 'Componentes CAIXA',
+    'prototypes/analise-impacto/analises-impacto/flow.html': 'Fluxo: Incluir Análise de Impacto',
+    'prototypes/contratos-fabricas/contratos/flow.html': 'Fluxo: Contratos',
+    'prototypes/parametrizacao/maquina-estado/pesquisar-transicao/form.html': 'Formulário: Pesquisar Transição',
+    'prototypes/parametrizacao/metodos-mensuracao/flow.html': 'Fluxo: Métodos de Mensuração'
+  };
+
+  function getFolderDisplayName(item) {
+    if (item.path in FOLDER_LABELS) return FOLDER_LABELS[item.path];
+    const parts = item.path.split('/');
+    const last = parts[parts.length - 1];
+    return last.charAt(0).toUpperCase() + last.slice(1).replace(/[-_]/g, ' ');
+  }
+
+  function titleFromMarkdown(content) {
+    return extractTitle(content);
+  }
+
+  function getFileDisplayName(item) {
+    if (item.path in FILE_LABELS) return FILE_LABELS[item.path];
+    if (typeof repoFilesContent !== 'undefined') {
+      const content = repoFilesContent[item.path];
+      if (content) {
+        const title = extractTitle(content);
+        if (title) return title;
+      }
+    }
+    const parts = item.path.split('/');
+    const last = parts[parts.length - 1];
+    return last.replace(/\.(md|html?)$/i, '').replace(/[-_]/g, ' ');
+  }
+
+  function getNodeDisplayName(item) {
+    return item.type === 'dir' ? getFolderDisplayName(item) : getFileDisplayName(item);
+  }
+
+  function findFolderIndexFile(dirNode) {
+    if (!dirNode || !dirNode.children) return null;
+    const keys = Object.keys(dirNode.children);
+    const pick = (name) => keys.find(k => k.toLowerCase() === name);
+    const key = pick('index.md') || pick('readme.md');
+    const child = key ? dirNode.children[key] : null;
+    return child && child.type === 'file' ? child : null;
+  }
+
+  function buildSubTree(files, prefix) {
+    const root = { name: prefix, type: "dir", children: {}, path: prefix };
+    files.forEach(filePath => {
+      const relPath = filePath.startsWith(prefix + '/') ? filePath.slice(prefix.length + 1) : filePath;
+      const parts = relPath.split('/');
+      let current = root;
+      parts.forEach((part, index) => {
+        const isLast = index === parts.length - 1;
+        const currentPath = prefix + '/' + parts.slice(0, index + 1).join('/');
+        if (isLast) {
+          current.children[part] = {
+            name: part,
+            type: "file",
+            path: currentPath
+          };
+        } else {
+          if (!current.children[part]) {
+            current.children[part] = {
+              name: part,
+              type: "dir",
+              children: {},
+              path: currentPath
+            };
+          }
+          current = current.children[part];
+        }
+      });
+    });
+    return root;
+  }
+
+  function renderSubTreeHTML(node, getSigla, topLevel = true) {
+    let html = '';
+    const indexFile = findFolderIndexFile(node);
+    const keys = Object.keys(node.children).sort((a, b) => {
+      const itemA = node.children[a];
+      const itemB = node.children[b];
+      if (itemA.type !== itemB.type) return itemA.type === "dir" ? -1 : 1;
+      return getNodeDisplayName(itemA).localeCompare(getNodeDisplayName(itemB), 'pt', { sensitivity: 'base' });
+    });
+
+    keys.forEach(key => {
+      const item = node.children[key];
+      if (item === indexFile && node.path !== item.path) return;
+
+      if (item.type === "dir") {
+        const folderIndex = findFolderIndexFile(item);
+        // Só no nível de topo (o domínio em si) — pastas sem domínio FDD
+        // correspondente (_template, _biblioteca-ds) caem no nome genérico.
+        const fddDomain = (topLevel && getSigla) ? getSigla(item.name) : null;
+        const folderName = fddDomain ? fddDomain.title : getFolderDisplayName(item);
+        const siglaBadge = fddDomain ? `<span class="domain-tag">${fddDomain.sigla}</span>` : '';
+        const clickHandler = folderIndex ? `onclick="if(event.target.closest('.chevron-icon')) return; navigateTo('${folderIndex.path}');"` : '';
+
+        html += `
+          <details class="nav-folder" data-path="${item.path}">
+            <summary ${clickHandler}>
+              <div class="nav-folder-title">
+                <svg class="nav-folder-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                ${siglaBadge}
+                <span title="${folderName}">${folderName}</span>
+              </div>
+              <svg class="chevron-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </summary>
+            <div class="nav-folder-content">
+              ${renderSubTreeHTML(item, getSigla, false)}
+            </div>
+          </details>
+        `;
+      } else {
+        const fileTitle = getFileDisplayName(item);
+        const isHtml = /\.html?$/i.test(item.path);
+        const icon = isHtml
+          ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`
+          : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`;
+
+        html += `
+          <a class="feature-item" href="#${item.path}" data-path="${item.path}" onclick="navigateTo('${item.path}'); return false;" style="font-size: 12.5px; padding: 5px 8px;">
+            <div style="display:flex; align-items:center; gap:7px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+              ${icon}
+              <span title="${fileTitle}">${fileTitle}</span>
+            </div>
+          </a>
+        `;
+      }
+    });
+
+    return html || `<div style="padding: 6px 10px; font-size:12px; color:var(--text-muted)">Sem itens.</div>`;
+  }
+
+  function renderGlobalFiles(files) {
+    const list = document.getElementById('globalNavList');
+    if (!list) return;
+    const tree = buildSubTree(files, 'global');
+    list.innerHTML = renderSubTreeHTML(tree);
+  }
+
+  function renderPrototypeFiles(files) {
+    const list = document.getElementById('prototypesNavList');
+    if (!list) return;
+    const tree = buildSubTree(files, 'prototypes');
+    // Nível de domínio (N1): prototypes/<domínio> usa a mesma pasta de modules/<domínio>,
+    // então reaproveita o domínio já lido pelo parse do FDD (sigla + título) — mesmo
+    // badge de "Requisitos por Domínio". Pastas sem domínio correspondente (_template,
+    // _biblioteca-ds) não casam e ficam sem badge.
+    list.innerHTML = renderSubTreeHTML(tree, (dirName) => fddStructure[dirName]);
+  }
+
+  function toggleDomain(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function toggleFeatureSet(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function toggleFddSection() {
+    const tree = document.getElementById('fddTreeContainer');
+    const chev = document.getElementById('fddChevron');
+    const isHidden = tree.style.display === 'none';
+    tree.style.display = isHidden ? 'block' : 'none';
+    chev.style.transform = isHidden ? 'rotate(90deg)' : 'rotate(0deg)';
+  }
+
+  function toggleGlobalSection() {
+    const list = document.getElementById('globalNavList');
+    const chev = document.getElementById('globalChevron');
+    const isHidden = list.style.display === 'none';
+    list.style.display = isHidden ? 'flex' : 'none';
+    chev.style.transform = isHidden ? 'rotate(90deg)' : 'rotate(0deg)';
+  }
+
+  function togglePrototypesSection() {
+    const list = document.getElementById('prototypesNavList');
+    const chev = document.getElementById('prototypesChevron');
+    const isHidden = list.style.display === 'none';
+    list.style.display = isHidden ? 'flex' : 'none';
+    chev.style.transform = isHidden ? 'rotate(90deg)' : 'rotate(0deg)';
+  }
+
+  // ============================================================================
+  // RENDERIZAÇÃO E FORMATAÇÃO DE DOCUMENTOS (TRANSFORMER CLEAN)
+  // ============================================================================
+  function loadFile(filePath) {
+    if (!filePath) filePath = "global/N0_PRODUCT_VISION.md";
+    if (/^analise-impacto\/AIM-[^/]+\.md$/.test(filePath) &&
+        typeof repoFilesContent !== 'undefined' && !repoFilesContent[filePath]) {
+      const current = filePath.replace('/AIM-', '/AIMM-');
+      if (repoFilesContent[current]) {
+        filePath = current;
+        history.replaceState(null, '', '#' + current);
+      }
+    }
+    currentFilePath = filePath;
+    changesRequest++;
+    // Nos previews de branch, o comparador desfaz o que marcou antes de o conteúdo trocar.
+    const documento = document.getElementById('documentContainer');
+    delete documento.dataset.docquiSource;
+    delete documento.dataset.docquiSourceRoot;
+    document.dispatchEvent(new CustomEvent('docqui:artifact-reset'));
+    documento.classList.remove('dashboard-view', 'doc-cards', 'changes-view');
+
+    // Atualizar item ativo na sidebar e expandir ancestrais
+    document.querySelectorAll('.feature-item, .nav-item-fixed a, .nav-folder summary').forEach(el => {
+      const p = el.getAttribute('data-path') || el.getAttribute('data-index-path');
+      if (p === filePath) {
+        el.classList.add('active');
+        let curr = el;
+        while (curr && curr !== document.body) {
+          if (curr.tagName === 'DETAILS') curr.open = true;
+          if (curr.classList.contains('fdd-domain') || curr.classList.contains('fdd-featureset')) curr.classList.add('open');
+          curr = curr.parentElement;
+        }
+      } else {
+        el.classList.remove('active');
+      }
+    });
+
+    if (filePath === '__dashboard__') {
+      updateBreadcrumbs(filePath, 'Dashboard de gestão');
+      renderDashboard();
+      return;
+    }
+    if (filePath === '__changes__') {
+      updateBreadcrumbs(filePath, 'Alterações para aprovação');
+      renderChanges(changesRequest);
+      return;
+    }
+
+    // Se for tela interativa do Mapa de Funcionalidades
+    if (filePath === '__mapa__') {
+      renderMapaView();
+      return;
+    }
+
+    // Se for iframe para protótipo HTML
+    if (filePath.endsWith('.html') && filePath.startsWith('prototypes/')) {
+      renderPrototypeIframe(filePath);
+      return;
+    }
+
+    // Obter conteúdo Markdown do tree.js
+    // O tree.js gerado no Windows guarda o .md com \r\n, e os templates (N1, N2, N3)
+    // procuram as seções por \n: com \r\n, o título e cada rubrica do N3 saíam duas vezes.
+    const rawContent = ((typeof repoFilesContent !== 'undefined' && repoFilesContent[filePath]) || `# Documento não encontrado\n\nO arquivo \`${filePath}\` não está disponível em \`assets/tree.js\`.`).replace(/\r\n?/g, '\n');
+    renderMarkdownContent(filePath, rawContent);
+  }
+
+  function renderPrototypeIframe(path) {
+    updateBreadcrumbs(path, getFileDisplayName({ path, name: path.split('/').pop() }));
+    const container = document.getElementById('documentContainer');
+    container.innerHTML = `
+      <div style="margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; background:var(--bg-card); padding:10px 16px; border:1px solid var(--border-color); border-radius:var(--radius-md);">
+        <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-secondary);">${path}</span>
+        <a href="${path}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--brand-blue); text-decoration:none; font-weight:600;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          Abrir em nova aba
+        </a>
+      </div>
+      <div class="prototype-iframe-container">
+        <iframe class="prototype-iframe" src="${path}" title="Protótipo: ${path}"></iframe>
+      </div>
+    `;
+  }
+
+  // O HTML do documento no template do seu nível. Serve também à versão da base nos
+  // previews de branch (comparaNosCards), por isso não mexe na página.
+  function desenhaDocumento(path, rawMd) {
+    const { data: frontmatter, content: cleanMd } = parseFrontMatter(rawMd);
+    const title = extractTitle(cleanMd) || path.split('/').pop().replace(/\.md$/i, '');
+
+    const isN3Feature = path.startsWith('modules/') && path.split('/').length === 4 && path.split('/').pop().startsWith('f-');
+    const isN2FeatureSet = path.startsWith('modules/') && path.split('/').length === 4 && path.split('/')[3] === 'README.md';
+    const isN1Domain = path.startsWith('modules/') && path.split('/').length === 3 && path.split('/')[2] === 'README.md';
+
+    let html;
+    if (isN3Feature) {
+      html = renderN3FeatureTemplate(path, title, frontmatter, cleanMd);
+    } else if (isN2FeatureSet) {
+      html = renderN2FeatureSetTemplate(path, title, frontmatter, cleanMd);
+    } else if (isN1Domain) {
+      html = renderN1DomainTemplate(path, title, frontmatter, cleanMd);
+    } else {
+      html = renderGenericDocumentTemplate(path, title, frontmatter, cleanMd);
+    }
+    // `table-wrap` é a moldura de tabela que o comparador do engine reconhece: com ela, a
+    // tabela é comparada linha a linha e célula a célula.
+    html = html.replace(/<div class="table-container">/g, '<div class="table-container table-wrap">');
+    return { title, frontmatter, html };
+  }
+
+  function renderMarkdownContent(path, rawMd) {
+    const { title, frontmatter, html } = desenhaDocumento(path, rawMd);
+    updateBreadcrumbs(path, title, frontmatter);
+
+    const container = document.getElementById('documentContainer');
+    // Em todo documento, cada seção é um card próprio (ver .doc-cards no docqui-theme.css).
+    container.classList.add('doc-cards');
+    container.innerHTML = html;
+
+    // Link para arquivo que NÃO é .md — o protótipo da funcionalidade, uma planilha, um
+    // PDF. Duas coisas precisam acontecer aqui, e nenhuma é automática:
+    //
+    //  1. O href do markdown é relativo AO ARQUIVO ('../../../prototypes/…'),
+    //     que é o que faz o link funcionar no GitHub e no editor. O navegador,
+    //     porém, resolveria esse href relativo à PÁGINA do visualizador, que
+    //     mora na raiz — e daria 404. Resolvemos aqui, como o
+    //     reescreveLinksInternos já faz com os .md.
+    //  2. O protótipo se lê ao LADO da spec, não no lugar dela: target=_blank.
+    //
+    // Reescrever o href (em vez de interceptar o clique) preserva o ctrl+clique,
+    // o "abrir em nova aba" do menu de contexto e o endereço real no hover. Roda
+    // aqui, e não dentro de cada template, porque o N3, o N2, o N1 e o genérico
+    // montam o HTML por caminhos diferentes e todos passam por este ponto.
+    const baseDoDoc = path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : '';
+    // Rubricas ganham `id` para que âncora dentro do documento tenha alvo. O marked
+    // desta versão não gera `id` nenhum, apesar do `headerIds: true` — por isso as 47
+    // âncoras do REPLICACAO.md e as 2 do NFR.md apontavam para o nada, e clicar numa
+    // delas trocava a ROTA (o hash é o caminho do documento) e abria "Documento não
+    // encontrado". A regra do slug é a do GitHub, que é como essas âncoras foram
+    // escritas à mão: minúsculas, fora tudo que não é letra/número/espaço/hífen —
+    // acento fica —, espaços viram hífen.
+    const usados = new Set();
+    container.querySelectorAll('h1, h2, h3, h4').forEach((h) => {
+      if (h.id) { usados.add(h.id); return; }
+      const base = slugDeTitulo(h.textContent || '');
+      if (!base) return;
+      let id = base, n = 1;
+      while (usados.has(id)) id = `${base}-${n++}`;
+      usados.add(id);
+      h.id = id;
+    });
+
+    container.querySelectorAll('a[href]').forEach((a) => {
+      const href = a.getAttribute('href');
+      // Âncora pura: rola até a rubrica e NÃO deixa o hash mudar — o hash é a rota.
+      if (href && href.startsWith('#') && href.length > 1) {
+        const alvoId = decodeURIComponent(href.slice(1));
+        a.addEventListener('click', (ev) => {
+          const el = container.querySelector(`[id="${CSS.escape(alvoId)}"]`);
+          if (!el) return;            // âncora sem alvo: deixa como estava, não engole o clique
+          ev.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return;
+      }
+      // esquema próprio (http:, mailto:), âncora e caminho absoluto ficam como estão
+      if (!href || /^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('#') || href.startsWith('/')) return;
+      const corte = href.indexOf('#');
+      const doc = corte === -1 ? href : href.slice(0, corte);
+      if (!doc) return;
+      const alvo = resolveCaminhoRelativo(baseDoDoc, doc);
+      if (/\.md$/i.test(doc)) {
+        // Link .md é navegação DENTRO do visualizador, e o hash é a rota
+        // (handleHashRoute lê o caminho dele). O reescreveLinksInternos já fazia
+        // isso — mas só é chamado no template de documento GENÉRICO. Nos templates
+        // de N1/N2/N3 o href relativo sobrevivia e o clique tirava o leitor do
+        // visualizador, entregando o Markdown cru: o `../README.md` da regra 3 do
+        // FOR-CAD-01 abria o README da RAIZ do repositório. Aqui a reescrita é no
+        // DOM já montado, então vale para todo template de uma vez, em vez de
+        // repetir a chamada nos oito pontos que fazem marked.parse.
+        // Alvo fora de repoFiles (placeholder de template, './[dominio]/[x].md')
+        // fica intacto: link inerte é melhor que link errado. A âncora, quando o link
+        // tem uma, viaja junto no formato `#<rota>#<âncora>` — o `handleHashRoute`
+        // separa as duas no ÚLTIMO `#`, porque caminho de arquivo não contém `#`.
+        if (repoFiles.includes(alvo)) {
+          const ancora = corte === -1 ? '' : href.slice(corte);
+          a.setAttribute('href', '#' + alvo + ancora);
+        }
+        return;
+      }
+      a.setAttribute('href', alvo + (corte === -1 ? '' : href.slice(corte)));
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+    });
+
+    // Pré-processamento robusto e renderização de diagramas Mermaid
+    container.querySelectorAll('pre code.language-mermaid, pre code.mermaid, code.language-mermaid').forEach(el => {
+      const div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = el.textContent;
+      const pre = el.closest('pre') || el;
+      pre.parentNode.replaceChild(div, pre);
+    });
+    // A fonte fica guardada: o Mermaid a troca pelo desenho, e o comparador dos previews
+    // confronta a fonte com a da base.
+    container.querySelectorAll('.mermaid').forEach(div => { div.dataset.fonte = div.textContent; });
+
+    if (typeof mermaid !== 'undefined') {
+      initMermaid();
+      setTimeout(async () => {
+        try {
+          const nodes = container.querySelectorAll('.mermaid');
+          if (nodes.length > 0) {
+            await mermaid.run({ nodes });
+            ajustaLarguraDiagramas(container);
+          }
+        } catch (e) {
+          console.warn('Erro ao renderizar Mermaid:', e);
+        }
+      }, 40);
+    }
+
+    // Nos previews de branch, avisa a barra do engine de qual artefato está na tela, para o
+    // "Destacar alterações" compará-lo com a base (ver comparaNosCards).
+    container.dataset.docquiSource = path;
+    container.dataset.docquiSourceRoot = 'repository';
+    document.dispatchEvent(new CustomEvent('docqui:artifact', {
+      detail: { path, root: 'repository', element: container },
+    }));
+  }
+
+  async function renderChanges(request) {
+    const container = document.getElementById('documentContainer');
+    container.classList.add('changes-view');
+    container.innerHTML = '<p role="status">Carregando alterações…</p>';
+    const source = new URL('_docqui/changes.html', location.href);
+    try {
+      const response = await fetch(source, { cache: 'no-cache' });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const parsed = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const main = parsed.querySelector('main.docqui-review__content');
+      if (!main) throw new Error('A comparação não contém o conteúdo esperado.');
+      if (request !== changesRequest || currentFilePath !== '__changes__') return;
+      main.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href.startsWith('#')) {
+          link.href = '#__changes__#' + href.slice(1);
+        } else {
+          link.href = new URL(href, source).href;
+        }
+      });
+      container.replaceChildren(...main.childNodes);
+      const anchor = location.hash.split('#')[2];
+      if (anchor) container.querySelector('[id="' + CSS.escape(decodeURIComponent(anchor)) + '"]')
+        ?.scrollIntoView({ block: 'start' });
+    } catch (error) {
+      if (request !== changesRequest || currentFilePath !== '__changes__') return;
+      console.error('Não foi possível carregar a comparação.', error);
+      const message = document.createElement('p');
+      message.setAttribute('role', 'alert');
+      message.textContent = 'Não foi possível carregar as alterações: ' + error.message
+        + '. A comparação está disponível nos previews de branches; na main, consulte os artefatos entregues.';
+      container.replaceChildren(message);
+    }
+  }
+
+  function updateBreadcrumbs(path, title, frontmatter) {
+    const bar = document.getElementById('breadcrumbBar');
+    let html = `<a href="#__dashboard__" onclick="navigateTo('__dashboard__'); return false;">Início</a>`;
+
+    if (path.startsWith('modules/')) {
+      const parts = path.split('/');
+      const domKey = parts[1];
+      const fsKey = parts[2];
+      const dom = fddStructure[domKey];
+      const fs = dom && dom.featureSets && dom.featureSets[fsKey];
+
+      if (dom) {
+        html += ` <span class="breadcrumb-sep">/</span> <a href="#${dom.readme}" onclick="navigateTo('${dom.readme}'); return false;">Domínio: ${dom.title}</a>`;
+      }
+      if (fs) {
+        html += ` <span class="breadcrumb-sep">/</span> <a href="#${fs.readme}" onclick="navigateTo('${fs.readme}'); return false;">Agrupamento Funcional: ${fs.title}</a>`;
+      }
+    }
+
+    html += ` <span class="breadcrumb-sep">/</span> <span class="breadcrumb-current">${title}</span>`;
+    bar.innerHTML = html;
+  }
+
+  // Template Especial para Funcionalidades Nível 3 (Clean, FDD, sem linhas em títulos)
+  // "Métricas de tamanho" sem nada contado: nenhuma célula de Tipo, ALR, DER, Complexidade
+  // ou PF preenchida e nenhuma Memória de cálculo. A linha de PF 0 (PE descartado) e a de PE
+  // reutilizado (↪) contam como preenchidas, e tabela sem essas colunas não é julgada vazia.
+  function metricasVazia(md) {
+    if (/^###\s+Mem[óo]ria de c[áa]lculo/mi.test(md)) return false;
+    const COLUNAS = ['Tipo', 'ALR', 'DER', 'Complexidade', 'PF'];
+    const VAZIA = new Set(['', '—', '–', '-']);
+    let cab = null;
+    for (const linha of md.split('\n')) {
+      const l = linha.trim();
+      if (!l.startsWith('|')) { cab = null; continue; }
+      const cells = l.replace(/^\|/, '').replace(/\|$/, '').split('|')
+        .map((c) => c.replace(/<\/?(small|strong|em)>/g, '').trim());
+      if (cells.every((c) => !c || /^:?-{2,}:?$/.test(c))) continue;
+      if (!cab) {
+        cab = cells;
+        if (!COLUNAS.some((c) => cab.includes(c))) return false;
+        continue;
+      }
+      for (const nome of COLUNAS) {
+        const k = cab.indexOf(nome);
+        if (k >= 0 && k < cells.length && !VAZIA.has(cells[k])) return false;
+      }
+    }
+    return true;
+  }
+
+  function renderN3FeatureTemplate(path, title, frontmatter, md) {
+    const idCode = frontmatter.id || path.split('/').pop().replace(/^f-|\.md$/g, '').toUpperCase();
+    const parts = path.split('/');
+    const dom = fddStructure[parts[1]];
+    const fs = dom && dom.featureSets && dom.featureSets[parts[2]];
+
+    const domName = dom ? dom.title : parts[1];
+    const fsName = fs ? fs.title : parts[2];
+
+    // Extrair Descrição e Não Faz
+    let descText = "Registra as operações da funcionalidade.";
+    let naoFazText = "";
+
+    const descMatch = md.match(/## Descrição\s*\n\n([\s\S]*?)(?=\n---|\n##|\n<div|$)/);
+    if (descMatch) {
+      const fullDesc = descMatch[1].trim();
+      const naoFazMatch = fullDesc.match(/\*\*Não faz\*\*:\s*([\s\S]*)$/i);
+      if (naoFazMatch) {
+        naoFazText = naoFazMatch[1].trim();
+        descText = fullDesc.replace(/\*\*Não faz\*\*:\s*[\s\S]*$/i, '').trim();
+      } else {
+        descText = fullDesc;
+      }
+    }
+
+    // Extrair Superfície Técnica (dev-only)
+    let devOnlyHtml = '';
+    const devMatch = md.match(/<div class="dev-only">([\s\S]*?)<\/div>/);
+    if (devMatch) {
+      devOnlyHtml = `
+        <div class="dev-only">
+          <span class="dev-badge">⚙️ SUPERFÍCIE TÉCNICA (DEV ONLY)</span>
+          ${marked.parse(devMatch[1])}
+        </div>
+      `;
+    }
+
+    // Extrair Regras de Negócio
+    let regrasHtml = '';
+    const regrasMatch = md.match(/## Regras de negócio\s*\n\n([\s\S]*?)(?=\n---|\n##|$)/);
+    if (regrasMatch) {
+      const rawRules = regrasMatch[1].trim();
+      const ruleLines = rawRules.split(/\n(?=\d+\.\s+|-\s+\*\*RN-\d+\*\*)/);
+      let cards = '';
+
+      ruleLines.forEach(line => {
+        const m = line.match(/^(\d+)\.\s+([\s\S]*)$/) || line.match(/^-\s+\*\*RN-(\d+)\*\*\s*[—–-]\s*([\s\S]*)$/);
+        if (m) {
+          const num = m[1].padStart(2, '0');
+          let text = m[2];
+          // Destaque de tags de sistemas/dicionários
+          text = text.replace(/`([A-Z0-9_\-]+)`/g, '<span class="rn-tag">$1</span>');
+          text = marked.parseInline(text);
+
+          cards += `
+            <div class="rn-card">
+              <div class="rn-card-header">
+                <span class="rn-num">RN-${num}</span>
+              </div>
+              <div class="rn-body">${text}</div>
+            </div>
+          `;
+        }
+      });
+
+      if (cards) {
+        regrasHtml = `
+          <div class="doc-section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--brand-blue);">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                Regras de Negócio
+              </h2>
+            </div>
+            <div class="rn-list">${cards}</div>
+          </div>
+        `;
+      }
+    }
+
+    // Extrair Cenários Gherkin e traduzir termos
+    let cenariosHtml = '';
+    const cenariosMatch = md.match(/## Cenários\s*\n\n```gherkin([\s\S]*?)```/);
+    if (cenariosMatch) {
+      const gherkinText = cenariosMatch[1].trim();
+      // Cada bloco começa nas tags e comentários logo acima do Background/Scenario a que
+      // pertencem; cortar só no Scenario os deixava no bloco do cenário anterior.
+      const gherkinLines = gherkinText.split('\n');
+      const blockStarts = [];
+      gherkinLines.forEach((l, i) => {
+        if (!/^\s*(?:Background|Contexto|Scenario|Cenário):/.test(l)) return;
+        let s = i;
+        while (s > 0 && /^\s*(?:[#@]|$)/.test(gherkinLines[s - 1])) s--;
+        blockStarts.push(s);
+      });
+      const blocks = blockStarts.map((s, k) => gherkinLines.slice(s, blockStarts[k + 1]).join('\n'));
+      const DICIONARIOS = { FIELD: 'Campo', RULES: 'Regra', MESSAGE: 'Mensagem', ERROR: 'Erro' };
+      let scCards = '';
+      let currentGroup = 'Cenários Principais';
+
+      blocks.forEach(b => {
+        if (b.includes('Caminho feliz')) currentGroup = 'Caminho Feliz';
+        if (b.includes('Estados especiais')) currentGroup = 'Estados Especiais & Excepcionalizações';
+        if (b.includes('Erros de validação')) currentGroup = 'Erros de Validação';
+        if (b.includes('Conflitos')) currentGroup = 'Conflitos com Dados Existentes';
+        if (b.includes('Restrições de acesso')) currentGroup = 'Restrições de Acesso';
+
+        const scTitleMatch = b.match(/(?:Scenario|Cenário):\s*(.+)/);
+        const isBackground = /^\s*(?:Background|Contexto):/m.test(b);
+        if (scTitleMatch || isBackground) {
+          const titleHtml = isBackground
+            ? '<strong>Contexto:</strong> pré-condição de todos os cenários'
+            : `<strong>Cenário:</strong> ${scTitleMatch[1].trim()}`;
+          // @RN-NN no selo dos cards de regra; "# ← X-DICTIONARY: chave" pela chave, com o
+          // comentário inteiro no title.
+          const rnBadges = (b.match(/^\s*@.*$/gm) || []).join(' ').split(/\s+/)
+            .filter(t => /^@RN-\d+$/.test(t))
+            .map(t => `<span class="rn-num">${t.slice(1)}</span>`).join('');
+          const dicBadges = [...b.matchAll(/^\s*#\s*←\s*(([A-Z]+)-DICTIONARY:\s*(.+?))\s*$/gm)].map(m => {
+            const chave = m[3].replace(/\s*\(.*\)$/, '').split(/\s+[—–]\s+/)[0];
+            return `<span class="rn-tag" title="${m[1].replace(/"/g, '&quot;')}">${DICIONARIOS[m[2]] || m[2]}: ${chave}</span>`;
+          }).join('');
+
+          let linesHtml = '';
+          b.split('\n').forEach(l => {
+            const lineTrim = l.trim();
+            if (lineTrim.startsWith('Given') || lineTrim.startsWith('Dado')) {
+              linesHtml += `<div><span class="gherkin-keyword gherkin-given">Dado</span> ${lineTrim.replace(/^(Given|Dado)\s+/i, '')}</div>\n`;
+            } else if (lineTrim.startsWith('When') || lineTrim.startsWith('Quando')) {
+              linesHtml += `<div><span class="gherkin-keyword gherkin-when">Quando</span> ${lineTrim.replace(/^(When|Quando)\s+/i, '')}</div>\n`;
+            } else if (lineTrim.startsWith('Then') || lineTrim.startsWith('Então') || lineTrim.startsWith('Entao')) {
+              linesHtml += `<div><span class="gherkin-keyword gherkin-then">Então</span> ${lineTrim.replace(/^(Then|Então|Entao)\s+/i, '')}</div>\n`;
+            } else if (lineTrim.startsWith('And') || lineTrim.startsWith('E ')) {
+              linesHtml += `<div><span class="gherkin-keyword gherkin-and">E</span> ${lineTrim.replace(/^(And|E)\s+/i, '')}</div>\n`;
+            }
+          });
+
+          scCards += `
+            <div class="scenario-card${isBackground ? ' scenario-background' : ''}">
+              <div class="scenario-header">
+                <span class="scenario-title">${titleHtml}</span>
+                <span class="scenario-tags">${rnBadges}${dicBadges}</span>
+              </div>
+              <div class="scenario-body">${linesHtml}</div>
+            </div>
+          `;
+        }
+      });
+
+      if (scCards) {
+        cenariosHtml = `
+          <div class="doc-section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--badge-success-text);">
+                  <polyline points="9 11 12 14 22 4"></polyline>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+                Cenários de Teste & Aceite (Gherkin BDD)
+              </h2>
+            </div>
+            ${scCards}
+          </div>
+        `;
+      }
+    }
+
+    // Demais seções (Campos, Campos automáticos, Comportamento de Tela, Changelog)
+    let restOfDoc = md
+      .replace(/#\s+.*?\n/, '')
+      .replace(/>\s*\*\*Nível 3\*\*.*?\n/, '')
+      .replace(/## Descrição[\s\S]*?(?=\n---|\n##|<div|$)/, '')
+      .replace(/<div class="dev-only">[\s\S]*?<\/div>/, '')
+      .replace(/## Regras de negócio[\s\S]*?(?=\n---|\n##|$)/, '')
+      .replace(/## Cenários[\s\S]*?(?=\n---|\n##|$)/, '');
+
+    // Remover linhas horizontais residuais
+    restOfDoc = restOfDoc.replace(/^[ \t]*---[ \t]*$/gm, '').trim();
+    // O que vem antes da primeira rubrica — o título e as linhas do cabeçalho (Nível 3 e
+    // as que o seguem) — já está no hero; sem este corte, virava um card sem título.
+    const primeiraRubrica = restOfDoc.search(/^##\s+/m);
+    if (primeiraRubrica > 0) restOfDoc = restOfDoc.slice(primeiraRubrica);
+
+    // Separar por seções (## Heading)
+    const sections = restOfDoc.split(/\n(?=##\s+)/);
+    let sectionsHtml = '';
+
+    sections.forEach(sec => {
+      if (!sec.trim()) return;
+      const secTitleMatch = sec.match(/^##\s+(.+)$/m);
+      let secTitle = secTitleMatch ? secTitleMatch[1].trim() : '';
+      let secBody = sec.replace(/^##\s+.*?(\n|$)/, '').trim();
+
+      // Métricas de tamanho ainda sem contagem não vira card: a pendência já aparece na
+      // coluna Contagem do INDEX e no painel; a seção continua no .md, onde a contagem nasce.
+      if (/^m[ée]tricas de tamanho$/i.test(secTitle) && metricasVazia(secBody)) return;
+
+      // Remover rodapés em itálico de metadados
+      secBody = secBody.replace(/\*(?:Agrupamento Funcional|Feature Set):[\s\S]*$/i, '').trim();
+      secBody = secBody.replace(/\*Links:[\s\S]*$/i, '').trim();
+
+      // Formatar datas dd/mm/aaaa no Changelog
+      secBody = secBody.replace(/\| (\d{4}-\d{2}-\d{2}) \|/g, (match, d) => `| ${formatDateBR(d)} |`);
+
+      let parsedSec = marked.parse(secBody);
+
+      // Tabelas
+      const isChangelog = secTitle.toLowerCase().includes('changelog');
+      const tableClass = isChangelog ? 'custom-table changelog-table' : 'custom-table';
+      parsedSec = parsedSec.replace(/<table>/g, `<div class="table-container"><table class="${tableClass}">`).replace(/<\/table>/g, '</table></div>');
+      parsedSec = parsedSec.replace(/<td>Sim<\/td>/g, '<td><span class="req-tag">Sim</span></td>');
+      parsedSec = parsedSec.replace(/<td>Não<\/td>/g, '<td><span class="opt-tag">Não</span></td>');
+
+      // Remover qualquer <hr> interno
+      parsedSec = parsedSec.replace(/<hr\s*\/?>/g, '');
+
+      // Badges do changelog
+      if (isChangelog) {
+        parsedSec = parsedSec.replace(/<td>(Aval do PO|Requisitos aprovados|Saneamento|Catalogação|Correção|Ajuste|Feature criada|Funcionalidade criada)(.*?)<\/td>/g, (m, p1, p2) => {
+          let color = '';
+          if (p1 === 'Aval do PO' || p1 === 'Requisitos aprovados') color = 'style="background:#ECFDF5; color:#047857;"';
+          else if (p1 === 'Correção') color = 'style="background:#FFFBEB; color:#B45309;"';
+          return `<td><span class="changelog-badge" ${color}>${p1}${p2}</span></td>`;
+        });
+      }
+
+      sectionsHtml += `
+        <div class="doc-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--brand-blue);">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+              </svg>
+              ${secTitle}
+            </h2>
+          </div>
+          <div class="generic-markdown-body">
+            ${parsedSec}
+          </div>
+        </div>
+      `;
+    });
+
+    const html = `
+      <!-- HERO CARD -->
+      <div class="doc-hero-card">
+        <div class="doc-meta-tags">
+          <span class="badge badge-fdd-level">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            Nível 3 · Funcionalidade
+          </span>
+          <span class="badge badge-id" onclick="copyId('${idCode}')" title="Clique para copiar">
+            ${idCode}
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </span>
+        </div>
+
+        <h1 class="doc-title">${title}</h1>
+        <div class="doc-hierarchy-info">
+          <span><strong>Nível 3</strong></span> &bull; 
+          <span>Agrupamento Funcional: <strong>${fsName}</strong></span> &bull; 
+          <span>Domínio: <strong>${domName}</strong></span>
+        </div>
+
+        <div class="hero-description-block">
+          <div class="section-header">
+            <h2 class="section-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--brand-blue);">
+                <line x1="21" y1="6" x2="3" y2="6"></line>
+                <line x1="17" y1="10" x2="3" y2="10"></line>
+                <line x1="21" y1="14" x2="3" y2="14"></line>
+                <line x1="17" y1="18" x2="3" y2="18"></line>
+              </svg>
+              Descrição
+            </h2>
+          </div>
+          <p style="font-size: 14px; color: var(--text-main); line-height: 1.6; margin-bottom: ${naoFazText ? '10px' : '0'};">
+            ${marked.parseInline(descText)}
+          </p>
+          ${naoFazText ? `
+            <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6;">
+              <strong style="color: var(--text-main);">Não faz:</strong> ${marked.parseInline(naoFazText)}
+            </p>
+          ` : ''}
+        </div>
+      </div>
+
+      ${devOnlyHtml}
+      ${regrasHtml}
+      ${cenariosHtml}
+      ${sectionsHtml}
+
+      <footer class="doc-footer">
+        <div>Agrupamento Funcional: <strong>${fsName}</strong> &bull; Domínio: <strong>${domName}</strong></div>
+        <div><a href="#__dashboard__" onclick="navigateTo('__dashboard__'); return false;">Voltar ao Início</a></div>
+      </footer>
+    `;
+
+    return html;
+  }
+
+  // Template para Agrupamentos Funcionais Nível 2 (Cards modulares, Hero card e Fluxo Mermaid)
+  function renderN2FeatureSetTemplate(path, title, frontmatter, md) {
+    const parts = path.split('/');
+    const dom = fddStructure[parts[1]];
+    const fsObj = dom && dom.featureSets && dom.featureSets[parts[2]];
+
+    const domName = dom ? dom.title : parts[1];
+    const fsName = fsObj ? fsObj.title : title.replace(/^Feature Set:\s*/i, '');
+    
+    // Extrair Sigla/Código
+    const siglaMatch = md.match(/`([A-Z0-9-]+)`/);
+    const idCode = siglaMatch ? siglaMatch[1] : (dom ? dom.sigla : 'N2');
+
+    // Extrair Descrição e Não Faz para o Hero Card
+    let descText = "";
+    let naoFazText = "";
+    const descMatch = md.match(/## Descrição\s*\n\n([\s\S]*?)(?=\n---|\n##|$)/);
+    if (descMatch) {
+      const fullDesc = descMatch[1].trim();
+      const naoFazMatch = fullDesc.match(/\*\*Não faz\*\*:\s*([\s\S]*)$/i);
+      if (naoFazMatch) {
+        naoFazText = naoFazMatch[1].trim();
+        descText = fullDesc.replace(/\*\*Não faz\*\*:\s*[\s\S]*$/i, '').trim();
+      } else {
+        descText = fullDesc;
+      }
+    }
+
+    // Processar demais seções em cards individuais
+    const bodyMd = md
+      .replace(/^#\s+[^\n]+\n(?:>\s*[^\n]+\n)?/m, '')
+      .replace(/## Descrição\s*\n\n[\s\S]*?(?=\n---|\n##|$)/, '')
+      .trim();
+
+    const rawSections = bodyMd.split(/\n(?=##\s+)/);
+    let sectionsHtml = '';
+
+    rawSections.forEach(sec => {
+      let secClean = sec.replace(/^---\s*\n?/m, '').trim();
+      if (!secClean) return;
+
+      const secTitleMatch = secClean.match(/^##\s+(.+)$/m);
+      if (!secTitleMatch) return;
+      const secTitle = secTitleMatch[1].trim();
+      let secContent = secClean.replace(/^##\s+.+$/m, '').trim();
+
+      // Ajustar links relativos para funcionalidades N3 (ex: [Nome](f-pesquisar...md) -> navigateTo('modules/dom/fs/f-pesquisar...md'))
+      secContent = secContent.replace(/href="(?!\/|#|http)(f-[^"]+\.md)"/g, `href="#modules/${parts[1]}/${parts[2]}/$1" onclick="navigateTo('modules/${parts[1]}/${parts[2]}/$1'); return false;"`);
+      secContent = secContent.replace(/\]\((f-[^\)]+\.md)\)/g, `](#modules/${parts[1]}/${parts[2]}/$1)`);
+
+      let renderedSec = marked.parse(secContent);
+      
+      const isChangelog = secTitle.toLowerCase().includes('histórico') || secTitle.toLowerCase().includes('changelog');
+      const tableClass = isChangelog ? 'custom-table changelog-table' : 'custom-table';
+
+      renderedSec = renderedSec
+        .replace(/<table>/g, `<div class="table-container"><table class="${tableClass}">`)
+        .replace(/<\/table>/g, '</table></div>');
+
+      // Formatar datas no changelog
+      renderedSec = renderedSec.replace(/\| (\d{4}-\d{2}-\d{2}) \|/g, (match, d) => `| ${formatDateBR(d)} |`);
+
+      // Ícones para cada seção
+      let icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>`;
+      if (/funcionalidade|feature/.test(secTitle.toLowerCase())) {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>`;
+      } else if (secTitle.toLowerCase().includes('fluxo')) {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="18" r="3"></circle><path d="M6 9v12M18 9a9 9 0 0 0-9 9"></path></svg>`;
+      } else if (secTitle.toLowerCase().includes('tela')) {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`;
+      } else if (secTitle.toLowerCase().includes('permiss')) {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`;
+      } else if (secTitle.toLowerCase().includes('depend')) {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.5" y1="10.5" x2="15.5" y2="6.5"></line><line x1="8.5" y1="13.5" x2="15.5" y2="17.5"></line></svg>`;
+      } else if (isChangelog) {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+      }
+
+      sectionsHtml += `
+        <div class="doc-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              ${icon}
+              ${secTitle}
+            </h2>
+          </div>
+          <div class="generic-markdown-body">
+            ${renderedSec}
+          </div>
+        </div>
+      `;
+    });
+
+    const html = `
+      <!-- HERO CARD N2 -->
+      <div class="doc-hero-card">
+        <div class="doc-meta-tags">
+          <span class="badge badge-fdd-level">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+            </svg>
+            Nível 2 · Agrupamento Funcional
+          </span>
+          <span class="badge badge-id" onclick="copyId('${idCode}')" title="Clique para copiar">
+            ${idCode}
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </span>
+        </div>
+
+        <h1 class="doc-title">${fsName}</h1>
+        <div class="doc-hierarchy-info">
+          <span><strong>Nível 2</strong></span> &bull; 
+          <span>Domínio: <strong>${domName}</strong></span>
+        </div>
+
+        ${descText ? `
+          <div class="hero-description-block">
+            <div class="section-header">
+              <h2 class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--brand-blue);">
+                  <line x1="21" y1="6" x2="3" y2="6"></line>
+                  <line x1="17" y1="10" x2="3" y2="10"></line>
+                  <line x1="21" y1="14" x2="3" y2="14"></line>
+                  <line x1="17" y1="18" x2="3" y2="18"></line>
+                </svg>
+                Descrição
+              </h2>
+            </div>
+            <p style="font-size: 14px; color: var(--text-main); line-height: 1.6; margin-bottom: ${naoFazText ? '10px' : '0'};">
+              ${marked.parseInline(descText)}
+            </p>
+            ${naoFazText ? `
+              <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6;">
+                <strong style="color: var(--text-main);">Não faz:</strong> ${marked.parseInline(naoFazText)}
+              </p>
+            ` : ''}
+          </div>
+        ` : ''}
+      </div>
+
+      ${sectionsHtml}
+
+      <footer class="doc-footer">
+        <div>Domínio: <strong>${domName}</strong> &bull; Agrupamento Funcional: <strong>${fsName}</strong></div>
+        <div><a href="#__dashboard__" onclick="navigateTo('__dashboard__'); return false;">Voltar ao Início</a></div>
+      </footer>
+    `;
+
+    return html;
+  }
+
+  // Template para Domínios Nível 1 (Cards modulares e Hero card)
+  function renderN1DomainTemplate(path, title, frontmatter, md) {
+    const parts = path.split('/');
+    const dom = fddStructure[parts[1]];
+    const domName = dom ? dom.title : title.replace(/^(Major Feature Set|Domínio):\s*/i, '');
+    const idCode = dom ? dom.sigla : 'N1';
+
+    // Extrair Descrição
+    let descText = "";
+    let naoFazTable = "";
+    const descMatch = md.match(/## Descrição\s*\n\n([\s\S]*?)(?=\n---|\n##|$)/);
+    if (descMatch) {
+      descText = descMatch[1].trim();
+    }
+
+    const bodyMd = md
+      .replace(/^#\s+[^\n]+\n(?:>\s*[^\n]+\n)?/m, '')
+      .replace(/## Descrição\s*\n\n[\s\S]*?(?=\n---|\n##|$)/, '')
+      .trim();
+
+    const rawSections = bodyMd.split(/\n(?=##\s+)/);
+    let sectionsHtml = '';
+
+    rawSections.forEach(sec => {
+      let secClean = sec.replace(/^---\s*\n?/m, '').trim();
+      if (!secClean) return;
+
+      const secTitleMatch = secClean.match(/^##\s+(.+)$/m);
+      if (!secTitleMatch) return;
+      const secTitle = secTitleMatch[1].trim();
+      let secContent = secClean.replace(/^##\s+.+$/m, '').trim();
+
+      // Ajustar links relativos para agrupamentos funcionais N2
+      secContent = secContent.replace(/href="(?!\/|#|http)\.?\/?([^"]+\/README\.md)"/g, `href="#modules/${parts[1]}/$1" onclick="navigateTo('modules/${parts[1]}/$1'); return false;"`);
+      secContent = secContent.replace(/\]\(\.?\/?([^\)]+\/README\.md)\)/g, `](#modules/${parts[1]}/$1)`);
+
+      let renderedSec = marked.parse(secContent);
+      const isChangelog = secTitle.toLowerCase().includes('histórico') || secTitle.toLowerCase().includes('changelog');
+      const tableClass = isChangelog ? 'custom-table changelog-table' : 'custom-table';
+
+      renderedSec = renderedSec
+        .replace(/<table>/g, `<div class="table-container"><table class="${tableClass}">`)
+        .replace(/<\/table>/g, '</table></div>');
+      renderedSec = renderedSec.replace(/\| (\d{4}-\d{2}-\d{2}) \|/g, (match, d) => `| ${formatDateBR(d)} |`);
+
+      let icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>`;
+      if (/agrupamentos funcionais|feature set/.test(secTitle.toLowerCase())) {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
+      } else if (secTitle.toLowerCase().includes('regras')) {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline></svg>`;
+      } else if (secTitle.toLowerCase().includes('integra')) {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.5" y1="10.5" x2="15.5" y2="6.5"></line><line x1="8.5" y1="13.5" x2="15.5" y2="17.5"></line></svg>`;
+      }
+
+      sectionsHtml += `
+        <div class="doc-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              ${icon}
+              ${secTitle}
+            </h2>
+          </div>
+          <div class="generic-markdown-body">
+            ${renderedSec}
+          </div>
+        </div>
+      `;
+    });
+
+    const html = `
+      <!-- HERO CARD N1 -->
+      <div class="doc-hero-card">
+        <div class="doc-meta-tags">
+          <span class="badge badge-fdd-level">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            </svg>
+            Nível 1 · Domínio
+          </span>
+          <span class="badge badge-id" onclick="copyId('${idCode}')" title="Clique para copiar">
+            ${idCode}
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </span>
+        </div>
+
+        <h1 class="doc-title">${domName}</h1>
+        <div class="doc-hierarchy-info">
+          <span><strong>Nível 1</strong></span> &bull; 
+          <span>Visão Estratégica do Domínio</span>
+        </div>
+
+        ${descText ? `
+          <div class="hero-description-block">
+            <div class="section-header">
+              <h2 class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--brand-blue);">
+                  <line x1="21" y1="6" x2="3" y2="6"></line>
+                  <line x1="17" y1="10" x2="3" y2="10"></line>
+                  <line x1="21" y1="14" x2="3" y2="14"></line>
+                  <line x1="17" y1="18" x2="3" y2="18"></line>
+                </svg>
+                Descrição
+              </h2>
+            </div>
+            <div style="font-size: 14px; color: var(--text-main); line-height: 1.6;">
+              ${marked.parse(descText)}
+            </div>
+          </div>
+        ` : ''}
+      </div>
+
+      ${sectionsHtml}
+
+      <footer class="doc-footer">
+        <div>Domínio: <strong>${domName}</strong></div>
+        <div><a href="#__dashboard__" onclick="navigateTo('__dashboard__'); return false;">Voltar ao Início</a></div>
+      </footer>
+    `;
+
+    return html;
+  }
+
+  // Resolve um caminho relativo contra o diretório de um documento ('a/b' + '../c' → 'a/c')
+  function resolveCaminhoRelativo(base, rel) {
+    const partes = base ? base.split('/') : [];
+    rel.split('/').forEach(seg => {
+      if (seg === '' || seg === '.') return;
+      if (seg === '..') partes.pop();
+      else partes.push(seg);
+    });
+    return partes.join('/');
+  }
+
+  // Slug no padrão GitHub — mesma regra com que as âncoras dos documentos foram
+  // escritas à mão (`#rep-041--o-verifica-texto-corrido-...`): minúsculas, fora o que
+  // não é letra/número/espaço/hífen (acento fica, emoji e crase saem), espaço vira hífen.
+  function slugDeTitulo(texto) {
+    // Espaço a espaço, não `\s+`: o travessão some e deixa DOIS espaços, que viram dois
+    // hífens (`rep-041--o-verifica…`). Colapsar aqui produziria um hífen só e a âncora
+    // escrita à mão no documento não casaria com a rubrica.
+    return texto.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, '').trim().replace(/\s/g, '-');
+  }
+
+  // Cabeçalho de card idêntico ao das seções do N3 — mesmo ícone, mesma tipografia.
+  // É a forma que o leitor já associa a "um bloco de conteúdo" no visualizador.
+  function cabecalhoDeCard(titulo) {
+    return `
+      <div class="section-header">
+        <h2 class="section-title" id="${slugDeTitulo(titulo)}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--brand-blue);">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="9" y1="21" x2="9" y2="9"></line>
+          </svg>
+          ${titulo}
+        </h2>
+      </div>`;
+  }
+
+  function renderizaBloco(md, path, tiraRegua) {
+    let r = marked.parse(md);
+    r = r.replace(/<table>/g, '<div class="table-container"><table class="custom-table">').replace(/<\/table>/g, '</table></div>');
+    r = r.replace(/\| (\d{4}-\d{2}-\d{2}) \|/g, (match, d) => `| ${formatDateBR(d)} |`);
+    if (tiraRegua) r = r.replace(/<hr\s*\/?>/g, '');
+    return r;
+  }
+
+  // Dicionário canônico: cada entrada `### <nome>` da seção `## Entradas` vira um card
+  // próprio. Numa lista corrida — 12 campos ou 6 regras dentro de um card só — não se
+  // enxerga onde uma entrada acaba e a seguinte começa, e é justamente a entrada que
+  // se consulta. Devolve null quando o documento não tem a seção, e aí nada muda.
+  function entradasDeDicionario(md) {
+    const linhas = md.split('\n');
+    const ini = linhas.findIndex((l) => /^##\s+Entradas\s*$/.test(l));
+    if (ini === -1) return null;
+    let fim = linhas.length;
+    let cerca = false;
+    for (let i = ini + 1; i < linhas.length; i++) {
+      if (/^\s*(```|~~~)/.test(linhas[i])) { cerca = !cerca; continue; }
+      if (!cerca && /^##\s+/.test(linhas[i])) { fim = i; break; }
+    }
+    // Dentro da seção, quebra em `### <nome>` — ignorando o que estiver em cerca de
+    // código, porque a entrada traz cenários Gherkin.
+    const corpo = linhas.slice(ini + 1, fim);
+    const intro = [];
+    const entradas = [];
+    cerca = false;
+    for (const l of corpo) {
+      if (/^\s*(```|~~~)/.test(l)) cerca = !cerca;
+      const h = !cerca && l.match(/^###\s+(.+?)\s*$/);
+      if (h) { entradas.push({ titulo: h[1], linhas: [] }); continue; }
+      (entradas.length ? entradas[entradas.length - 1].linhas : intro).push(l);
+    }
+    if (!entradas.length) return null;
+    return { antes: linhas.slice(0, ini + 1).concat(intro).join('\n'), entradas, depois: linhas.slice(fim).join('\n') };
+  }
+
+  // Cada rubrica `## ` vira um card, como as seções do N3; o que vem antes da primeira — o
+  // título e a apresentação — é o primeiro card. Rubrica dentro de cerca de código não conta.
+  function cardsPorSecao(md, path) {
+    const secoes = [{ titulo: null, linhas: [] }];
+    let cerca = false;
+    for (const l of md.split('\n')) {
+      if (/^\s*(```|~~~)/.test(l)) cerca = !cerca;
+      const h = !cerca && l.match(/^##\s+(.+?)\s*$/);
+      if (h) { secoes.push({ titulo: h[1], linhas: [] }); continue; }
+      secoes[secoes.length - 1].linhas.push(l);
+    }
+    return secoes
+      .filter((s) => s.titulo !== null || s.linhas.join('\n').trim())
+      .map((s) => s.titulo === null
+        ? `<div class="doc-section generic-markdown-body">${renderizaBloco(s.linhas.join('\n'), path, true)}</div>`
+        : `
+          <div class="doc-section">
+            ${cabecalhoDeCard(s.titulo)}
+            <div class="generic-markdown-body">${renderizaBloco(s.linhas.join('\n'), path, true)}</div>
+          </div>`)
+      .join('');
+  }
+
+  // AIMM: o estado, quem levou a AIMM até ele e quando (`estado-por`/`estado-em`, Docqui 9.1.0).
+  // AIMM anterior, sem os campos, mostra só o estado.
+  function estadoDaAimm(fm) {
+    const ROTULO = { rascunho: 'Rascunho', 'em-análise': 'Em análise', 'escopo-aprovado': 'Escopo aprovado', 'em-execução': 'Em execução', 'concluído': 'Concluída' };
+    const limpa = (v) => String(v || '').replace(/\s+#.*$/, '').trim().replace(/^["']|["']$/g, '');
+    const estado = limpa(fm.estado), por = limpa(fm['estado-por']);
+    const em = limpa(fm['estado-em']).match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2}) ([+-]\d{2}:\d{2})$/);
+    return `<div class="aimm-estado"><span class="badge badge-fdd-level">${mmEsc(ROTULO[estado] || estado)}</span>`
+      + (por ? `<span>por <strong>${mmEsc(por)}</strong></span>` : '')
+      + (em ? `<span>em ${em[3]}/${em[2]}/${em[1]} às ${em[4]}</span>` : '')
+      + '</div>';
+  }
+
+  // Template para Documentos Gerais (N0, Readmes gerais)
+  function renderGenericDocumentTemplate(path, title, frontmatter, md) {
+    const dicionario = /-DICTIONARY\.md$/i.test(path) ? entradasDeDicionario(md) : null;
+
+    let rendered;
+    if (dicionario) {
+      rendered =
+        cardsPorSecao(dicionario.antes, path) +
+        dicionario.entradas.map((e) => `
+          <div class="doc-section">
+            ${cabecalhoDeCard(e.titulo)}
+            <div class="generic-markdown-body">${renderizaBloco(e.linhas.join('\n'), path, true)}</div>
+          </div>`).join('') +
+        (dicionario.depois.trim() ? cardsPorSecao(dicionario.depois, path) : '');
+    } else {
+      rendered = cardsPorSecao(md, path);
+    }
+    if (/(^|\/)analise-impacto\/AIMM-[^/]+\.md$/.test(path) && frontmatter.estado) {
+      rendered = rendered.replace(/<\/h1>/, (fim) => fim + estadoDaAimm(frontmatter));
+    }
+
+    const html = `
+      ${rendered}
+      <footer class="doc-footer">
+        <div>Arquivo: <code>${path}</code></div>
+        <div><a href="#__dashboard__" onclick="navigateTo('__dashboard__'); return false;">Voltar ao Início</a></div>
+      </footer>
+    `;
+
+    return html;
+  }
+
+  // Navegação Global
+  function navigateTo(path) {
+    if (mobileSidebar.matches) setSidebarExpanded(false);
+    window.location.hash = path;
+    loadFile(path);
+  }
+
+  // ============================================================================
+  // TELA INTERATIVA: MAPA DE FUNCIONALIDADES (FDD CANVAS)
+  // ============================================================================
+  function mmEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  function mmOpenLink(path) {
+    if (!path) return '';
+    return '<a class="mm-open" href="#' + encodeURI(path) + '" onclick="navigateTo(\'' + mmEsc(path) + '\'); event.stopPropagation(); return false;"'
+      + ' title="Abrir o artefato">'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+      + '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>'
+      + '<span>abrir</span></a>';
+  }
+
+  function mmCard(cls, dataText, badge, nome, desc, foot, kidsHTML, leaf) {
+    return '<div class="mm-node ' + cls + (leaf ? ' mm-leaf' : '') + '" data-text="' + mmEsc(dataText).toLowerCase() + '">'
+      + '<div class="mm-card" onclick="mmToggle(this)">'
+      + '<div class="mm-badge">' + badge + '</div>'
+      + '<div class="mm-name">' + mmEsc(nome) + '</div>'
+      + (desc ? '<div class="mm-desc">' + mmEsc(desc) + '</div>' : '')
+      + (foot || '')
+      + '</div>'
+      + (kidsHTML ? '<div class="mm-kids"><div class="mm-bus"></div>' + kidsHTML + '</div>' : '')
+      + '</div>';
+  }
+
+  let mmZoom = null;
+
+  function renderMapaView() {
+    currentFilePath = '__mapa__';
+    updateBreadcrumbs('__mapa__', 'Mapa de Funcionalidades');
+    const container = document.getElementById('documentContainer');
+    const M = globalThis.MAPA_FEATURES;
+
+    if (!M) {
+      container.innerHTML = `
+        <div class="doc-section">
+          <h2 class="doc-title" style="font-size:18px;">Mapa de funcionalidades indisponível</h2>
+          <p style="color:var(--text-muted); margin-top:8px;">O arquivo <code>assets/mapa-data.js</code> não foi carregado.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const prodOpen = M.produto.path
+      ? '<p class="mm-product-open">' + mmOpenLink(M.produto.path).replace('<span>abrir</span>', '<span>abrir a visão do produto</span>') + '</p>'
+      : '';
+
+    container.innerHTML = `
+      <div class="mapa-screen">
+        <div class="doc-section" style="margin-bottom: 20px; padding: 24px 28px;">
+          <div class="mm-top">
+            <div class="mm-top-row">
+              <div class="mm-product">
+                <div class="mm-product-name">${mmEsc(M.produto.nome)} <small>· Mapa de funcionalidades</small></div>
+                ${prodOpen}
+              </div>
+              <div class="mm-right">
+                <div class="mm-controls">
+                  <span class="mm-kpi" id="mm-kpi-dom">— domínios</span>
+                  <span class="mm-kpi" id="mm-kpi-fs">— agrupamentos funcionais</span>
+                  <span class="mm-kpi" id="mm-kpi-feat">— funcionalidades</span>
+                  <span class="mm-kpi" id="mm-kpi-gap">— cobertura</span>
+                  <span class="mm-search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="search" id="mm-busca" placeholder="Filtrar por nome ou ID" oninput="mmSearch(this.value)" aria-label="Filtrar o mapa">
+                  </span>
+                </div>
+                <div class="mm-actions">
+                  <button class="mm-btn" id="mm-btn-synthetic" onclick="mmToggleSynthetic(this)">Visualizar Árvore Sintética</button>
+                  <button class="mm-btn" onclick="mmAll(false)">Expandir tudo</button>
+                  <button class="mm-btn" onclick="mmAll(true)">Recolher tudo</button>
+                  <button class="mm-btn" id="mm-btn-desc" aria-pressed="false" onclick="mmToggleDesc()">Ocultar descrição</button>
+                  <button class="mm-btn" id="mm-btn-gaps" onclick="mmOnlyGaps(this.classList.toggle('is-on'))">Só lacunas</button>
+                  <span class="mm-zoom" role="group" aria-label="Zoom dos nós">
+                    <button class="mm-btn mm-zoom-btn" onclick="mmZoomBy(-0.1)" aria-label="Reduzir zoom" title="Reduzir">&minus;</button>
+                    <button class="mm-btn mm-zoom-fit" onclick="mmZoomFit()" title="Ajustar à largura" aria-label="Ajustar à largura"><span id="mm-zoom-val">100%</span></button>
+                    <button class="mm-btn mm-zoom-btn" onclick="mmZoomBy(0.1)" aria-label="Aumentar zoom" title="Aumentar">+</button>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <p class="mm-product-desc"><strong>Domínios</strong> (N1) → <strong>agrupamentos funcionais</strong> (N2) → <strong>funcionalidades</strong> (N3). Clique num nó para abrir ou fechar; <strong>abrir</strong> leva ao artefato.</p>
+            <div class="mm-legend">
+              <span class="lg"><span class="sw" style="border-left-color:#005CA9"></span> N1 · Domínio</span>
+              <span class="lg"><span class="sw" style="border-left-color:#2E86C1"></span> N2 · Agrupamento funcional</span>
+              <span class="lg"><span class="sw" style="border-left-color:#7C93A8"></span> N3 · Funcionalidade</span>
+              <span class="lg"><span class="mm-status st-em-desenvolvimento"></span> requisitos aprovados / implementado</span>
+              <span class="lg"><span class="mm-status st-rascunho"></span> rascunho</span>
+            </div>
+          </div>
+        </div>
+        <div class="doc-section" style="padding: 24px; background: var(--bg-card);">
+          <div class="mm-wrap" style="background: radial-gradient(circle at 1.5px 1.5px, var(--border-color) 1.5px, transparent 0) 0 0 / 22px 22px, var(--bg-app); min-height: 680px; border-radius: var(--radius-md);">
+            <div id="mm-canvas"></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const doms = M.dominios.map(function (d) {
+      if (!d.fss.length) {
+        const gfoot = '<div class="mm-foot"><span class="mm-gap-badge">sem agrupamentos funcionais — a especificar</span>' + mmOpenLink(d.path) + '</div>';
+        return mmCard('lvl-n1 mm-gap', 'lacuna a especificar ' + d.sigla + ' ' + d.nome + ' ' + d.desc, 'N1 · ' + mmEsc(d.sigla), d.nome, d.desc, gfoot, '', true);
+      }
+      const fss = d.fss.map(function (fs) {
+        if (!fs.feats.length) {
+          const gfoot = '<div class="mm-foot"><span class="mm-gap-badge">sem N3 — a especificar</span>' + mmOpenLink(fs.path) + '</div>';
+          return mmCard('lvl-n2 mm-gap', 'lacuna a especificar ' + fs.sigla + ' ' + fs.nome + ' ' + fs.desc, 'N2 · ' + mmEsc(fs.sigla), fs.nome, fs.desc, gfoot, '', true);
+        }
+        const feats = fs.feats.map(function (f) {
+          const foot = '<div class="mm-foot"><span class="mm-status st-' + mmEsc(f.estado) + '"></span>'
+            + mmOpenLink(f.path) + '</div>';
+          return mmCard('lvl-n3', f.id + ' ' + f.nome + ' ' + f.desc, 'N3 · ' + mmEsc(f.id), f.nome, f.desc, foot, '', true);
+        }).join('');
+        const foot = '<div class="mm-foot"><span class="mm-count">' + fs.feats.length + ' funcionalidade' + (fs.feats.length === 1 ? '' : 's') + '</span>' + mmOpenLink(fs.path) + '<span class="mm-caret">▸</span></div>';
+        return mmCard('lvl-n2', fs.sigla + ' ' + fs.nome + ' ' + fs.desc, 'N2 · ' + mmEsc(fs.sigla), fs.nome, fs.desc, foot, feats, false);
+      }).join('');
+      const foot = '<div class="mm-foot"><span class="mm-count">' + d.fss.length + ' agrupamento funcional' + (d.fss.length === 1 ? '' : 's') + '</span>' + mmOpenLink(d.path) + '<span class="mm-caret">▸</span></div>';
+      return mmCard('lvl-n1', d.sigla + ' ' + d.nome + ' ' + d.desc, 'N1 · ' + mmEsc(d.sigla), d.nome, d.desc, foot, fss, false);
+    }).join('');
+
+    document.getElementById('mm-canvas').innerHTML = doms;
+
+    document.getElementById('mm-kpi-dom').textContent = M.kpi.dominios + ' domínios';
+    document.getElementById('mm-kpi-fs').textContent = M.kpi.fss + ' agrupamentos funcionais';
+    document.getElementById('mm-kpi-feat').textContent = M.kpi.feats + ' funcionalidades';
+    const _gaps = (M.kpi.fssVazios || 0) + (M.kpi.domsVazios || 0);
+    const _kg = document.getElementById('mm-kpi-gap');
+    if (_kg) {
+      const totN2 = M.kpi.fss || 0;
+      const cob = totN2 ? Math.round(100 * (totN2 - (M.kpi.fssVazios || 0)) / totN2) : 100;
+      _kg.textContent = _gaps ? (_gaps + ' lacuna' + (_gaps === 1 ? '' : 's') + ' · cobertura ' + cob + '%') : ('cobertura ' + cob + '% · sem lacunas');
+      _kg.classList.toggle('is-gap', _gaps > 0);
+    }
+    const _bg = document.getElementById('mm-btn-gaps');
+    if (_bg) _bg.style.display = _gaps ? '' : 'none';
+
+    mmZoom = null;
+    mmResetCollapse();
+    let _hideDesc = false;
+    try { _hideDesc = localStorage.getItem('mapa-hide-desc') === '1'; } catch (e) {}
+    mmSetDesc(_hideDesc);
+  }
+
+  function mmResetCollapse() {
+    document.querySelectorAll('#mm-canvas .mm-node').forEach(n => n.classList.remove('mm-collapsed'));
+    document.querySelectorAll('#mm-canvas .mm-node.lvl-n2').forEach(n => n.classList.add('mm-collapsed'));
+  }
+  function mmToggle(card) {
+    const n = card.closest('.mm-node');
+    if (n.classList.contains('mm-leaf')) return;
+    n.classList.toggle('mm-collapsed');
+    mmLayout();
+  }
+  function mmAll(collapse) {
+    document.querySelectorAll('#mm-canvas .mm-node:not(.mm-leaf)').forEach(n => n.classList.toggle('mm-collapsed', collapse));
+    mmLayout();
+  }
+  function mmFit() {
+    const canvas = document.getElementById('mm-canvas');
+    if (!canvas) return;
+    const wrap = canvas.parentElement;
+    if (!wrap) return;
+    canvas.style.zoom = '1';
+    if (mmZoom != null) {
+      canvas.style.zoom = String(mmZoom);
+    } else {
+      const content = canvas.scrollWidth;
+      if (content > 0) canvas.style.zoom = String(Math.max(1, Math.min((wrap.clientWidth - 30) / content, 2)));
+    }
+    mmZoomLabel();
+  }
+  const MM_ZOOM_MIN = 0.3, MM_ZOOM_MAX = 2;
+  function mmZoomEfetivo() {
+    if (mmZoom != null) return mmZoom;
+    const canvas = document.getElementById('mm-canvas');
+    return canvas ? (parseFloat(canvas.style.zoom) || 1) : 1;
+  }
+  function mmZoomLabel() {
+    const el = document.getElementById('mm-zoom-val');
+    if (el) el.textContent = Math.round(mmZoomEfetivo() * 100) + '%';
+    const fit = document.querySelector('.mm-zoom-fit');
+    if (fit) fit.classList.toggle('is-on', mmZoom != null);
+  }
+  function mmZoomBy(step) {
+    mmZoom = Math.max(MM_ZOOM_MIN, Math.min(mmZoomEfetivo() + step, MM_ZOOM_MAX));
+    const canvas = document.getElementById('mm-canvas');
+    if (canvas) canvas.style.zoom = String(mmZoom);
+    mmZoomLabel();
+  }
+  function mmZoomFit() {
+    mmZoom = null;
+    mmLayout();
+  }
+  function mmToggleSynthetic(btn) {
+    const wrap = document.querySelector('.mm-wrap');
+    if (!wrap) return;
+    const isSynthetic = wrap.classList.toggle('mm-synthetic');
+    if (btn) {
+      btn.classList.toggle('is-on', isSynthetic);
+      btn.setAttribute('aria-pressed', isSynthetic ? 'true' : 'false');
+    }
+    setTimeout(mmLayout, 30);
+  }
+  function mmToggleDesc() {
+    _hideDesc = !_hideDesc;
+    mmSetDesc(_hideDesc);
+  }
+  function mmLayout() {
+    const canvas = document.getElementById('mm-canvas');
+    if (!canvas) return;
+    canvas.style.zoom = '1';
+    document.querySelectorAll('#mm-canvas .mm-kids').forEach(function (k) {
+      const bus = k.querySelector(':scope > .mm-bus');
+      if (!bus) return;
+      if (!k.offsetParent) return;
+      const nodes = [].slice.call(k.children).filter(c => c.classList && c.classList.contains('mm-node') && !c.classList.contains('mm-hidden'));
+      if (nodes.length < 1) { bus.style.display = 'none'; return; }
+      bus.style.display = 'block';
+      const f = nodes[0], l = nodes[nodes.length - 1];
+      const top = f.offsetTop + f.offsetHeight / 2;
+      const bot = l.offsetTop + l.offsetHeight / 2;
+      bus.style.top = top + 'px';
+      bus.style.height = Math.max(0, bot - top) + 'px';
+    });
+    mmFit();
+  }
+  function mmFilterNode(n, term) {
+    const kids = n.querySelector(':scope > .mm-kids');
+    let childMatch = false;
+    if (kids) {
+      [].slice.call(kids.children).forEach(function (c) {
+        if (c.classList && c.classList.contains('mm-node')) { if (mmFilterNode(c, term)) childMatch = true; }
+      });
+    }
+    const selfMatch = term && (n.getAttribute('data-text') || '').indexOf(term) >= 0;
+    n.classList.toggle('mm-hit', !!selfMatch);
+    const keep = selfMatch || childMatch;
+    n.classList.toggle('mm-hidden', !keep);
+    if (childMatch) n.classList.remove('mm-collapsed');
+    return keep;
+  }
+  function mmSearch(v) {
+    const term = (v || '').trim().toLowerCase();
+    if (!term) {
+      document.querySelectorAll('#mm-canvas .mm-node').forEach(n => n.classList.remove('mm-hidden', 'mm-hit'));
+      mmResetCollapse();
+      mmLayout();
+      return;
+    }
+    document.querySelectorAll('#mm-canvas > .mm-node').forEach(r => mmFilterNode(r, term));
+    mmLayout();
+  }
+  function mmGapKeep(n) {
+    const kids = n.querySelector(':scope > .mm-kids');
+    let childKeep = false;
+    if (kids) [].slice.call(kids.children).forEach(function (c) {
+      if (c.classList && c.classList.contains('mm-node')) { if (mmGapKeep(c)) childKeep = true; }
+    });
+    const keep = n.classList.contains('mm-gap') || childKeep;
+    n.classList.toggle('mm-hidden', !keep);
+    if (childKeep) n.classList.remove('mm-collapsed');
+    return keep;
+  }
+  function mmOnlyGaps(on) {
+    if (!document.getElementById('mm-canvas')) return;
+    if (on) {
+      document.querySelectorAll('#mm-canvas > .mm-node').forEach(r => mmGapKeep(r));
+    } else {
+      document.querySelectorAll('#mm-canvas .mm-node').forEach(n => n.classList.remove('mm-hidden'));
+      mmResetCollapse();
+    }
+    mmLayout();
+  }
+  function mmSetDesc(hide) {
+    const canvas = document.getElementById('mm-canvas');
+    if (canvas) canvas.classList.toggle('mm-hide-desc', !!hide);
+    const btn = document.getElementById('mm-btn-desc');
+    if (btn) {
+      btn.classList.toggle('is-on', !!hide);
+      btn.textContent = hide ? 'Mostrar descrição' : 'Ocultar descrição';
+      btn.setAttribute('aria-pressed', hide ? 'true' : 'false');
+    }
+    try { localStorage.setItem('mapa-hide-desc', hide ? '1' : '0'); } catch (e) {}
+    mmLayout();
+  }
+  function mmToggleDesc() {
+    const canvas = document.getElementById('mm-canvas');
+    mmSetDesc(!(canvas && canvas.classList.contains('mm-hide-desc')));
+  }
+
+  // Busca instantânea
+  function handleSearch(query) {
+    const modal = document.getElementById('searchResultsModal');
+    if (!query || query.trim().length < 2) {
+      modal.classList.remove('show');
+      modal.innerHTML = '';
+      return;
+    }
+
+    const q = query.toLowerCase().trim();
+    const results = [];
+
+    if (typeof repoFiles !== 'undefined') {
+      repoFiles.forEach(file => {
+        const content = (typeof repoFilesContent !== 'undefined' && repoFilesContent[file]) || "";
+        const title = extractTitle(content) || file;
+        
+        if (title.toLowerCase().includes(q) || file.toLowerCase().includes(q) || content.toLowerCase().includes(q)) {
+          results.push({ path: file, title });
+        }
+      });
+    }
+
+    if (results.length === 0) {
+      modal.innerHTML = `<div style="padding:14px; font-size:12.5px; color:var(--text-muted);">Nenhum resultado encontrado para "${query}".</div>`;
+    } else {
+      results.sort((a, b) => Number(b.title.toLowerCase() === q) - Number(a.title.toLowerCase() === q));
+      let html = '';
+      results.slice(0, 10).forEach(res => {
+        html += `
+          <a class="search-result-item" href="#${res.path}" onclick="navigateTo('${res.path}'); document.getElementById('searchResultsModal').classList.remove('show'); return false;">
+            <span class="search-result-title">${res.title}</span>
+            <span class="search-result-path">${res.path}</span>
+          </a>
+        `;
+      });
+      modal.innerHTML = html;
+    }
+
+    modal.classList.add('show');
+  }
+
+  // Fechar busca ao clicar fora
+  document.addEventListener('click', (e) => {
+    const searchBox = document.querySelector('.search-box');
+    const modal = document.getElementById('searchResultsModal');
+    if (!searchBox.contains(e.target)) {
+      modal.classList.remove('show');
+    }
+  });
+
+  // Atalho de teclado ⌘K / Ctrl+K
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      setSidebarExpanded(true);
+      document.getElementById('searchInput').focus();
+    } else if (e.key === 'Escape') {
+      document.getElementById('searchResultsModal').classList.remove('show');
+      if (mobileSidebar.matches) setSidebarExpanded(false);
+    }
+  });
+
+  // Copiar ID
+  function copyId(id) {
+    navigator.clipboard.writeText(id);
+    showToast(`Identificador "${id}" copiado!`);
+  }
+
+  function showToast(text) {
+    const toast = document.getElementById('toastMessage');
+    toast.innerText = text;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  // ============================================================================
+  // PREVIEW DE BRANCH: "DESTACAR ALTERAÇÕES" DENTRO DOS CARDS
+  // ============================================================================
+  // A barra do engine (engine/publication/preview.js) compara o artefato desenhado com o
+  // Markdown da base: alinha os blocos de um com os do outro e marca, dentro deles, só o que
+  // mudou — o removido riscado, o incluído destacado. Aqui o desenho são cards, que os
+  // templates montam separando e enfeitando as seções, e o .md corrido da base não alinharia
+  // com eles. Por isso a base é desenhada pelos mesmos templates, fora da tela, e o comparador
+  // do engine corre card a card, cada um contra o seu par na base (pelo título da seção): as
+  // marcas caem dentro do card certo. Card novo sai contornado; card que saiu volta no lugar
+  // onde estava, com o conteúdo de antes riscado.
+  function cardsDoDesenho(raiz) {
+    const vistos = new Map();
+    return Array.from(raiz.querySelectorAll(':scope > .doc-hero-card, :scope > .dev-only, :scope > .doc-section')).map((card) => {
+      const titulo = card.querySelector(':scope > .section-header .section-title');
+      const nome = card.matches('.doc-hero-card') ? '§hero' : card.matches('.dev-only') ? '§dev' : titulo ? titulo.textContent.trim() : '§abertura';
+      const n = (vistos.get(nome) || 0) + 1;
+      vistos.set(nome, n);
+      return { chave: `${nome}#${n}`, card, corpo: card.querySelector(':scope > .rn-list, :scope > .generic-markdown-body') || card };
+    });
+  }
+
+  function antesRiscado(texto) {
+    const div = document.createElement('div');
+    div.className = 'docqui-inline-before';
+    div.style.whiteSpace = 'pre-wrap';
+    const rotulo = document.createElement('span');
+    rotulo.className = 'docqui-inline-label';
+    rotulo.textContent = 'Antes: ';
+    const del = document.createElement('del');
+    del.textContent = texto;
+    div.append(rotulo, del);
+    return div;
+  }
+
+  // O Mermaid troca a fonte do diagrama pelo desenho, que o comparador leria como texto: o
+  // diagrama sai da comparação e é confrontado pela fonte — o que mudou fica contornado, com
+  // a fonte de antes riscada logo abaixo.
+  function comparaCard(aplica, atual, base, desfazer) {
+    const diagramas = Array.from(atual.querySelectorAll('.mermaid')).map((div) => {
+      const marca = document.createComment('diagrama');
+      div.replaceWith(marca);
+      return { div, marca };
+    });
+    const fontes = Array.from(base.querySelectorAll('.mermaid')).map((div) => { div.remove(); return div.textContent; });
+    let resultado;
+    try { resultado = aplica(atual, '', () => base.innerHTML); }
+    finally { diagramas.forEach(({ div, marca }) => marca.replaceWith(div)); }
+    desfazer.push(resultado.clear);
+    diagramas.forEach(({ div }, i) => {
+      if (div.dataset.fonte === fontes[i]) return;
+      div.classList.add('docqui-inline-after-block');
+      desfazer.push(() => div.classList.remove('docqui-inline-after-block'));
+      resultado.stats.blocks++;
+      if (fontes[i] === undefined) return;
+      const antes = antesRiscado(fontes[i]);
+      div.after(antes);
+      desfazer.push(() => antes.remove());
+    });
+    fontes.slice(diagramas.length).forEach((fonte) => {
+      const antes = antesRiscado(fonte);
+      atual.append(antes);
+      desfazer.push(() => antes.remove());
+      resultado.stats.blocks++;
+    });
+    return resultado.stats;
+  }
+
+  function comparaNosCards(aplica) {
+    return function (conteudo, antesMd, parse) {
+      if (conteudo.id !== 'documentContainer') return aplica(conteudo, antesMd, parse);
+      const base = document.createElement('div');
+      if (antesMd) base.innerHTML = desenhaDocumento(conteudo.dataset.docquiSource, antesMd.replace(/\r\n?/g, '\n')).html;
+      const atuais = cardsDoDesenho(conteudo), anteriores = cardsDoDesenho(base);
+      const naBase = new Map(anteriores.map((c) => [c.chave, c]));
+      const naTela = new Map(atuais.map((c) => [c.chave, c]));
+      const desfazer = [], stats = { cells: 0, rows: 0, blocks: 0 };
+      const soma = (parcial) => Object.keys(stats).forEach((k) => { stats[k] += parcial[k]; });
+      const limpa = () => { desfazer.reverse().forEach((f) => f()); desfazer.length = 0; };
+      try {
+        atuais.forEach((c) => {
+          const par = naBase.get(c.chave);
+          if (par) { soma(comparaCard(aplica, c.corpo, par.corpo, desfazer)); return; }
+          c.card.classList.add('docqui-inline-after-block');
+          desfazer.push(() => c.card.classList.remove('docqui-inline-after-block'));
+          stats.blocks++;
+        });
+        anteriores.forEach((c, i) => {
+          if (naTela.has(c.chave)) return;
+          const seguinte = anteriores.slice(i + 1).find((p) => naTela.has(p.chave));
+          const casca = c.card.cloneNode(true);
+          const corpo = c.corpo === c.card ? casca : casca.querySelector(':scope > .rn-list, :scope > .generic-markdown-body');
+          corpo.replaceChildren();
+          conteudo.insertBefore(casca, seguinte ? naTela.get(seguinte.chave).card : conteudo.querySelector(':scope > .doc-footer'));
+          desfazer.push(() => casca.remove());
+          soma(comparaCard(aplica, corpo, c.corpo, desfazer));
+        });
+      } catch (erro) {
+        limpa();
+        throw erro;
+      }
+      return { stats, clear: limpa };
+    };
+  }
+
+  // Inicialização Robusta da SPA
+  function handleHashRoute() {
+    const rawHash = decodeURIComponent(window.location.hash.substring(1));
+    // `#caminho/do/arquivo.md#ancora`: o caminho é tudo até o ÚLTIMO `#`. Só vale como
+    // âncora se o que vem antes for um arquivo conhecido — assim um `#` no meio de um
+    // nome de arquivo não vira separador por engano.
+    const ult = rawHash.lastIndexOf('#');
+    let alvo = rawHash, ancora = '';
+    if (ult > 0) {
+      const candidato = rawHash.slice(0, ult);
+      if (candidato === '__changes__' || typeof repoFiles !== 'undefined' && repoFiles.includes(candidato)) {
+        alvo = candidato;
+        ancora = rawHash.slice(ult + 1);
+      }
+    }
+    loadFile(alvo || "__dashboard__");
+    if (!ancora) return;
+    // O documento é montado de forma síncrona a partir do conteúdo embutido, mas o
+    // realce de código e os diagramas ainda mexem na altura — daí o quadro seguinte.
+    requestAnimationFrame(() => {
+      const el = document.getElementById('documentContainer')?.querySelector(`[id="${CSS.escape(ancora)}"]`);
+      if (el) el.scrollIntoView({ block: 'start' });
+    });
+  }
+
+  function initApp() {
+    // O comparador do engine só existe nos previews de branch (scripts/monta-site-preview.mjs).
+    if (window.DOCQUI_INLINE_DIFF) window.DOCQUI_INLINE_DIFF.apply = comparaNosCards(window.DOCQUI_INLINE_DIFF.apply);
+    buildFDDTree();
+    handleHashRoute();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
+
+  window.addEventListener('hashchange', handleHashRoute);
+</script>
+
+</body>
+</html>

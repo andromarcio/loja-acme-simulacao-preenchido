@@ -1,0 +1,210 @@
+<!-- docqui: 6.4.10 | prompt: PROMPT_PROTOTYPE_FLOW_FULL | atualizado: 2026-10-18 -->
+<!DOCTYPE html>
+<!--
+  ⚠️ PROTÓTIPO NAVEGÁVEL — treino, não jogo.
+  Fonte de verdade de LAYOUT, COMPORTAMENTO e ESTADOS — NUNCA de implementação.
+  Não copie este HTML/CSS/JS para o código de produção: aqui tudo é autocontido
+  e procedural DE PROPÓSITO (simulação). A implementação real segue outra
+  estratégia: componentes do design system do projeto (mapa de equivalência no
+  README do tema), catálogo global/PATTERNS.md e convenções do global/MASTER.md.
+  Classes .dsc-* são EXCLUSIVAS de protótipo — proibidas em código de produção.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo: Checkout — Vendas</title>
+  <link rel="stylesheet" href="../../_biblioteca-ds/ds.css">
+</head>
+<body>
+
+  <div class="dsc-proto-badge">🎨 PROTÓTIPO — não é o sistema real</div>
+
+  <div class="dsc-app">
+
+    <aside class="dsc-sidebar">
+      <div class="dsc-sidebar-backdrop" onclick="dscToggleMenu()"></div>
+      <div class="dsc-sidebar-brand"><span class="dsc-brand-mark">L</span> Loja ACME</div>
+      <ul class="dsc-menu">
+        <li class="dsc-menu-section">Vendas</li>
+        <li><a class="dsc-menu-item is-active" href="#" onclick="showScreen('screen-checkout'); return false;">Checkout</a></li>
+      </ul>
+    </aside>
+
+    <div class="dsc-shell-main">
+      <header class="dsc-header">
+        <div class="dsc-header-start">
+          <button class="dsc-menu-toggle" aria-label="Recolher/expandir menu" onclick="dscToggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <span class="dsc-header-logo">Loja ACME · <strong>CAIXA</strong></span>
+        </div>
+        <div class="dsc-header-actions">
+          <button class="dsc-header-item">
+            <span class="dsc-avatar dsc-avatar--sm">AC</span>
+            <span class="dsc-hi-body"><span class="dsc-hi-title">Ana Costa</span><span class="dsc-hi-sub dsc-text-primary">Cliente</span></span>
+            <svg class="dsc-hi-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dsc-main">
+
+        <!-- Tela única do N2: Checkout (/checkout) — atende VND-CHK-01 Calcular Frete -->
+        <div id="screen-checkout" class="dsc-screen is-active">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Vendas</span><span class="dsc-sep">›</span><span class="is-current">Checkout</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Checkout</h1>
+            <p class="dsc-page-subtitle">Informe o CEP de entrega para conhecer o valor do frete antes de confirmar o pedido.</p>
+          </div>
+
+          <div class="dsc-row">
+            <div class="dsc-col-6">
+              <section class="dsc-card">
+                <h2 class="dsc-card-title">Entrega</h2>
+                <div class="dsc-row">
+                  <div class="dsc-col-8">
+                    <div class="dsc-field" id="f-cep">
+                      <label class="dsc-field-label" for="cep">CEP de entrega <span class="dsc-req">*</span></label>
+                      <input class="dsc-input" id="cep" inputmode="numeric" maxlength="8" placeholder="00000000" aria-describedby="cep-hint" oninput="cepAlterado()" onkeydown="if (event.key === 'Enter') calcular()">
+                      <span class="dsc-field-hint" id="cep-hint">Somente números.</span>
+                    </div>
+                  </div>
+                  <div class="dsc-col-4" style="display:flex;align-items:flex-start;padding-top:26px">
+                    <button class="dsc-btn" id="btn-calcular" onclick="calcular()">Calcular</button>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <div class="dsc-col-6">
+              <section class="dsc-card">
+                <h2 class="dsc-card-title">Seu pedido</h2>
+                <div id="itens">
+                  <div class="dsc-table-wrap">
+                    <table class="dsc-table">
+                      <thead><tr><th>Produto</th><th class="dsc-num">Qtd.</th><th class="dsc-num">Valor</th></tr></thead>
+                      <tbody>
+                        <tr><td>Caneca de cerâmica ACME 300 ml</td><td class="dsc-num">2</td><td class="dsc-num">R$&nbsp;79,80</td></tr>
+                        <tr><td>Camiseta ACME algodão — tamanho M</td><td class="dsc-num">1</td><td class="dsc-num">R$&nbsp;59,90</td></tr>
+                        <tr><td>Garrafa térmica ACME 500 ml</td><td class="dsc-num">1</td><td class="dsc-num">R$&nbsp;89,90</td></tr>
+                        <tr><td>Bloco de notas ACME A5</td><td class="dsc-num">3</td><td class="dsc-num">R$&nbsp;74,70</td></tr>
+                        <tr><td>Ecobag ACME de lona</td><td class="dsc-num">1</td><td class="dsc-num">R$&nbsp;34,90</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div id="carrinho-vazio" class="dsc-state" style="display:none">
+                  <span class="dsc-state-icon">🛒</span>
+                  <span class="dsc-state-title">Carrinho sem itens</span>
+                  <span class="dsc-state-text">Adicione itens ao carrinho para calcular o frete.</span>
+                </div>
+                <!-- Resultado da cotação, ao lado do pedido (N3 › Comportamento de tela › Onde fica) -->
+                <div id="cotacao" aria-live="polite" style="margin-top:16px"></div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsc-proto-notes">
+          <strong>📋 Notas do protótipo:</strong>
+          <ul>
+            <li>Faixa didática da Tabela de Frete: CEPs de 01310000 a 01310999 custam R$ 18,90 (ex.: 01310100). Fora dela, ex.: 69900000.</li>
+            <li>Os itens do pedido são os do carrinho de Ana Costa (pedido aberto 1007), montado pelo Carrinho (VND-CAR); ver o <a href="../carrinho/flow.html">protótipo do Carrinho</a>.</li>
+            <li>O registro do valor do frete e da faixa no Pedido (campos automáticos do N3) não é visível na tela.</li>
+            <li>Ficam fora deste fluxo, por ainda não estarem especificados: prazo de entrega e resumo do pedido (STRY0013120), cupom (STRY0013135) e a confirmação do pedido.</li>
+          </ul>
+          <div class="dsc-field" style="margin-top:12px;max-width:320px">
+            <label class="dsc-field-label" for="simulacao">Simular estado <span class="dsc-text-muted" style="font-weight:400">(controle do protótipo, não faz parte da tela)</span></label>
+            <select class="dsc-select" id="simulacao" onchange="simular(this.value)">
+              <option value="normal">Carrinho com itens</option>
+              <option value="vazio">Carrinho vazio</option>
+              <option value="sem-acesso">Sem acesso</option>
+              <option value="falha">Falha no cálculo</option>
+            </select>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ☰: abre/fecha o drawer do menu (sidebar oculta por padrão); ESC também fecha
+    function dscToggleMenu() {
+      document.querySelector('.dsc-app').classList.toggle('is-menu-open');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') document.querySelector('.dsc-app').classList.remove('is-menu-open');
+    });
+    function showScreen(id) {
+      document.querySelectorAll('.dsc-screen').forEach(function (s) { s.classList.remove('is-active'); });
+      document.getElementById(id).classList.add('is-active');
+      document.querySelector('.dsc-app').classList.remove('is-menu-open');
+    }
+
+    var estado = 'normal';
+    var calculando = false;
+    var ICONE_ERRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    var ICONE_ALERTA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+    var ICONE_FALHA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+
+    function cotacao(html) { document.getElementById('cotacao').innerHTML = html; }
+    function alerta(variante, icone, texto) {
+      return '<div class="dsc-alert dsc-alert--' + variante + '" role="alert">' + icone + '<span>' + texto + '</span></div>';
+    }
+
+    function erroNoCampo(texto) {
+      var f = document.getElementById('f-cep');
+      var e = f.querySelector('.dsc-field-error');
+      if (!texto) { f.classList.remove('is-invalid'); if (e) e.remove(); return; }
+      f.classList.add('is-invalid');
+      if (!e) { e = document.createElement('span'); e.className = 'dsc-field-error'; e.id = 'cep-erro'; f.appendChild(e); }
+      e.innerHTML = ICONE_ERRO + ' ' + texto;
+      document.getElementById('cep').setAttribute('aria-describedby', 'cep-hint cep-erro');
+    }
+
+    // CEP alterado: a cotação anterior sai até um novo cálculo (N3 › Estados da tela)
+    function cepAlterado() {
+      erroNoCampo('');
+      if (estado !== 'vazio') cotacao('');
+    }
+
+    function calcular() {
+      if (calculando) return;
+      erroNoCampo('');
+      // Restrições de acesso: sem acesso, não executa o cálculo
+      if (estado === 'sem-acesso') { cotacao(alerta('danger', ICONE_FALHA, 'Você não tem permissão para esta ação.')); return; }
+      // Estados especiais: carrinho sem itens
+      if (estado === 'vazio') { cotacao(''); return; }
+      var cep = document.getElementById('cep').value.trim();
+      if (!cep) { cotacao(''); erroNoCampo('Campo obrigatório.'); return; }
+      if (!/^\d{8}$/.test(cep)) { cotacao(''); erroNoCampo('CEP inválido.'); return; }
+
+      // Loading: "Carregando…" e o botão bloqueado enquanto calcula
+      calculando = true;
+      var btn = document.getElementById('btn-calcular');
+      btn.classList.add('is-loading'); btn.disabled = true;
+      cotacao('<p class="dsc-caption" style="margin-bottom:8px">Carregando…</p><span class="dsc-skeleton" style="height:20px;width:50%"></span>');
+      setTimeout(function () {
+        calculando = false;
+        btn.classList.remove('is-loading'); btn.disabled = false;
+        if (estado === 'falha') { cotacao(alerta('danger', ICONE_FALHA, 'Ocorreu um erro. Tente novamente.')); return; }
+        var n = Number(cep);
+        if (n >= 1310000 && n <= 1310999) {
+          cotacao('<hr class="dsc-divider"><p class="dsc-title-sm" style="margin:0">Frete: R$ 18,90</p>');
+        } else {
+          cotacao(alerta('warning', ICONE_ALERTA, 'Ainda não entregamos neste CEP.'));
+        }
+      }, 900);
+    }
+
+    function simular(valor) {
+      estado = valor;
+      var vazio = estado === 'vazio';
+      document.getElementById('itens').style.display = vazio ? 'none' : '';
+      document.getElementById('carrinho-vazio').style.display = vazio ? '' : 'none';
+      erroNoCampo('');
+      cotacao('');
+    }
+  </script>
+</body>
+</html>

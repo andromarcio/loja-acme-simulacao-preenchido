@@ -1,0 +1,23 @@
+# gates-config.yml — configuração da esteira de checkpoints DESTA instância.
+# Copie para `global/gates-config.yml` do repositório de docs. Opcional: sem este
+# arquivo, scripts/gates.py usa os papéis padrão (perfil de time de produto).
+#
+# `papeis` redefine QUEM aprova cada checkpoint — informativo (aparece no
+# modules/INDEX.md e no `gates.py status`); quem torna o revisor obrigatório é o
+# CODEOWNERS. A ordem e o significado dos checkpoints não mudam:
+#   requisitos → modelo-dados → testes → codigo
+# No perfil requisitos, são semeados apenas os papéis de CP1 e CP2.
+#
+# Exemplo para time de PRODUTO (padrão — pode omitir o arquivo inteiro):
+papeis:
+  requisitos: "PO/Negócio"
+  modelo-dados: "DBA/Arquiteto"
+
+# Exemplo para time de PESQUISA/ML (arquétipo ml-dados) — sem PO/DBA/QA formais,
+# os checkpoints continuam existindo, com donos que fazem sentido no contexto:
+#
+# papeis:
+#   requisitos: "Dono do experimento"
+#   modelo-dados: "Reprodutibilidade/revisor técnico"   # valida artefatos, formatos e invariantes
+#   testes: "Avaliação/benchmarks"                       # valida o plano de avaliação
+#   codigo: "Revisor de código"

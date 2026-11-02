@@ -1,0 +1,575 @@
+<!-- docqui: 6.4.10 | prompt: PROMPT_PROTOTYPE_FLOW_FULL | atualizado: 2026-10-18 -->
+<!DOCTYPE html>
+<!--
+  ⚠️ PROTÓTIPO NAVEGÁVEL — treino, não jogo.
+  Fonte de verdade de LAYOUT, COMPORTAMENTO e ESTADOS — NUNCA de implementação.
+  Não copie este HTML/CSS/JS para o código de produção: aqui tudo é autocontido
+  e procedural DE PROPÓSITO (simulação). A implementação real segue outra
+  estratégia: componentes do design system do projeto (mapa de equivalência no
+  README do tema), catálogo global/PATTERNS.md e convenções do global/MASTER.md.
+  Classes .dsc-* são EXCLUSIVAS de protótipo — proibidas em código de produção.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo: Destaques — Vitrine</title>
+  <link rel="stylesheet" href="../../_biblioteca-ds/ds.css">
+</head>
+<body>
+
+  <div class="dsc-proto-badge">🎨 PROTÓTIPO — não é o sistema real</div>
+
+  <div class="dsc-app">
+
+    <aside class="dsc-sidebar">
+      <div class="dsc-sidebar-backdrop" onclick="dscToggleMenu()"></div>
+      <div class="dsc-sidebar-brand"><span class="dsc-brand-mark">L</span> Loja ACME</div>
+      <ul class="dsc-menu">
+        <li class="dsc-menu-section">Catálogo</li>
+        <li><a class="dsc-menu-item" href="../../catalogo/categorias/flow.html">Categorias</a></li>
+        <li class="dsc-menu-section">Vitrine</li>
+        <li><a class="dsc-menu-item is-active" href="#" onclick="abrirPesquisa(); return false;">Destaques</a></li>
+      </ul>
+    </aside>
+
+    <div class="dsc-shell-main">
+      <header class="dsc-header">
+        <div class="dsc-header-start">
+          <button class="dsc-menu-toggle" aria-label="Recolher/expandir menu" onclick="dscToggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <span class="dsc-header-logo">Loja ACME · <strong>CAIXA</strong></span>
+        </div>
+        <div class="dsc-header-actions">
+          <button class="dsc-header-item">
+            <span class="dsc-avatar dsc-avatar--sm">DM</span>
+            <span class="dsc-hi-body"><span class="dsc-hi-title">Diego Martins</span><span class="dsc-hi-sub dsc-text-primary">Gestor de catálogo</span></span>
+            <svg class="dsc-hi-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dsc-main">
+
+        <!-- Tela: Pesquisa de Destaques (/vitrine/destaques) — VIT-DST-01 Pesquisar Destaques e VIT-DST-04 Excluir Destaque -->
+        <div id="screen-pesquisa" class="dsc-screen is-active">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Vitrine</span><span class="dsc-sep">›</span><span class="is-current">Destaques</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Destaques</h1>
+            <p class="dsc-page-subtitle">Produtos em evidência na página inicial da loja, com a chamada, a ordem e o período de cada um.</p>
+          </div>
+
+          <div id="pesquisa-sem-acesso" style="display:none"></div>
+
+          <div id="pesquisa-conteudo">
+            <section class="dsc-card">
+              <h2 class="dsc-card-title">Filtros</h2>
+              <div class="dsc-row">
+                <div class="dsc-col-6">
+                  <div class="dsc-field">
+                    <label class="dsc-field-label" for="f-produto">Produto <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+                    <span class="dsc-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="dsc-input" id="f-produto" placeholder="Parte do nome do produto" onkeydown="if (event.key === 'Enter') pesquisar()"></span>
+                  </div>
+                </div>
+                <div class="dsc-col-3">
+                  <div class="dsc-field">
+                    <label class="dsc-field-label" for="f-situacao">Situação</label>
+                    <select class="dsc-select" id="f-situacao">
+                      <option value="">Todas</option>
+                      <option>Programado</option>
+                      <option>Vigente</option>
+                      <option>Encerrado</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="dsc-col-3" style="display:flex;align-items:flex-start;gap:8px;padding-top:26px">
+                  <button class="dsc-btn" onclick="pesquisar()">Pesquisar</button>
+                  <button class="dsc-btn dsc-btn--chromeless" onclick="limparFiltros()">Limpar</button>
+                </div>
+              </div>
+            </section>
+
+            <div id="alerta-pesquisa" aria-live="polite"></div>
+
+            <div class="dsc-card" style="padding:0;overflow:hidden">
+              <div class="dsc-table-toolbar">
+                <span class="dsc-text-muted"><strong id="contagem" style="color:var(--text-color)">5 registros</strong></span>
+                <button class="dsc-btn dsc-btn--sm" onclick="abrirCadastro()">Cadastrar destaque</button>
+              </div>
+              <div id="resultado"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tela: Cadastrar Destaque (/vitrine/destaques/novo) — VIT-DST-02 -->
+        <div id="screen-cadastro" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Vitrine</span><span class="dsc-sep">›</span><a href="#" onclick="abrirPesquisa(); return false;">Destaques</a><span class="dsc-sep">›</span><span class="is-current">Cadastrar destaque</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Cadastrar destaque</h1>
+            <p class="dsc-page-subtitle">Escolha o produto, escreva a chamada e defina a ordem e o período em que o destaque fica no ar.</p>
+          </div>
+          <div id="cad-sem-acesso" style="display:none"></div>
+          <section class="dsc-card" id="cad-form">
+            <div id="cad-alerta" aria-live="polite"></div>
+            <div class="dsc-row">
+              <div class="dsc-col-8">
+                <div class="dsc-field" id="cad-f-produto">
+                  <label class="dsc-field-label" for="cad-produto">Produto <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="cad-produto" list="lista-produtos" placeholder="Digite o nome do produto" autocomplete="off">
+                  <span class="dsc-field-hint">Só aparecem produtos de categorias ativas.</span>
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="cad-f-ordem">
+                  <label class="dsc-field-label" for="cad-ordem">Ordem de exibição <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="cad-ordem" inputmode="numeric" placeholder="1 a 99">
+                </div>
+              </div>
+              <div class="dsc-col-12">
+                <div class="dsc-field" id="cad-f-chamada">
+                  <label class="dsc-field-label" for="cad-chamada">Chamada <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="cad-chamada" placeholder="Frase curta exibida com o produto">
+                  <span class="dsc-field-hint">Até 60 caracteres.</span>
+                </div>
+              </div>
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="cad-f-inicio">
+                  <label class="dsc-field-label" for="cad-inicio">Início da vigência <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="cad-inicio" type="date">
+                </div>
+              </div>
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="cad-f-fim">
+                  <label class="dsc-field-label" for="cad-fim">Fim da vigência <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="cad-fim" type="date">
+                </div>
+              </div>
+            </div>
+            <div class="dsc-flex dsc-gap-1 dsc-justify-between" style="margin-top:8px">
+              <button class="dsc-btn dsc-btn--chromeless" onclick="abrirPesquisa()">Cancelar</button>
+              <button class="dsc-btn" id="cad-salvar" onclick="salvarCadastro()">Salvar</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tela: Editar Destaque (/vitrine/destaques/:id/editar) — VIT-DST-03 -->
+        <div id="screen-edicao" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Vitrine</span><span class="dsc-sep">›</span><a href="#" onclick="abrirPesquisa(); return false;">Destaques</a><span class="dsc-sep">›</span><span class="is-current">Editar destaque</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Editar destaque</h1>
+            <p class="dsc-page-subtitle">Altere a chamada, a ordem e a vigência. O produto não muda.</p>
+          </div>
+          <section class="dsc-card">
+            <div id="ed-alerta" aria-live="polite"></div>
+            <div class="dsc-row">
+              <div class="dsc-col-8"><div class="dsc-lv"><span class="dsc-lv-label">Produto</span><span class="dsc-lv-value" id="ed-produto"></span></div></div>
+              <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">Situação</span><span class="dsc-lv-value" id="ed-situacao"></span></div></div>
+            </div>
+            <hr class="dsc-divider">
+            <div class="dsc-row">
+              <div class="dsc-col-8">
+                <div class="dsc-field" id="ed-f-chamada">
+                  <label class="dsc-field-label" for="ed-chamada">Chamada <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="ed-chamada">
+                  <span class="dsc-field-hint">Até 60 caracteres.</span>
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="ed-f-ordem">
+                  <label class="dsc-field-label" for="ed-ordem">Ordem de exibição <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="ed-ordem" inputmode="numeric">
+                </div>
+              </div>
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="ed-f-inicio">
+                  <label class="dsc-field-label" for="ed-inicio">Início da vigência <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="ed-inicio" type="date">
+                </div>
+                <div class="dsc-lv" id="ed-inicio-leitura" style="display:none"><span class="dsc-lv-label">Início da vigência</span><span class="dsc-lv-value" id="ed-inicio-valor"></span></div>
+              </div>
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="ed-f-fim">
+                  <label class="dsc-field-label" for="ed-fim">Fim da vigência <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="ed-fim" type="date">
+                </div>
+              </div>
+            </div>
+            <div class="dsc-flex dsc-gap-1 dsc-justify-between" style="margin-top:8px">
+              <button class="dsc-btn dsc-btn--chromeless" onclick="abrirPesquisa()">Cancelar</button>
+              <button class="dsc-btn" id="ed-salvar" onclick="salvarEdicao()">Salvar</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tela: Visualizar Destaque (/vitrine/destaques/:id) — VIT-DST-05 -->
+        <div id="screen-visualizar" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Vitrine</span><span class="dsc-sep">›</span><a href="#" onclick="abrirPesquisa(); return false;">Destaques</a><span class="dsc-sep">›</span><span class="is-current">Visualizar destaque</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Destaque</h1>
+            <p class="dsc-page-subtitle">Dados do destaque, só para leitura.</p>
+          </div>
+          <section class="dsc-card">
+            <div class="dsc-row" id="ficha"></div>
+            <div style="margin-top:16px">
+              <button class="dsc-btn dsc-btn--outline" onclick="abrirPesquisa()">Voltar</button>
+            </div>
+          </section>
+        </div>
+
+        <div class="dsc-proto-notes">
+          <strong>📋 Notas do protótipo:</strong>
+          <ul>
+            <li>Data de referência do protótipo: 18/10/2026. A situação (programado, vigente, encerrado) é calculada das datas de vigência e não é guardada.</li>
+            <li>A seleção de produto oferece só produtos de categorias ativas: a Almofada ACME estampada, da categoria Decoração (inativa), não aparece. Texto que não corresponde a um produto da lista conta como campo vazio.</li>
+            <li>A Data de cadastro é registrada ao salvar e aparece na ficha; não há campo para ela no formulário.</li>
+            <li>Os destaques vigentes aparecem na página inicial da loja, no protótipo da <a href="../navegacao/flow.html">Navegação</a> (VIT-NAV-01 — Listar Destaques).</li>
+            <li>A Caneca está encerrada: a ação editar mostra o aviso e não abre o formulário. Na Camiseta (vigente), o início da vigência aparece só para leitura.</li>
+          </ul>
+          <div class="dsc-field" style="margin-top:12px;max-width:320px">
+            <label class="dsc-field-label" for="simulacao">Simular estado <span class="dsc-text-muted" style="font-weight:400">(controle do protótipo, não faz parte da tela)</span></label>
+            <select class="dsc-select" id="simulacao" onchange="simular(this.value)">
+              <option value="normal">Com destaques</option>
+              <option value="vazio">Nenhum destaque cadastrado</option>
+              <option value="sem-acesso">Sem acesso</option>
+              <option value="falha-carga">Falha ao carregar</option>
+              <option value="falha-gravacao">Falha ao salvar ou excluir</option>
+            </select>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <datalist id="lista-produtos">
+    <option value="Caneca de cerâmica ACME 300 ml">
+    <option value="Garrafa térmica ACME 500 ml">
+    <option value="Camiseta ACME algodão — tamanho M">
+    <option value="Boné ACME aba curva">
+    <option value="Bloco de notas ACME A5">
+    <option value="Caneta esferográfica ACME azul">
+    <option value="Ecobag ACME de lona">
+    <option value="Chaveiro ACME de metal">
+  </datalist>
+
+  <!-- Confirmação de exclusão — VIT-DST-04 (sem vínculo a bloquear: não há modal de bloqueio) -->
+  <div id="modal-excluir" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="dialog" aria-labelledby="modal-excluir-titulo">
+      <div class="dsc-modal-header"><strong id="modal-excluir-titulo">Excluir destaque</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-excluir', false)">✕</button></div>
+      <div class="dsc-modal-body">
+        <p>Deseja realmente excluir este registro?</p>
+        <p class="dsc-body-sm"><strong id="excluir-produto"></strong> — <span id="excluir-chamada"></span></p>
+      </div>
+      <div class="dsc-modal-footer">
+        <button class="dsc-btn dsc-btn--chromeless" onclick="toggleModal('modal-excluir', false)">Cancelar</button>
+        <button class="dsc-btn dsc-btn--danger" id="btn-confirmar-exclusao" onclick="confirmarExclusao()">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-save" class="dsc-toast dsc-toast--positive" style="display:none;position:fixed;top:24px;right:24px;z-index:200">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Registro salvo com sucesso.</span>
+  </div>
+  <div id="toast-delete" class="dsc-toast dsc-toast--positive" style="display:none;position:fixed;top:24px;right:24px;z-index:200">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Registro excluído com sucesso.</span>
+  </div>
+  <div id="toast-erro" class="dsc-toast dsc-toast--danger" style="display:none;position:fixed;top:24px;right:24px;z-index:200">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>Ocorreu um erro. Tente novamente.</span>
+  </div>
+
+  <script>
+    // ☰: abre/fecha o drawer do menu (sidebar oculta por padrão); ESC também fecha
+    function dscToggleMenu() {
+      document.querySelector('.dsc-app').classList.toggle('is-menu-open');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.querySelector('.dsc-app').classList.remove('is-menu-open');
+        toggleModal('modal-excluir', false);
+      }
+    });
+    function showScreen(id) {
+      document.querySelectorAll('.dsc-screen').forEach(function (s) { s.classList.remove('is-active'); });
+      document.getElementById(id).classList.add('is-active');
+      document.querySelector('.dsc-app').classList.remove('is-menu-open');
+      window.scrollTo(0, 0);
+    }
+    function toggleModal(id, aberto) { document.getElementById(id).style.display = aberto ? 'flex' : 'none'; }
+    function showToast(id) {
+      var t = document.getElementById(id);
+      t.style.display = 'flex';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function () { t.style.display = 'none'; }, 4000);
+    }
+
+    // ---- Massa da demonstração (global/data-models/vitrine.md), referência 18/10/2026 ----
+    var HOJE = new Date(2026, 9, 18);
+    var DESTAQUES_INICIAIS = [
+      { id: 1, produto: 'Garrafa térmica ACME 500 ml', chamada: 'Café quente o dia todo', ordem: 1, inicio: '2026-10-01', fim: '2026-10-31', cadastro: '2026-09-25' },
+      { id: 2, produto: 'Camiseta ACME algodão — tamanho M', chamada: 'Nova coleção de algodão', ordem: 2, inicio: '2026-10-10', fim: '2026-11-10', cadastro: '2026-10-05' },
+      { id: 3, produto: 'Boné ACME aba curva', chamada: 'Volta em breve', ordem: 3, inicio: '2026-10-15', fim: '2026-10-25', cadastro: '2026-10-12' },
+      { id: 4, produto: 'Caneca de cerâmica ACME 300 ml', chamada: 'Presente para o Dia do Professor', ordem: 1, inicio: '2026-10-01', fim: '2026-10-15', cadastro: '2026-09-20' },
+      { id: 5, produto: 'Ecobag ACME de lona', chamada: 'Semana da sacola retornável', ordem: 1, inicio: '2026-11-20', fim: '2026-11-30', cadastro: '2026-10-16' }
+    ];
+    var destaques = DESTAQUES_INICIAIS.slice();
+    var proximoId = 6;
+    var estado = 'normal';
+    var emEdicao = null, emExclusao = null;
+
+    var ICONE_VER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    var ICONE_EDITAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>';
+    var ICONE_EXCLUIR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+    var ICONE_ERRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    var ICONE_FALHA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    var ICONE_ALERTA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+    var PRODUTOS_ATIVOS = Array.prototype.map.call(document.querySelectorAll('#lista-produtos option'), function (o) { return o.value; });
+
+    function data(iso) { var p = iso.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+    function br(iso) { var p = iso.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+    function semAcento(t) { return t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+    // VIT-DST-01 RN-01: situação derivada da vigência, limites inclusive (RC-03)
+    function situacao(d) {
+      if (HOJE < data(d.inicio)) return 'Programado';
+      if (HOJE > data(d.fim)) return 'Encerrado';
+      return 'Vigente';
+    }
+    function tag(s) {
+      var v = s === 'Vigente' ? 'success' : (s === 'Programado' ? 'highlight' : 'neutral');
+      return '<span class="dsc-tag dsc-tag--' + v + '">' + s + '</span>';
+    }
+    function alerta(variante, icone, texto) {
+      return '<div class="dsc-alert dsc-alert--' + variante + '" role="alert">' + icone + '<span>' + texto + '</span></div>';
+    }
+    function estadoTela(icone, titulo, texto) {
+      return '<div class="dsc-state"><span class="dsc-state-icon">' + icone + '</span><span class="dsc-state-title">' + titulo + '</span><span class="dsc-state-text">' + texto + '</span></div>';
+    }
+
+    // ---------------- VIT-DST-01 — Pesquisar Destaques ----------------
+    function abrirPesquisa() {
+      showScreen('screen-pesquisa');
+      document.getElementById('alerta-pesquisa').innerHTML = '';
+      renderLista();
+    }
+    function limparFiltros() {
+      document.getElementById('f-produto').value = '';
+      document.getElementById('f-situacao').value = '';
+      pesquisar();
+    }
+    function pesquisar() {
+      document.getElementById('alerta-pesquisa').innerHTML = '';
+      document.getElementById('resultado').innerHTML = '<div style="padding:24px"><p class="dsc-caption" style="margin-bottom:8px">Carregando…</p><span class="dsc-skeleton" style="height:16px;margin-bottom:8px"></span><span class="dsc-skeleton" style="height:16px;width:80%"></span></div>';
+      setTimeout(renderLista, 500);
+    }
+    function renderLista() {
+      var res = document.getElementById('resultado');
+      var contagem = document.getElementById('contagem');
+      if (estado === 'sem-acesso') return;
+      if (estado === 'falha-carga') {
+        contagem.textContent = '—';
+        res.innerHTML = estadoTela('⚠️', 'Falha ao carregar', 'Não foi possível carregar os dados.');
+        return;
+      }
+      var base = estado === 'vazio' ? [] : destaques;
+      if (!base.length) {
+        contagem.textContent = '0 registros';
+        res.innerHTML = estadoTela('🗂️', 'Sem destaques', 'Nenhum registro encontrado.');
+        return;
+      }
+      var termo = semAcento(document.getElementById('f-produto').value.trim());
+      var sit = document.getElementById('f-situacao').value;
+      var lista = base.filter(function (d) {
+        return (!termo || semAcento(d.produto).indexOf(termo) >= 0) && (!sit || situacao(d) === sit);
+      }).sort(function (a, b) { return data(b.inicio) - data(a.inicio); }); // padrão: início mais recente primeiro
+      contagem.textContent = lista.length + (lista.length === 1 ? ' registro' : ' registros');
+      if (!lista.length) {
+        res.innerHTML = estadoTela('🔎', 'Sem resultado', 'Nenhum resultado para a busca.');
+        return;
+      }
+      var linhas = lista.map(function (d) {
+        return '<tr><td>' + d.produto + '</td><td>' + d.chamada + '</td><td class="dsc-num">' + d.ordem + '</td><td>' + br(d.inicio) + '</td><td>' + br(d.fim) + '</td><td>' + tag(situacao(d)) + '</td>' +
+          '<td class="dsc-col-actions">' +
+          '<button class="dsc-icon-action" aria-label="Visualizar destaque de ' + d.produto + '" title="Visualizar" onclick="abrirVisualizar(' + d.id + ')">' + ICONE_VER + '</button>' +
+          '<button class="dsc-icon-action" aria-label="Editar destaque de ' + d.produto + '" title="Editar" onclick="abrirEdicao(' + d.id + ')">' + ICONE_EDITAR + '</button>' +
+          '<button class="dsc-icon-action" aria-label="Excluir destaque de ' + d.produto + '" title="Excluir" onclick="pedirExclusao(' + d.id + ')">' + ICONE_EXCLUIR + '</button>' +
+          '</td></tr>';
+      }).join('');
+      res.innerHTML = '<div class="dsc-table-wrap"><table class="dsc-table"><thead><tr><th class="dsc-sortable">Produto</th><th>Chamada</th><th class="dsc-num dsc-sortable">Ordem</th><th class="dsc-sortable is-sorted">Início da vigência</th><th class="dsc-sortable">Fim da vigência</th><th>Situação</th><th class="dsc-col-actions">Ações</th></tr></thead><tbody>' + linhas + '</tbody></table></div>' +
+        '<div class="dsc-table-footer"><span>Mostrando 1–' + lista.length + ' de ' + lista.length + '</span><span class="dsc-flex dsc-gap-1"><button class="dsc-btn dsc-btn--sm dsc-btn--chromeless" disabled>‹ Anterior</button><button class="dsc-btn dsc-btn--sm dsc-btn--chromeless" disabled>Próxima ›</button></span></div>';
+    }
+    function buscar(id) { return destaques.filter(function (d) { return d.id === id; })[0]; }
+
+    // ---------------- validação compartilhada (cadastro e edição) ----------------
+    function erroNoCampo(idCampo, texto) {
+      var f = document.getElementById(idCampo);
+      var e = f.querySelector('.dsc-field-error');
+      if (!texto) { f.classList.remove('is-invalid'); if (e) e.remove(); return; }
+      f.classList.add('is-invalid');
+      if (!e) { e = document.createElement('span'); e.className = 'dsc-field-error'; f.appendChild(e); }
+      e.innerHTML = ICONE_ERRO + ' ' + texto;
+    }
+    function limparErros(prefixo) {
+      ['produto', 'chamada', 'ordem', 'inicio', 'fim'].forEach(function (c) {
+        var f = document.getElementById(prefixo + '-f-' + c);
+        if (f) erroNoCampo(prefixo + '-f-' + c, '');
+      });
+      document.getElementById(prefixo + '-alerta').innerHTML = '';
+    }
+    // RN: mesmo produto sem vigências sobrepostas (a própria não conta na edição)
+    function sobrepoe(produto, inicio, fim, ignorarId) {
+      return destaques.some(function (d) {
+        return d.id !== ignorarId && d.produto === produto && data(inicio) <= data(d.fim) && data(d.inicio) <= data(fim);
+      });
+    }
+    function validar(prefixo, v, opcoes) {
+      var ok = true;
+      if (opcoes.produto && PRODUTOS_ATIVOS.indexOf(v.produto) < 0) { erroNoCampo(prefixo + '-f-produto', 'Campo obrigatório.'); ok = false; }
+      if (!v.chamada) { erroNoCampo(prefixo + '-f-chamada', 'Campo obrigatório.'); ok = false; }
+      else if (v.chamada.length > 60) { erroNoCampo(prefixo + '-f-chamada', 'Máximo de 60 caracteres.'); ok = false; }
+      if (v.ordem === '') { erroNoCampo(prefixo + '-f-ordem', 'Campo obrigatório.'); ok = false; }
+      else if (!/^\d+$/.test(v.ordem) || +v.ordem < 1 || +v.ordem > 99) { erroNoCampo(prefixo + '-f-ordem', 'Informe uma ordem de 1 a 99.'); ok = false; }
+      if (opcoes.inicioEditavel) {
+        if (!v.inicio) { erroNoCampo(prefixo + '-f-inicio', 'Campo obrigatório.'); ok = false; }
+        else if (data(v.inicio) < HOJE) { erroNoCampo(prefixo + '-f-inicio', 'Informe uma data igual ou posterior a hoje.'); ok = false; }
+      }
+      if (!v.fim) { erroNoCampo(prefixo + '-f-fim', 'Campo obrigatório.'); ok = false; }
+      else if (v.inicio && data(v.fim) < data(v.inicio)) { erroNoCampo(prefixo + '-f-fim', 'A data final não pode ser anterior à data inicial.'); ok = false; }
+      else if (opcoes.fimFuturo && data(v.fim) < HOJE) { erroNoCampo(prefixo + '-f-fim', 'Informe uma data igual ou posterior a hoje.'); ok = false; }
+      return ok;
+    }
+    function gravando(botao, ativo) {
+      var b = document.getElementById(botao);
+      b.disabled = ativo;
+      if (ativo) b.classList.add('is-loading'); else b.classList.remove('is-loading');
+    }
+
+    // ---------------- VIT-DST-02 — Cadastrar Destaque ----------------
+    function abrirCadastro() {
+      ['cad-produto', 'cad-chamada', 'cad-ordem', 'cad-inicio', 'cad-fim'].forEach(function (id) { document.getElementById(id).value = ''; });
+      limparErros('cad');
+      var semAcesso = estado === 'sem-acesso';
+      document.getElementById('cad-form').style.display = semAcesso ? 'none' : '';
+      document.getElementById('cad-sem-acesso').style.display = semAcesso ? '' : 'none';
+      document.getElementById('cad-sem-acesso').innerHTML = semAcesso ? alerta('danger', ICONE_FALHA, 'Você não tem permissão para esta ação.') : '';
+      showScreen('screen-cadastro');
+    }
+    function salvarCadastro() {
+      limparErros('cad');
+      var v = {
+        produto: document.getElementById('cad-produto').value.trim(),
+        chamada: document.getElementById('cad-chamada').value.trim(),
+        ordem: document.getElementById('cad-ordem').value.trim(),
+        inicio: document.getElementById('cad-inicio').value,
+        fim: document.getElementById('cad-fim').value
+      };
+      if (!validar('cad', v, { produto: true, inicioEditavel: true, fimFuturo: false })) return;
+      if (sobrepoe(v.produto, v.inicio, v.fim, null)) {
+        document.getElementById('cad-alerta').innerHTML = alerta('warning', ICONE_ALERTA, 'Este produto já tem um destaque nesse período.');
+        return;
+      }
+      gravando('cad-salvar', true);
+      setTimeout(function () {
+        gravando('cad-salvar', false);
+        if (estado === 'falha-gravacao') { document.getElementById('cad-alerta').innerHTML = alerta('danger', ICONE_FALHA, 'Ocorreu um erro. Tente novamente.'); return; }
+        destaques.push({ id: proximoId++, produto: v.produto, chamada: v.chamada, ordem: +v.ordem, inicio: v.inicio, fim: v.fim, cadastro: '2026-10-18' });
+        abrirPesquisa();
+        showToast('toast-save');
+      }, 700);
+    }
+
+    // ---------------- VIT-DST-03 — Editar Destaque ----------------
+    function abrirEdicao(id) {
+      var d = buscar(id);
+      var aviso = document.getElementById('alerta-pesquisa');
+      if (estado === 'sem-acesso') return;
+      if (!d) { aviso.innerHTML = alerta('danger', ICONE_FALHA, 'Registro não encontrado.'); return; }
+      var s = situacao(d);
+      // RN-02: destaque encerrado não é alterado — o formulário não abre
+      if (s === 'Encerrado') { aviso.innerHTML = alerta('warning', ICONE_ALERTA, 'Destaque encerrado não pode ser alterado.'); window.scrollTo(0, 0); return; }
+      emEdicao = d;
+      limparErros('ed');
+      document.getElementById('ed-produto').textContent = d.produto;
+      document.getElementById('ed-situacao').innerHTML = tag(s);
+      document.getElementById('ed-chamada').value = d.chamada;
+      document.getElementById('ed-ordem').value = d.ordem;
+      document.getElementById('ed-fim').value = d.fim;
+      // RN-03: o início de um destaque vigente não muda
+      var vigente = s === 'Vigente';
+      document.getElementById('ed-f-inicio').style.display = vigente ? 'none' : '';
+      document.getElementById('ed-inicio-leitura').style.display = vigente ? '' : 'none';
+      document.getElementById('ed-inicio').value = d.inicio;
+      document.getElementById('ed-inicio-valor').textContent = br(d.inicio);
+      showScreen('screen-edicao');
+    }
+    function salvarEdicao() {
+      var d = emEdicao;
+      limparErros('ed');
+      var vigente = situacao(d) === 'Vigente';
+      var v = {
+        chamada: document.getElementById('ed-chamada').value.trim(),
+        ordem: String(document.getElementById('ed-ordem').value).trim(),
+        inicio: vigente ? d.inicio : document.getElementById('ed-inicio').value,
+        fim: document.getElementById('ed-fim').value
+      };
+      if (!validar('ed', v, { produto: false, inicioEditavel: !vigente, fimFuturo: true })) return;
+      if (sobrepoe(d.produto, v.inicio, v.fim, d.id)) {
+        document.getElementById('ed-alerta').innerHTML = alerta('warning', ICONE_ALERTA, 'Este produto já tem um destaque nesse período.');
+        return;
+      }
+      gravando('ed-salvar', true);
+      setTimeout(function () {
+        gravando('ed-salvar', false);
+        if (estado === 'falha-gravacao') { document.getElementById('ed-alerta').innerHTML = alerta('danger', ICONE_FALHA, 'Ocorreu um erro. Tente novamente.'); return; }
+        d.chamada = v.chamada; d.ordem = +v.ordem; d.inicio = v.inicio; d.fim = v.fim;
+        abrirPesquisa();
+        showToast('toast-save');
+      }, 700);
+    }
+
+    // ---------------- VIT-DST-04 — Excluir Destaque ----------------
+    function pedirExclusao(id) {
+      if (estado === 'sem-acesso') return;
+      emExclusao = buscar(id);
+      document.getElementById('excluir-produto').textContent = emExclusao.produto;
+      document.getElementById('excluir-chamada').textContent = emExclusao.chamada;
+      toggleModal('modal-excluir', true);
+    }
+    function confirmarExclusao() {
+      var b = document.getElementById('btn-confirmar-exclusao');
+      b.disabled = true; b.classList.add('is-loading');
+      setTimeout(function () {
+        b.disabled = false; b.classList.remove('is-loading');
+        toggleModal('modal-excluir', false);
+        if (estado === 'falha-gravacao') { showToast('toast-erro'); return; }
+        destaques = destaques.filter(function (d) { return d.id !== emExclusao.id; });
+        renderLista();
+        showToast('toast-delete');
+      }, 600);
+    }
+
+    // ---------------- VIT-DST-05 — Visualizar Destaque ----------------
+    function abrirVisualizar(id) {
+      var d = buscar(id);
+      if (estado === 'sem-acesso') return;
+      if (!d) { document.getElementById('alerta-pesquisa').innerHTML = alerta('danger', ICONE_FALHA, 'Registro não encontrado.'); return; }
+      function lv(col, rotulo, valor) { return '<div class="dsc-col-' + col + '"><div class="dsc-lv"><span class="dsc-lv-label">' + rotulo + '</span><span class="dsc-lv-value">' + valor + '</span></div></div>'; }
+      document.getElementById('ficha').innerHTML =
+        lv(8, 'Produto', d.produto) + lv(4, 'Situação', tag(situacao(d))) +
+        lv(8, 'Chamada', d.chamada) + lv(4, 'Ordem de exibição', d.ordem) +
+        lv(4, 'Início da vigência', br(d.inicio)) + lv(4, 'Fim da vigência', br(d.fim)) + lv(4, 'Data de cadastro', br(d.cadastro));
+      showScreen('screen-visualizar');
+    }
+
+    // ---------------- Simulação de estados (painel de notas) ----------------
+    function simular(valor) {
+      estado = valor;
+      var semAcesso = estado === 'sem-acesso';
+      document.getElementById('pesquisa-conteudo').style.display = semAcesso ? 'none' : '';
+      document.getElementById('pesquisa-sem-acesso').style.display = semAcesso ? '' : 'none';
+      document.getElementById('pesquisa-sem-acesso').innerHTML = semAcesso ? alerta('danger', ICONE_FALHA, 'Você não tem permissão para esta ação.') : '';
+      abrirPesquisa();
+    }
+
+    renderLista();
+  </script>
+</body>
+</html>

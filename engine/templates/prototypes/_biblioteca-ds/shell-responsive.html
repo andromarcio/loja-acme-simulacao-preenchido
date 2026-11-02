@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo — shell responsivo (Basic Layout)</title>
+  <link rel="stylesheet" href="ds.css">
+</head>
+<body>
+
+  <div class="dsc-proto-badge">🎨 DEMO — shell responsivo da biblioteca</div>
+
+  <!-- Sidebar oculta por padrão: abre como drawer pelo ☰ no header -->
+  <div class="dsc-app">
+
+    <aside class="dsc-sidebar">
+      <div class="dsc-sidebar-backdrop" onclick="dscToggleMenu()"></div>
+      <div class="dsc-sidebar-brand"><span class="dsc-brand-mark">C</span> Sistema</div>
+      <ul class="dsc-menu">
+        <li class="dsc-menu-section">Demonstração</li>
+        <li><a class="dsc-menu-item is-active" href="#" onclick="dscToggleMenu();return false">Basic Layout</a></li>
+        <li><a class="dsc-menu-item" href="index.html">Catálogo de componentes</a></li>
+      </ul>
+    </aside>
+
+    <div class="dsc-shell-main">
+
+      <header class="dsc-header">
+        <div class="dsc-header-start">
+          <button class="dsc-menu-toggle" aria-label="Abrir/fechar menu" onclick="dscToggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <span class="dsc-header-logo">DEMO · <strong>CAIXA</strong></span>
+        </div>
+        <div class="dsc-header-actions">
+          <button class="dsc-icon-action" aria-label="Alternar tema" onclick="document.documentElement.classList.toggle('app-dark')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+          <button class="dsc-header-item">
+            <span class="dsc-avatar dsc-avatar--sm">AC</span>
+            <span class="dsc-hi-body"><span class="dsc-hi-title">Ana Costa</span><span class="dsc-hi-sub dsc-text-primary">Gestora</span></span>
+            <svg class="dsc-hi-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dsc-main">
+        <nav class="dsc-breadcrumb"><a href="#">Início</a><span class="dsc-sep">›</span><span class="is-current">Basic Layout</span></nav>
+
+        <div class="dsc-page-header">
+          <h1 class="dsc-page-title">Shell responsivo</h1>
+          <p class="dsc-page-subtitle">Sidebar oculta por padrão (drawer pelo ☰) · grid de 12 colunas ≥768px, empilhado abaixo — redimensione a janela.</p>
+        </div>
+
+        <div class="dsc-alert" role="status" style="margin-bottom:24px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>Breakpoints (Figma Basic Layout): <strong>360 · 480 · 768 · 1024 · 1440</strong>. Largura atual: <strong id="bp-width">…</strong>.</span>
+        </div>
+
+        <div class="dsc-row">
+          <div class="dsc-col-8">
+            <div class="dsc-card">
+              <h2 class="dsc-card-title">dsc-col-8</h2>
+              <p class="dsc-body-sm dsc-text-muted">Conteúdo principal. Abaixo de 768px esta coluna ocupa a largura total (grid de 4 colunas / empilhado).</p>
+            </div>
+          </div>
+          <div class="dsc-col-4">
+            <div class="dsc-card">
+              <h2 class="dsc-card-title">dsc-col-4</h2>
+              <p class="dsc-body-sm dsc-text-muted">Coluna lateral.</p>
+            </div>
+          </div>
+          <div class="dsc-col-3"><div class="dsc-card"><p class="dsc-caption">dsc-col-3</p></div></div>
+          <div class="dsc-col-3"><div class="dsc-card"><p class="dsc-caption">dsc-col-3</p></div></div>
+          <div class="dsc-col-3"><div class="dsc-card"><p class="dsc-caption">dsc-col-3</p></div></div>
+          <div class="dsc-col-3"><div class="dsc-card"><p class="dsc-caption">dsc-col-3</p></div></div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ☰: abre/fecha o drawer do menu (sidebar oculta por padrão)
+    function dscToggleMenu() {
+      document.querySelector('.dsc-app').classList.toggle('is-menu-open');
+    }
+    // Indicador de largura/breakpoint da demo
+    function bp() {
+      var w = window.innerWidth;
+      var faixa = w >= 1440 ? 'extra large' : w >= 1024 ? 'large' : w >= 768 ? 'medium' : w >= 480 ? 'small' : 'extra small';
+      document.getElementById('bp-width').textContent = w + 'px (' + faixa + ')';
+    }
+    window.addEventListener('resize', bp); bp();
+  </script>
+</body>
+</html>

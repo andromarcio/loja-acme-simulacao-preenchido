@@ -1,0 +1,86 @@
+# security.yml — esteira de segurança do REPOSITÓRIO DE PRODUTO (template do engine)
+#
+# ⚠️ Destino: o repositório de CÓDIGO (backend/frontend) — NÃO o repositório de
+# docs (que usa o spec-guard.yml). Copie para `.github/workflows/security.yml`
+# de cada repo de produto e ajuste os pontos marcados com [ ].
+#
+# Três camadas complementares — nenhuma substitui o code review (CP4):
+#   1. SAST (CodeQL)        → vulnerabilidades no código próprio (injeção, XSS…)
+#   2. Dependências (Trivy + dependency review) → CVEs em bibliotecas de terceiros
+#   3. Segredos (Gitleaks)  → credencial commitada por acidente
+#
+# Ferramenta-agnóstico: se a organização já tem SonarQube/Snyk/etc., troque o job
+# equivalente e mantenha a COBERTURA (SAST + dependências + segredos). O que
+# verificar vem das specs (global/NFR.md → SEG-*; global/PATTERNS.md → campo
+# Verificação); a ferramenta é só o como.
+
+name: Segurança — SAST, dependências e segredos
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1" # semanal: pega CVE novo em dependência antiga
+
+permissions:
+  contents: read
+  security-events: write # upload de resultados para o Security tab
+
+jobs:
+  sast-codeql:
+    name: SAST (CodeQL)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # [ajuste às linguagens do repo: java-kotlin p/ backend, javascript-typescript p/ frontend]
+        language: ["java-kotlin", "javascript-typescript"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended
+      - uses: github/codeql-action/autobuild@v3 # [troque por passos de build explícitos se o autobuild falhar]
+      - uses: github/codeql-action/analyze@v3
+
+  dependencias:
+    name: Dependências vulneráveis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Em PR: bloqueia a INTRODUÇÃO de dependência vulnerável/licença proibida
+      - uses: actions/dependency-review-action@v4
+        if: github.event_name == 'pull_request'
+        with:
+          fail-on-severity: high # [calibre: low|moderate|high|critical]
+      # Sempre: varre o estado ATUAL da árvore de dependências (CVE novo em lib antiga)
+      - uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scanners: vuln
+          severity: HIGH,CRITICAL # [calibre]
+          exit-code: "1" # reprova o job — sem cap silencioso
+          ignore-unfixed: true
+
+  segredos:
+    name: Segredos commitados (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # histórico completo — segredo antigo também vaza
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Adoção (uma vez por repo de produto):
+# 1. Copie este arquivo para .github/workflows/security.yml e ajuste os [ ].
+# 2. Em Settings → Branches → branch protection da main, marque os três jobs
+#    como status checks obrigatórios — sem verde, sem merge (fecha com o CP4).
+# 3. Habilite o Dependabot (Settings → Code security) para PRs de atualização —
+#    o scan acusa, o Dependabot corrige.
+# 4. As fitness functions de PADRÕES (ArchUnit/ESLint — ver global/PATTERNS.md,
+#    campo Verificação) entram na CI de build/teste do repo, não aqui: aqui é
+#    vulnerabilidade; lá é conformidade arquitetural.

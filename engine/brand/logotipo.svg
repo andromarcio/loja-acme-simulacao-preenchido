@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 356 128" role="img" aria-label="docqui">
+  <!-- logotipo monolinear em geometria própria; o rabo do "q" é a agulha de pin -->
+  <g stroke="#1B2B4B" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="28" cy="50" r="21.5"/>
+    <line x1="49.5" y1="6.5" x2="49.5" y2="71.5"/>
+    <circle cx="97" cy="50" r="21.5"/>
+    <path d="M179.8 33.5 A21.5 21.5 0 1 0 179.8 66.5"/>
+    <circle cx="228" cy="50" r="21.5"/>
+    <path d="M275.5 28.5 V56.5 A21.5 21.5 0 0 0 318.5 56.5 V28.5"/>
+    <line x1="344.5" y1="28.5" x2="344.5" y2="71.5"/>
+  </g>
+  <path fill="#1B2B4B" d="M243 28.5 A6.5 6.5 0 0 1 256 28.5 V84 L249.5 106 L243 84 Z"/>
+  <circle cx="344.5" cy="6.5" r="7.5" fill="#1B2B4B"/>
+</svg>

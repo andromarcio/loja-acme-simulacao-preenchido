@@ -1,0 +1,100 @@
+/* ============================================================================
+   tokens.css — tokens canônicos do CAIXA Design System (namespace --dsc-*)
+   Fonte: global/DESIGN-SYSTEM.md (extraído do Figma, Dev Mode MCP).
+   Este arquivo define SÓ variáveis; os componentes vivem em ds.css.
+   Tema escuro: classe `app-dark` na raiz (<html> ou <body>).
+   ========================================================================== */
+
+:root {
+  /* --- Marca / ação (escala 10→130; stops usados pelo DS) ----------------- */
+  --dsc-primary-10:  #e5f2fc;   /* fundo de destaque (bg-highlight-1) */
+  --dsc-primary-50:  #33a0ff;   /* primário no dark mode */
+  --dsc-primary-90:  #005ca9;   /* ação principal, links, menu ativo */
+  --dsc-primary-110: #00437a;   /* hover/pressionado do primário */
+  --dsc-secondary-90: #d87b00;  /* apoio / laranja CAIXA */
+
+  /* --- Semânticas (status): par fundo -10 + forte -90 + texto escuro on*Bg - */
+  --dsc-success-10:  #e7f4ea;
+  --dsc-success-90:  #127527;
+  --dsc-success-on:  #0d581d;
+  --dsc-warning-10:  #fff9e6;
+  --dsc-warning-90:  #977203;
+  --dsc-warning-on:  #654c02;
+  --dsc-danger-10:   #fbebeb;
+  --dsc-danger-90:   #b22c2c;
+  --dsc-danger-on:   #8c2424;
+  --dsc-info-10:     #e5f5f8;
+  --dsc-info-90:     #038299;
+  --dsc-info-on:     #026273;
+
+  /* --- Superfícies / texto (grayscale) ------------------------------------ */
+  --dsc-bg-neutral-1:     #ffffff;  /* cards, header, sidebar */
+  --dsc-bg-neutral-2:     #f7fafa;  /* fundo da aplicação / header de tabela */
+  --dsc-bg-neutral-3:     #ebf1f2;  /* hover de itens, zebra */
+  --dsc-border-neutral-3: #d0e0e3;  /* bordas, divisores */
+  --dsc-content-neutral-5:#22292e;  /* texto principal */
+  --dsc-content-neutral-4:#404b52;  /* texto secundário */
+  --dsc-grayscale-90:     #525f66;  /* texto suave / placeholder */
+  --dsc-grayscale-130:    #22292e;  /* fundo do toast */
+
+  /* --- Aliases semânticos usados por ds.css e pelos protótipos ------------ */
+  --dsc-bg-highlight-1: var(--dsc-primary-10);
+  --text-color:         var(--dsc-content-neutral-5); /* usado em snippets dos prompts */
+
+  /* --- Tipografia ---------------------------------------------------------- */
+  /* CAIXA Std é proprietária e NÃO vem embutida — sem @font-face o navegador
+     cai no fallback. Para fidelidade total, embuta os arquivos da fonte. */
+  --dsc-font-family-1: "CAIXA Std", "Segoe UI", Roboto, system-ui, sans-serif;
+  --dsc-font-family-numeric: Roboto, "Segoe UI", system-ui, sans-serif;
+  --dsc-font-size-micro: 16px;      /* base */
+  --dsc-line-height: 1.5;
+
+  /* --- Espaçamento (--dsc-spacing-*) --------------------------------------- */
+  --dsc-spacing-quark:   4px;
+  --dsc-spacing-nano:    8px;
+  --dsc-spacing-micro:  12px;
+  --dsc-spacing-tiny:   16px;
+  --dsc-spacing-smaller:24px;
+  --dsc-spacing-small:  32px;
+  --dsc-spacing-medium: 40px;
+  --dsc-spacing-large:  48px;
+  --dsc-spacing-larger: 56px;
+  --dsc-spacing-big:    64px;
+  --dsc-spacing-bigger: 72px;
+  --dsc-spacing-huge:   80px;
+
+  /* --- Forma e movimento ---------------------------------------------------- */
+  --dsc-border-radius-pill:   1000px; /* botões, inputs, select, tags, chips, switch */
+  --dsc-border-radius-medium: 12px;   /* cards, modais, textarea, popovers */
+  --dsc-border-radius-large:  16px;   /* Card Alert */
+  --dsc-border-radius-small:  8px;    /* checkbox, células editáveis, itens de menu */
+  --dsc-border-width-hairline: 1px;
+  --dsc-border-width-thin:     2px;
+  --dsc-transition-duration: 0.12s;
+  --dsc-focus-ring: 0 0 0 3px rgba(0, 92, 169, 0.35); /* anel 3px primary translúcido */
+  --dsc-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.04);   /* cards, chips */
+  --dsc-elevation-2: 0 14px 28px rgba(0, 0, 0, 0.04); /* modais, toasts, popovers, drawer */
+
+  /* --- Métricas do shell ----------------------------------------------------- */
+  --dsc-header-height: 64px;
+  --dsc-sidebar-width: 264px;
+
+  /* --- Breakpoints (referência — CSS não interpola var() em @media) ----------
+     extra small 360 · small 480 · medium 768 · large 1024 · extra large 1440
+     Grid: 12 colunas ≥768px (gutter 24) · 4 colunas <768px (gutter 16).      */
+}
+
+/* ============================ Tema escuro =================================== */
+.app-dark {
+  --dsc-bg-neutral-1:     #1e2429;
+  --dsc-bg-neutral-2:     #22292e;
+  --dsc-bg-neutral-3:     #2b333a;
+  --dsc-border-neutral-3: #3a444d;
+  --dsc-content-neutral-5:#f9fafb;
+  --dsc-content-neutral-4:#c6ced4;
+  --dsc-grayscale-90:     #97a3ab;
+  --dsc-primary-90:       var(--dsc-primary-50); /* primary desloca para o stop 50 */
+  --dsc-primary-110:      #66b8ff;
+  --dsc-bg-highlight-1:   #10314d;
+  --dsc-focus-ring: 0 0 0 3px rgba(51, 160, 255, 0.4);
+}

@@ -1,0 +1,396 @@
+<!-- docqui: 6.4.10 | prompt: PROMPT_PROTOTYPE_FLOW_FULL | atualizado: 2026-10-18 -->
+<!DOCTYPE html>
+<!--
+  ⚠️ PROTÓTIPO NAVEGÁVEL — treino, não jogo.
+  Fonte de verdade de LAYOUT, COMPORTAMENTO e ESTADOS — NUNCA de implementação.
+  Não copie este HTML/CSS/JS para o código de produção: aqui tudo é autocontido
+  e procedural DE PROPÓSITO (simulação). A implementação real segue outra
+  estratégia: componentes do design system do projeto (mapa de equivalência no
+  README do tema), catálogo global/PATTERNS.md e convenções do global/MASTER.md.
+  Classes .dsc-* são EXCLUSIVAS de protótipo — proibidas em código de produção.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo: Navegação — Vitrine</title>
+  <link rel="stylesheet" href="../../_biblioteca-ds/ds.css">
+</head>
+<body>
+
+  <div class="dsc-proto-badge">🎨 PROTÓTIPO — não é o sistema real</div>
+
+  <div class="dsc-app">
+
+    <aside class="dsc-sidebar">
+      <div class="dsc-sidebar-backdrop" onclick="dscToggleMenu()"></div>
+      <div class="dsc-sidebar-brand"><span class="dsc-brand-mark">L</span> Loja ACME</div>
+      <ul class="dsc-menu">
+        <li class="dsc-menu-section">Loja</li>
+        <li><a class="dsc-menu-item is-active" id="menu-inicio" href="#" onclick="abrirInicio(); return false;">Início</a></li>
+        <li><a class="dsc-menu-item" id="menu-produtos" href="#" onclick="abrirBusca('', ''); return false;">Produtos</a></li>
+        <li class="dsc-menu-section">Vendas</li>
+        <li><a class="dsc-menu-item" href="../../vendas/carrinho/flow.html">Carrinho</a></li>
+      </ul>
+    </aside>
+
+    <div class="dsc-shell-main">
+      <header class="dsc-header">
+        <div class="dsc-header-start">
+          <button class="dsc-menu-toggle" aria-label="Recolher/expandir menu" onclick="dscToggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <span class="dsc-header-logo">Loja ACME · <strong>CAIXA</strong></span>
+        </div>
+        <div class="dsc-header-actions">
+          <button class="dsc-header-item">
+            <span class="dsc-avatar dsc-avatar--sm">AC</span>
+            <span class="dsc-hi-body"><span class="dsc-hi-title">Ana Costa</span><span class="dsc-hi-sub dsc-text-primary">Cliente</span></span>
+            <svg class="dsc-hi-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dsc-main">
+
+        <!-- Tela 1 do N2: Página inicial (/) — atende VIT-NAV-01 Listar Destaques -->
+        <div id="screen-inicio" class="dsc-screen is-active">
+          <nav class="dsc-breadcrumb"><span class="is-current">Início</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Loja ACME</h1>
+            <p class="dsc-page-subtitle">Encontre o produto e saiba quanto custa antes de comprar.</p>
+          </div>
+
+          <section class="dsc-card">
+            <div class="dsc-row">
+              <div class="dsc-col-9">
+                <div class="dsc-field" id="f-busca-inicio">
+                  <label class="dsc-field-label" for="busca-inicio">Busca <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+                  <span class="dsc-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="dsc-input" id="busca-inicio" placeholder="Parte do nome do produto" onkeydown="if (event.key === 'Enter') pesquisarDoInicio()" oninput="erroNoCampo('f-busca-inicio', '')"></span>
+                </div>
+              </div>
+              <div class="dsc-col-3" style="display:flex;align-items:flex-start;padding-top:26px">
+                <button class="dsc-btn" onclick="pesquisarDoInicio()">Pesquisar</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="dsc-card">
+            <h2 class="dsc-card-title">Destaques</h2>
+            <div id="destaques" aria-live="polite"></div>
+          </section>
+        </div>
+
+        <!-- Tela 2 do N2: Resultado da busca (/produtos) — atende VIT-NAV-02 Pesquisar Produtos na Vitrine -->
+        <div id="screen-busca" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><a href="#" onclick="abrirInicio(); return false;">Início</a><span class="dsc-sep">›</span><span class="is-current">Produtos</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Produtos</h1>
+            <p class="dsc-page-subtitle">Pesquise por parte do nome e filtre por categoria.</p>
+          </div>
+
+          <section class="dsc-card">
+            <div class="dsc-row">
+              <div class="dsc-col-5">
+                <div class="dsc-field" id="f-busca">
+                  <label class="dsc-field-label" for="busca">Busca <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+                  <span class="dsc-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="dsc-input" id="busca" placeholder="Parte do nome do produto" onkeydown="if (event.key === 'Enter') pesquisar()" oninput="erroNoCampo('f-busca', '')"></span>
+                </div>
+              </div>
+              <div class="dsc-col-3">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="categoria">Categoria <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+                  <select class="dsc-select" id="categoria" onchange="pesquisar()">
+                    <option value="">Todas as categorias</option>
+                  </select>
+                </div>
+              </div>
+              <div class="dsc-col-2">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="ordem">Ordenar por</label>
+                  <select class="dsc-select" id="ordem" onchange="pesquisar()">
+                    <option value="nome">Nome A–Z</option>
+                    <option value="menor">Menor preço</option>
+                    <option value="maior">Maior preço</option>
+                  </select>
+                </div>
+              </div>
+              <div class="dsc-col-2" style="display:flex;align-items:flex-start;padding-top:26px">
+                <button class="dsc-btn" id="btn-pesquisar" onclick="pesquisar()">Pesquisar</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="dsc-card">
+            <div class="dsc-flex dsc-justify-between dsc-items-center" style="margin-bottom:16px">
+              <span class="dsc-text-muted" id="total-resultado"></span>
+            </div>
+            <div id="resultado" aria-live="polite"></div>
+          </section>
+        </div>
+
+        <!-- Tela 3 do N2: Página do produto (/produtos/:id) — atende VIT-NAV-03 Visualizar Produto na Vitrine; origem de VND-CAR-01 -->
+        <div id="screen-produto" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><a href="#" onclick="abrirInicio(); return false;">Início</a><span class="dsc-sep">›</span><a href="#" onclick="voltarParaBusca(); return false;">Produtos</a><span class="dsc-sep">›</span><span class="is-current" id="bc-produto">Produto</span></nav>
+          <div id="produto" aria-live="polite"></div>
+        </div>
+
+        <div class="dsc-proto-notes">
+          <strong>📋 Notas do protótipo:</strong>
+          <ul>
+            <li>Data de referência: 18/10/2026. Destaques vigentes: Garrafa térmica (ordem 1), Camiseta (2) e Boné (3). A Caneca (destaque encerrado em 15/10) e a Ecobag (programada para 20/11) não aparecem.</li>
+            <li>A Almofada ACME estampada é da categoria inativa Decoração: não aparece nos destaques nem na busca, e Decoração não está entre as categorias do filtro.</li>
+            <li>O Boné está sem estoque: aparece com o selo "Esgotado" e o botão "Adicionar ao carrinho" fica indisponível.</li>
+            <li>A quantidade e o botão "Adicionar ao carrinho" da página do produto são de VND-CAR-01 — Adicionar Item ao Carrinho; o botão leva ao protótipo do Carrinho.</li>
+            <li>As descrições dos produtos são ilustrativas; a Caneta não tem descrição, para mostrar a página sem esse bloco.</li>
+            <li>STRY0013205: o filtro lista todas as categorias ativas, com o caminho das subcategorias. Selecionar Cozinha inclui seus produtos diretos e os das subcategorias ativas; inativar a superior não oculta uma filha ativa.</li>
+            <li>Canecas e Garrafas, em Cozinha, são estrutura suplementar sem produtos. A massa original continua nas categorias diretas originais.</li>
+          </ul>
+          <div class="dsc-field" style="margin-top:12px;max-width:360px">
+            <label class="dsc-field-label" for="simulacao">Simular estado <span class="dsc-text-muted" style="font-weight:400">(controle do protótipo, não faz parte da tela)</span></label>
+            <select class="dsc-select" id="simulacao" onchange="simular(this.value)">
+              <option value="normal">Loja com destaques</option>
+              <option value="sem-destaques">Nenhum destaque vigente</option>
+              <option value="falha">Falha ao carregar</option>
+              <option value="inativa">Abrir produto de categoria inativa</option>
+            </select>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ☰: abre/fecha o drawer do menu (sidebar oculta por padrão); ESC também fecha
+    function dscToggleMenu() {
+      document.querySelector('.dsc-app').classList.toggle('is-menu-open');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') document.querySelector('.dsc-app').classList.remove('is-menu-open');
+    });
+    function showScreen(id) {
+      document.querySelectorAll('.dsc-screen').forEach(function (s) { s.classList.remove('is-active'); });
+      document.getElementById(id).classList.add('is-active');
+      document.querySelector('.dsc-app').classList.remove('is-menu-open');
+      document.getElementById('menu-inicio').classList.toggle('is-active', id === 'screen-inicio');
+      document.getElementById('menu-produtos').classList.toggle('is-active', id !== 'screen-inicio');
+      window.scrollTo(0, 0);
+    }
+
+    // Massa da demonstração (global/data-models/catalogo.md e vitrine.md); só produtos de categorias ativas
+    var PRODUTOS = [
+      { id: 'caneca', nome: 'Caneca de cerâmica ACME 300 ml', categoria: 'Cozinha', preco: 39.90, estoque: 120, descricao: 'Caneca de cerâmica branca com a marca ACME, para café ou chá.' },
+      { id: 'garrafa', nome: 'Garrafa térmica ACME 500 ml', categoria: 'Cozinha', preco: 89.90, estoque: 35, descricao: 'Mantém a bebida quente ou gelada por horas.' },
+      { id: 'camiseta', nome: 'Camiseta ACME algodão — tamanho M', categoria: 'Vestuário', preco: 59.90, estoque: 48, descricao: 'Camiseta de algodão com a marca ACME no peito.' },
+      { id: 'bone', nome: 'Boné ACME aba curva', categoria: 'Vestuário', preco: 49.90, estoque: 0, descricao: 'Boné ajustável com aba curva.' },
+      { id: 'bloco', nome: 'Bloco de notas ACME A5', categoria: 'Papelaria', preco: 24.90, estoque: 200, descricao: 'Bloco com folhas pautadas no formato A5.' },
+      { id: 'caneta', nome: 'Caneta esferográfica ACME azul', categoria: 'Papelaria', preco: 6.90, estoque: 500, descricao: '' },
+      { id: 'ecobag', nome: 'Ecobag ACME de lona', categoria: 'Acessórios', preco: 34.90, estoque: 60, descricao: 'Sacola retornável de lona crua.' },
+      { id: 'chaveiro', nome: 'Chaveiro ACME de metal', categoria: 'Acessórios', preco: 14.90, estoque: 75, descricao: 'Chaveiro de metal com a marca ACME.' }
+    ];
+    var CATEGORIAS = [
+      { id: 1, nome: 'Cozinha', situacao: 'Ativa' },
+      { id: 2, nome: 'Vestuário', situacao: 'Ativa' },
+      { id: 3, nome: 'Papelaria', situacao: 'Ativa' },
+      { id: 4, nome: 'Acessórios', situacao: 'Ativa' },
+      { id: 5, nome: 'Decoração', situacao: 'Inativa' },
+      { id: 6, nome: 'Brinquedos', situacao: 'Ativa' },
+      { id: 7, nome: 'Canecas', superior: 1, situacao: 'Ativa' },
+      { id: 8, nome: 'Garrafas', superior: 1, situacao: 'Ativa' }
+    ];
+    // Destaques vigentes em 18/10/2026, já na ordem de exibição
+    var DESTAQUES = [
+      { produto: 'garrafa', chamada: 'Café quente o dia todo' },
+      { produto: 'camiseta', chamada: 'Nova coleção de algodão' },
+      { produto: 'bone', chamada: 'Volta em breve' }
+    ];
+
+    var estado = 'normal';
+    var ultimaBusca = { termo: '', categoria: '' };
+    var ICONE_ERRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+
+    function porId(id) { return PRODUTOS.filter(function (p) { return p.id === id; })[0]; }
+    function categoriaPorId(id) { return CATEGORIAS.find(function (c) { return c.id === id; }); }
+    function categoriaDoProduto(p) {
+      return p.categoriaId != null ? categoriaPorId(p.categoriaId) : CATEGORIAS.find(function (c) { return !c.superior && c.nome === p.categoria; });
+    }
+    function produtoVisivel(p) {
+      var c = p && categoriaDoProduto(p);
+      return !!c && c.situacao === 'Ativa';
+    }
+    function caminhoCategoria(c) {
+      var superior = c && categoriaPorId(c.superior);
+      return c ? (superior ? superior.nome + ' › ' : '') + c.nome : '—';
+    }
+    function preencherCategorias() {
+      var campo = document.getElementById('categoria');
+      var selecionada = campo.value;
+      campo.replaceChildren(new Option('Todas as categorias', ''));
+      CATEGORIAS.filter(function (c) { return c.situacao === 'Ativa'; })
+        .sort(function (a, b) { return caminhoCategoria(a).localeCompare(caminhoCategoria(b), 'pt-BR'); })
+        .forEach(function (c) { campo.add(new Option(caminhoCategoria(c), String(c.id))); });
+      campo.value = selecionada;
+    }
+    function correspondeCategoria(p, filtro) {
+      var c = categoriaDoProduto(p);
+      var selecionada = categoriaPorId(Number(filtro));
+      return !filtro || !!selecionada && !!c && (c.id === selecionada.id || (!selecionada.superior && c.superior === selecionada.id));
+    }
+    function escapar(texto) {
+      return String(texto).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+    }
+    function moeda(v) { return 'R$&nbsp;' + v.toFixed(2).replace('.', ','); }
+    function normaliza(t) { return t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+    function selo(p) { return p.estoque === 0 ? ' <span class="dsc-tag dsc-tag--sm dsc-tag--danger">Esgotado</span>' : ''; }
+
+    function carregando(alvo, n) {
+      var html = '<p class="dsc-caption" style="margin-bottom:8px">Carregando…</p><div class="dsc-grid-3">';
+      for (var i = 0; i < n; i++) html += '<div><span class="dsc-skeleton" style="height:96px;margin-bottom:8px"></span><span class="dsc-skeleton" style="height:14px;width:70%"></span></div>';
+      document.getElementById(alvo).innerHTML = html + '</div>';
+    }
+    function estadoTela(alvo, icone, titulo, texto) {
+      document.getElementById(alvo).innerHTML = '<div class="dsc-state"><span class="dsc-state-icon">' + icone + '</span><span class="dsc-state-title">' + titulo + '</span><span class="dsc-state-text">' + texto + '</span></div>';
+    }
+    function cardProduto(p, chamada) {
+      return '<div><section class="dsc-card" style="height:100%">' +
+        (chamada ? '<p class="dsc-caption dsc-text-primary" style="margin:0 0 4px">' + escapar(chamada) + '</p>' : '') +
+        '<p class="dsc-caption dsc-text-muted" style="margin:0 0 4px">' + escapar(caminhoCategoria(categoriaDoProduto(p))) + '</p>' +
+        '<h3 class="dsc-title-sm" style="margin:0 0 8px">' + escapar(p.nome) + selo(p) + '</h3>' +
+        '<p class="dsc-body" style="margin:0 0 12px"><strong>' + moeda(p.preco) + '</strong></p>' +
+        '<button class="dsc-btn dsc-btn--sm dsc-btn--outline" onclick="abrirProduto(\'' + p.id + '\')">Ver produto</button>' +
+        '</section></div>';
+    }
+
+    function erroNoCampo(campo, texto) {
+      var f = document.getElementById(campo);
+      var e = f.querySelector('.dsc-field-error');
+      if (!texto) { f.classList.remove('is-invalid'); if (e) e.remove(); return; }
+      f.classList.add('is-invalid');
+      if (!e) { e = document.createElement('span'); e.className = 'dsc-field-error'; f.appendChild(e); }
+      e.innerHTML = ICONE_ERRO + ' ' + texto;
+    }
+
+    // VIT-NAV-01 — Listar Destaques
+    // Na abertura do protótipo a tela já vem em repouso (regra 11); o "Carregando…" só aparece ao voltar ao Início.
+    function abrirInicio(imediato) {
+      showScreen('screen-inicio');
+      function desenha() {
+        if (estado === 'falha') { estadoTela('destaques', '⚠️', 'Não foi possível carregar', 'Não foi possível carregar os dados.'); return; }
+        if (estado === 'sem-destaques') { estadoTela('destaques', '🛍️', 'Sem destaques', 'Nenhum destaque no momento. Use a busca para encontrar produtos.'); return; }
+        var html = '<div class="dsc-grid-3">';
+        var destaques = DESTAQUES.filter(function (d) { return produtoVisivel(porId(d.produto)); });
+        if (!destaques.length) { estadoTela('destaques', '🛍️', 'Sem destaques', 'Nenhum destaque no momento. Use a busca para encontrar produtos.'); return; }
+        destaques.forEach(function (d) { html += cardProduto(porId(d.produto), d.chamada); });
+        document.getElementById('destaques').innerHTML = html + '</div>';
+      }
+      if (imediato) { desenha(); return; }
+      carregando('destaques', 3);
+      setTimeout(desenha, 500);
+    }
+
+    function pesquisarDoInicio() {
+      var termo = document.getElementById('busca-inicio').value.trim();
+      if (termo.length === 1) { erroNoCampo('f-busca-inicio', 'Mínimo de 2 caracteres.'); return; }
+      abrirBusca(termo, '');
+    }
+
+    // VIT-NAV-02 — Pesquisar Produtos na Vitrine
+    function abrirBusca(termo, categoria) {
+      showScreen('screen-busca');
+      document.getElementById('busca').value = termo;
+      preencherCategorias();
+      document.getElementById('categoria').value = categoria;
+      erroNoCampo('f-busca', '');
+      pesquisar();
+    }
+
+    function pesquisar() {
+      var termo = document.getElementById('busca').value.trim();
+      var categoria = document.getElementById('categoria').value;
+      var ordem = document.getElementById('ordem').value;
+      // Termo com menos de 2 caracteres: mensagem junto ao campo e o resultado anterior fica
+      if (termo.length === 1) { erroNoCampo('f-busca', 'Mínimo de 2 caracteres.'); return; }
+      erroNoCampo('f-busca', '');
+      ultimaBusca = { termo: termo, categoria: categoria };
+      var btn = document.getElementById('btn-pesquisar');
+      btn.classList.add('is-loading'); btn.disabled = true;
+      document.getElementById('total-resultado').textContent = '';
+      carregando('resultado', 3);
+      setTimeout(function () {
+        btn.classList.remove('is-loading'); btn.disabled = false;
+        if (estado === 'falha') { estadoTela('resultado', '⚠️', 'Não foi possível carregar', 'Não foi possível carregar os dados.'); return; }
+        var lista = PRODUTOS.filter(function (p) {
+          return produtoVisivel(p) && (!termo || normaliza(p.nome).indexOf(normaliza(termo)) >= 0) && correspondeCategoria(p, categoria);
+        });
+        lista.sort(function (a, b) {
+          if (ordem === 'menor') return a.preco - b.preco;
+          if (ordem === 'maior') return b.preco - a.preco;
+          return a.nome.localeCompare(b.nome, 'pt-BR');
+        });
+        if (!lista.length) { estadoTela('resultado', '🔍', 'Sem resultado', 'Nenhum resultado para a busca.'); return; }
+        document.getElementById('total-resultado').innerHTML = '<strong style="color:var(--text-color)">' + lista.length + (lista.length === 1 ? ' produto' : ' produtos') + '</strong>';
+        var html = '<div class="dsc-grid-3">';
+        lista.forEach(function (p) { html += cardProduto(p); });
+        document.getElementById('resultado').innerHTML = html + '</div>';
+      }, 500);
+    }
+
+    function voltarParaBusca() { abrirBusca(ultimaBusca.termo, ultimaBusca.categoria); }
+
+    // VIT-NAV-03 — Visualizar Produto na Vitrine
+    function abrirProduto(id) {
+      showScreen('screen-produto');
+      document.getElementById('bc-produto').textContent = 'Produto';
+      document.getElementById('produto').innerHTML = '<p class="dsc-caption" style="margin-bottom:8px">Carregando…</p><span class="dsc-skeleton" style="height:28px;width:50%;margin-bottom:12px"></span><span class="dsc-skeleton" style="height:14px;margin-bottom:6px"></span><span class="dsc-skeleton" style="height:14px;width:80%"></span>';
+      setTimeout(function () {
+        if (estado === 'falha') { estadoTela('produto', '⚠️', 'Não foi possível carregar', 'Não foi possível carregar os dados.'); return; }
+        var p = porId(id);
+        if (!produtoVisivel(p)) { estadoTela('produto', '🚫', 'Produto indisponível', 'Este produto não está disponível na loja.'); return; }
+        document.getElementById('bc-produto').textContent = p.nome;
+        var esgotado = p.estoque === 0;
+        var html =
+          '<div class="dsc-page-header"><h1 class="dsc-page-title">' + escapar(p.nome) + '</h1>' +
+          '<p class="dsc-page-subtitle">' + escapar(caminhoCategoria(categoriaDoProduto(p))) + '</p></div>' +
+          '<div class="dsc-row">' +
+            '<div class="dsc-col-7"><section class="dsc-card">' +
+              '<div class="dsc-row">' +
+                '<div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">Categoria</span><span class="dsc-lv-value">' + escapar(caminhoCategoria(categoriaDoProduto(p))) + '</span></div></div>' +
+                '<div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">Disponibilidade</span><span class="dsc-lv-value">' + (esgotado ? '<span class="dsc-tag dsc-tag--danger">Esgotado</span>' : '<span class="dsc-tag dsc-tag--success">Em estoque</span>') + '</span></div></div>' +
+              '</div>' +
+              (p.descricao ? '<hr class="dsc-divider"><h2 class="dsc-card-title">Descrição</h2><p class="dsc-body" style="margin:0">' + escapar(p.descricao) + '</p>' : '') +
+            '</section></div>' +
+            '<div class="dsc-col-5"><section class="dsc-card">' +
+              '<p class="dsc-caption dsc-text-muted" style="margin:0 0 4px">Preço</p>' +
+              '<p class="dsc-display" style="margin:0 0 16px">' + moeda(p.preco) + '</p>' +
+              '<!-- Quantidade e botão: VND-CAR-01 Adicionar Item ao Carrinho (outro Agrupamento Funcional) -->' +
+              '<p class="dsc-caption dsc-text-muted" style="margin:0 0 8px">Quantidade</p>' +
+              '<span class="dsc-stepper" style="margin-bottom:16px"><button aria-label="Diminuir" ' + (esgotado ? 'disabled' : 'onclick="passo(-1)"') + '>−</button><span id="qtd">1</span><button aria-label="Aumentar" ' + (esgotado ? 'disabled' : 'onclick="passo(1)"') + '>+</button></span>' +
+              (esgotado
+                ? '<div><button class="dsc-btn" disabled>Adicionar ao carrinho</button></div>'
+                : '<div><a class="dsc-btn" href="../../vendas/carrinho/flow.html">Adicionar ao carrinho</a></div>') +
+            '</section></div>' +
+          '</div>';
+        document.getElementById('produto').innerHTML = html;
+      }, 500);
+    }
+    function passo(d) {
+      var q = document.getElementById('qtd');
+      q.textContent = Math.max(1, Number(q.textContent) + d);
+    }
+
+    function simular(valor) {
+      estado = valor;
+      if (valor === 'inativa') {
+        // Endereço da página da Almofada ACME estampada (categoria inativa Decoração): sem página na vitrine
+        estado = 'normal';
+        document.getElementById('simulacao').value = 'normal';
+        abrirProduto('almofada');
+        return;
+      }
+      abrirInicio();
+    }
+
+    preencherCategorias();
+    abrirInicio(true);
+  </script>
+</body>
+</html>

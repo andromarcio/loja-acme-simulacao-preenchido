@@ -1,0 +1,50 @@
+name: Esteira de gates — espelho do INDEX
+
+# Rede de segurança PÓS-merge: o espelho da esteira no modules/INDEX.md viaja
+# DENTRO do próprio PR do gate (o gate-check reprova PR com espelho defasado —
+# rode `python scripts/gates.py promote --write` e inclua o INDEX no PR).
+# Este workflow apenas VERIFICA, a cada push na main, que o espelho não ficou
+# para trás (ex.: push direto de admin, edição manual do front-matter). Ele
+# não faz push algum — convive com o branch protection "Require a pull request
+# before merging" que o kit recomenda. Defasagem detectada → o job falha;
+# corrija abrindo um PR com o resultado do promote --write.
+
+on:
+  push:
+    # também nas branches de entrega: o espelho viaja com elas até o merge, e o preview
+    # do site (pages.yml) mostra o INDEX da branch
+    branches: [main, "sprint/**", "historia/**"]
+    paths:
+      - "modules/**"
+      - "scripts/gates.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: Esteira de gates — drift do INDEX
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Dependências
+        run: pip install pyyaml
+
+      - name: Verificar espelho da esteira
+        run: |
+          python scripts/gates.py promote --write
+          if ! git diff --quiet -- modules/INDEX.md; then
+            echo "::error file=modules/INDEX.md::Espelho da esteira defasado do front-matter dos N3."
+            echo "Abra um PR com o resultado de: python scripts/gates.py promote --write"
+            git --no-pager diff -- modules/INDEX.md | head -60
+            exit 1
+          fi
+          echo "Espelho do INDEX em dia."

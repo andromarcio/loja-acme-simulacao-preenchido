@@ -1,0 +1,120 @@
+/* ============================================================================
+   TELA "MAPA DE FEATURES" — visualizador de documentação (GitHub Pages)
+   Árvore navegável Produto → domínios (N1) → feature sets (N2) → features
+   (N3), sobre os tokens do visualizador (assets/css/app.css), com claro/
+   escuro. Status de aprovação em verde; o restante segue a paleta CAIXA.
+   Porta do mapa.css do siesa-doc — mesma estrutura, tokens da instância.
+   ============================================================================ */
+
+
+.mapa-screen { display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+
+/* ---- Cabeçalho: produto + controles + legenda ---- */
+.mm-top { flex: 0 0 auto; }
+.mm-top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; flex-wrap: wrap; margin-bottom: 16px; }
+.mm-product-name { font: 700 22px/1.1 var(--dsc-font-title); color: var(--primary-color); letter-spacing: -.2px; }
+.mm-product-name small { font: 600 12px/1 var(--dsc-font-family-1); color: var(--text-muted); margin-left: 8px; letter-spacing: 0; }
+.mm-product-desc { font: 400 13px/1.5 var(--dsc-font-family-1); color: var(--text-secondary); margin: 12px 0 0; }
+
+.mm-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+/* Coluna à direita do topo: KPIs/busca em cima e, logo abaixo (sem espaço extra), os botões. */
+.mm-right { display: flex; flex-direction: column; gap: 8px; }
+/* Botões de ação: linha própria sob os KPIs, alinhados à direita (evita atropelo em telas menores). */
+.mm-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.mm-kpi { font: 600 11.5px/1 var(--dsc-font-family-1); color: var(--text-muted); background: var(--surface-hover);
+  border: 1px solid var(--surface-border); border-radius: var(--dsc-border-radius-pill); padding: 5px 10px; white-space: nowrap; }
+.mm-search { position: relative; }
+.mm-search svg { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text-muted); pointer-events: none; }
+.mm-search input { width: 210px; max-width: 46vw; font: 400 13px/1 var(--dsc-font-family-1); color: var(--text-color);
+  background: var(--surface-card); border: 1px solid var(--surface-border); border-radius: var(--dsc-border-radius-medium); padding: 8px 10px 8px 30px; }
+.mm-search input:focus { outline: none; border-color: var(--primary-color); box-shadow: var(--focus-ring); }
+.mm-btn { font: 600 12px/1 var(--dsc-font-family-1); color: var(--text-secondary); background: var(--surface-card);
+  border: 1px solid var(--surface-border); border-radius: var(--dsc-border-radius-medium); padding: 8px 11px; cursor: pointer; transition: background var(--transition-duration), border-color var(--transition-duration); }
+.mm-btn:hover { background: var(--surface-hover); border-color: var(--primary-color); }
+
+.mm-legend { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--surface-border); font: 600 11.5px/1 var(--dsc-font-family-1); color: var(--text-muted); }
+.mm-legend .lg { display: inline-flex; align-items: center; gap: 5px; }
+.mm-legend .sw { width: 14px; height: 14px; border-radius: 4px; border-left: 4px solid; }
+
+/* ---- Canvas do mapa (rolagem própria, fundo pontilhado) ---- */
+.mm-wrap { flex: 1 1 auto; min-height: min(66vh, 760px); overflow: auto; padding: 26px 14px;
+  border: 1px solid var(--surface-border); border-radius: 10px;
+  background: radial-gradient(circle at 1px 1px, var(--surface-border) 1px, transparent 0) 0 0 / 22px 22px, var(--surface-ground); }
+#mm-canvas { display: flex; flex-direction: column; gap: 22px; align-items: flex-start; width: max-content; transform-origin: top left; }
+
+/* ---- Nós ---- */
+.mm-node { display: flex; align-items: flex-start; }
+.mm-kids { display: flex; flex-direction: column; gap: 14px; margin-left: 46px; position: relative; }
+.mm-node.mm-collapsed > .mm-kids { display: none; }
+.mm-node.mm-hidden { display: none; }
+
+/* barra vertical (bus) posicionada por JS + stubs horizontais */
+.mm-bus { position: absolute; left: -23px; width: 2px; background: var(--surface-border); border-radius: 2px; }
+.mm-node:not(.mm-collapsed):not(.mm-leaf) > .mm-card::after { content:''; position:absolute; right:-23px; top:50%; width:23px; height:2px; background: var(--surface-border); }
+.mm-kids > .mm-node > .mm-card::before { content:''; position:absolute; left:-23px; top:50%; width:23px; height:2px; background: var(--surface-border); }
+
+.mm-card { position: relative; width: 300px; flex: 0 0 300px; border: 1px solid var(--surface-border); border-left-width: 4px;
+  border-radius: 10px; background: var(--surface-card); padding: 11px 13px; box-shadow: var(--shadow-1); cursor: pointer;
+  transition: box-shadow .12s, transform .12s; }
+.mm-card:hover { box-shadow: var(--dsc-elevation-2); }
+.mm-leaf > .mm-card { cursor: default; }
+
+.mm-badge { font: 500 10.5px/1 var(--dsc-font-mono); letter-spacing: .4px; text-transform: uppercase; margin-bottom: 5px; display: inline-block; }
+.mm-name { font: 700 14px/1.25 var(--dsc-font-title); color: var(--text-color); }
+.mm-desc { font: 400 10.5px/1.45 var(--dsc-font-family-1); color: var(--text-muted); margin-top: 4px; }
+.mm-foot { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.mm-count { font: 600 11px/1 var(--dsc-font-family-1); color: var(--text-muted); }
+.mm-caret { margin-left: auto; font-size: 12px; color: var(--text-muted); transition: transform .15s; }
+.mm-node:not(.mm-collapsed) > .mm-card .mm-caret { transform: rotate(90deg); }
+
+.mm-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--surface-border); }
+.mm-status.st-requisitos-aprovados, .mm-status.st-modelo-validado, .mm-status.st-especificado, .mm-status.st-em-desenvolvimento, .mm-status.st-implementado { background: #0E9F6E; }
+.mm-status.st-rascunho { background: var(--surface-border); }
+
+/* Link para o artefato (abre em nova aba) — não dispara o recolher do card */
+.mm-open { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;
+  font: 600 10.5px/1 var(--dsc-font-family-1); color: var(--primary-color); text-decoration: none;
+  border: 1px solid var(--surface-border); border-radius: var(--dsc-border-radius-small); padding: 4px 7px;
+  transition: background var(--transition-duration), border-color var(--transition-duration); }
+.mm-open:hover { background: var(--dsc-color-bg-highlight-1); border-color: var(--primary-color); }
+.mm-open svg { width: 12px; height: 12px; }
+/* quando há caret (nó com filhos), o link fica antes do caret, sem empurrá-lo */
+.mm-foot .mm-open + .mm-caret { margin-left: 8px; }
+
+/* Níveis: o azul constrói (o verde é só status de aprovação) */
+.lvl-root > .mm-card { border-left-color: #0a2440; background: linear-gradient(180deg, rgba(0,92,169,.06), var(--surface-card)); }
+.lvl-root > .mm-card .mm-badge, .lvl-root > .mm-card .mm-name { color: #0a2440; }
+.app-dark .lvl-root > .mm-card .mm-badge, .app-dark .lvl-root > .mm-card .mm-name { color: var(--dsc-color-primary-30); }
+.app-dark .lvl-root > .mm-card { border-left-color: var(--dsc-color-primary-30); }
+.lvl-n1 > .mm-card { border-left-color: #005CA9; }
+.lvl-n1 > .mm-card .mm-badge { color: var(--primary-color); }
+.lvl-n2 > .mm-card { border-left-color: #2E86C1; }
+.lvl-n2 > .mm-card .mm-badge { color: #2E86C1; }
+.lvl-n3 > .mm-card { border-left-color: #7C93A8; }
+.lvl-n3 > .mm-card .mm-badge { color: #5b7085; }
+.app-dark .lvl-n3 > .mm-card .mm-badge { color: #8aa0b8; }
+
+.mm-node.mm-hit > .mm-card { outline: 2px solid var(--primary-color); outline-offset: 1px; }
+
+/* ---- Alternar descrição: exibe só o código (badge), o nome e o status ---- */
+#mm-canvas.mm-hide-desc .mm-desc { display: none; }
+
+/* ---- Zoom manual dos nós (controle segmentado −/%/+) ---- */
+.mm-zoom { display: inline-flex; align-items: stretch; border: 1px solid var(--surface-border); border-radius: var(--dsc-border-radius-medium); overflow: hidden; }
+.mm-zoom .mm-btn { border: none; border-radius: 0; padding: 8px 10px; }
+.mm-zoom .mm-btn + .mm-btn { border-left: 1px solid var(--surface-border); }
+.mm-zoom-btn { min-width: 32px; font: 700 15px/1 var(--dsc-font-family-1); }
+.mm-zoom-fit { min-width: 54px; font-variant-numeric: tabular-nums; }
+.mm-zoom-fit.is-on { color: var(--primary-color); }
+
+/* ---- Lacunas de especificação (cobertura) — N2 sem N3, N1 sem N2 ---- */
+.mm-gap > .mm-card { border-style: dashed; border-left-style: solid; border-left-color: #B45309; background: var(--surface-ground); }
+.mm-gap > .mm-card .mm-name { color: var(--text-muted); }
+.mm-gap > .mm-card .mm-badge { color: #B45309; }
+.mm-gap-badge { font: 600 10px/1.2 var(--dsc-font-family-1); color: #B45309; border: 1px dashed #B45309; border-radius: var(--dsc-border-radius-small); padding: 3px 7px; text-transform: uppercase; letter-spacing: .3px; }
+.mm-kpi.is-gap { color: #B45309; border-color: #B45309; }
+.mm-btn.is-on { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+.app-dark .mm-gap > .mm-card { border-left-color: #F59E0B; }
+.app-dark .mm-gap > .mm-card .mm-badge, .app-dark .mm-gap-badge { color: #F59E0B; border-color: #F59E0B; }
+.app-dark .mm-kpi.is-gap { color: #F59E0B; border-color: #F59E0B; }

@@ -1,0 +1,558 @@
+<!-- docqui: 6.4.10 | prompt: PROMPT_PROTOTYPE_FLOW_FULL | atualizado: 2026-10-18 -->
+<!DOCTYPE html>
+<!--
+  ⚠️ PROTÓTIPO NAVEGÁVEL — treino, não jogo.
+  Fonte de verdade de LAYOUT, COMPORTAMENTO e ESTADOS — NUNCA de implementação.
+  Não copie este HTML/CSS/JS para o código de produção: aqui tudo é autocontido
+  e procedural DE PROPÓSITO (simulação). A implementação real segue outra
+  estratégia: componentes do design system do projeto (mapa de equivalência no
+  README do tema), catálogo global/PATTERNS.md e convenções do global/MASTER.md.
+  Classes .dsc-* são EXCLUSIVAS de protótipo — proibidas em código de produção.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo: Categorias — Catálogo</title>
+  <link rel="stylesheet" href="../../_biblioteca-ds/ds.css">
+</head>
+<body>
+
+  <div class="dsc-proto-badge">🎨 PROTÓTIPO — não é o sistema real</div>
+
+  <div class="dsc-app">
+
+    <aside class="dsc-sidebar">
+      <div class="dsc-sidebar-backdrop" onclick="dscToggleMenu()"></div>
+      <div class="dsc-sidebar-brand"><span class="dsc-brand-mark">L</span> Loja ACME</div>
+      <ul class="dsc-menu">
+        <li class="dsc-menu-section">Catálogo</li>
+        <li><a class="dsc-menu-item is-active" href="#" onclick="showScreen('screen-pesquisa'); return false;">Categorias</a></li>
+        <li class="dsc-menu-section">Vitrine</li>
+        <li><a class="dsc-menu-item" href="../../vitrine/destaques/flow.html">Destaques</a></li>
+      </ul>
+    </aside>
+
+    <div class="dsc-shell-main">
+      <header class="dsc-header">
+        <div class="dsc-header-start">
+          <button class="dsc-menu-toggle" aria-label="Recolher/expandir menu" onclick="dscToggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <span class="dsc-header-logo">Loja ACME · <strong>CAIXA</strong></span>
+        </div>
+        <div class="dsc-header-actions">
+          <button class="dsc-header-item">
+            <span class="dsc-avatar dsc-avatar--sm">DM</span>
+            <span class="dsc-hi-body"><span class="dsc-hi-title">Diego Martins</span><span class="dsc-hi-sub dsc-text-primary">Gestor de catálogo</span></span>
+            <svg class="dsc-hi-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dsc-main">
+
+        <!-- Tela única do N2: Pesquisa de Categorias (/catalogo/categorias) — atende CAT-CTG-01..05 (cadastro, edição e visualização em modal) -->
+        <div id="screen-pesquisa" class="dsc-screen is-active">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Catálogo</span><span class="dsc-sep">›</span><span class="is-current">Categorias</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Categorias</h1>
+            <p class="dsc-page-subtitle">Organize os produtos em categorias e subcategorias de um único nível. Inativar uma categoria oculta apenas seus produtos diretos na vitrine, sem alterar suas subcategorias.</p>
+          </div>
+
+          <div id="sem-acesso" style="display:none"></div>
+
+          <div id="area-pesquisa">
+            <section class="dsc-card">
+              <h2 class="dsc-card-title">Filtros</h2>
+              <div class="dsc-row">
+                <div class="dsc-col-6">
+                  <div class="dsc-field">
+                    <label class="dsc-field-label" for="f-nome">Nome da categoria</label>
+                    <input class="dsc-input" id="f-nome" placeholder="Parte do nome, ex.: pape" onkeydown="if (event.key === 'Enter') pesquisar()">
+                  </div>
+                </div>
+                <div class="dsc-col-3">
+                  <div class="dsc-field">
+                    <label class="dsc-field-label" for="f-situacao">Situação</label>
+                    <select class="dsc-select" id="f-situacao">
+                      <option value="">Todas</option>
+                      <option value="Ativa">Ativa</option>
+                      <option value="Inativa">Inativa</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="dsc-col-3" style="display:flex;align-items:flex-start;gap:8px;padding-top:26px">
+                  <button class="dsc-btn" id="btn-pesquisar" onclick="pesquisar()">Pesquisar</button>
+                  <button class="dsc-btn dsc-btn--chromeless" onclick="limparFiltros()">Limpar</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="dsc-card" style="padding:0;overflow:hidden">
+              <div class="dsc-table-toolbar">
+                <span class="dsc-text-muted"><strong style="color:var(--text-color)" id="total">6 registros</strong></span>
+                <button class="dsc-btn dsc-btn--sm" onclick="abrirCadastro()">Cadastrar categoria</button>
+              </div>
+              <div id="resultado"></div>
+            </section>
+          </div>
+        </div>
+
+        <div class="dsc-proto-notes">
+          <strong>📋 Notas do protótipo:</strong>
+          <ul>
+            <li>Cadastro, edição e visualização abrem em modal sobre a pesquisa (Superfície Modal das N3 CAT-CTG-02, 03 e 05); a exclusão é ação na linha (CAT-CTG-04).</li>
+            <li>Os produtos são massa fictícia do modelo de entidades: a manutenção deles é o exercício STRY0013150 (Produtos, planejado). A quantidade de produtos conta os esgotados, como o Boné em Vestuário.</li>
+            <li>Inativar uma categoria tira apenas seus produtos diretos da vitrine (Vitrine › Navegação), sem alterar a situação ou ocultar produtos das filhas ativas; o efeito não aparece nesta tela.</li>
+            <li>A abertura preserva as seis categorias da massa base. Selecione “Categorias com subcategorias (STRY0013205)” no simulador para adicionar Canecas e Garrafas como subcategorias de Cozinha, ambas sem produtos. Os produtos base continuam diretamente em Cozinha; a quantidade não soma produtos das subcategorias.</li>
+            <li>Categorias com subcategorias não podem ter categoria superior nem ser excluídas. Na massa base, apenas Brinquedos pode ser excluída; na variação, Canecas e Garrafas também não têm produtos nem subcategorias.</li>
+            <li>A Data de cadastro é registrada automaticamente ao salvar.</li>
+          </ul>
+          <div class="dsc-field" style="margin-top:12px;max-width:320px">
+            <label class="dsc-field-label" for="simulacao">Simular estado <span class="dsc-text-muted" style="font-weight:400">(controle do protótipo, não faz parte da tela)</span></label>
+            <select class="dsc-select" id="simulacao" onchange="simular(this.value)">
+              <option value="normal">Categorias cadastradas</option>
+              <option value="subcategorias">Categorias com subcategorias (STRY0013205)</option>
+              <option value="vazio">Nenhuma categoria cadastrada</option>
+              <option value="sem-acesso">Sem acesso</option>
+              <option value="falha-carregar">Falha ao carregar</option>
+              <option value="falha-salvar">Falha ao salvar ou excluir</option>
+            </select>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- CAT-CTG-02 — Cadastrar Categoria (modal) -->
+  <div id="modal-cadastro" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="dialog" aria-labelledby="titulo-cadastro">
+      <div class="dsc-modal-header"><strong id="titulo-cadastro">Cadastrar categoria</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-cadastro', false)">✕</button></div>
+      <div class="dsc-modal-body">
+        <div id="cad-erro-geral"></div>
+        <div class="dsc-field" id="fc-nome">
+          <label class="dsc-field-label" for="c-nome">Nome da categoria <span class="dsc-req">*</span></label>
+          <input class="dsc-input" id="c-nome" placeholder="Ex.: Jardinagem">
+          <span class="dsc-field-hint">Até 40 caracteres.</span>
+        </div>
+        <div class="dsc-field" id="fc-descricao">
+          <label class="dsc-field-label" for="c-descricao">Descrição <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+          <textarea class="dsc-textarea" id="c-descricao" placeholder="Ex.: Vasos, regadores e sementes"></textarea>
+          <span class="dsc-field-hint">Até 200 caracteres.</span>
+        </div>
+        <div class="dsc-field" id="fc-superior">
+          <label class="dsc-field-label" for="c-superior">Categoria superior <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+          <select class="dsc-select" id="c-superior"></select>
+        </div>
+      </div>
+      <div class="dsc-modal-footer">
+        <button class="dsc-btn dsc-btn--chromeless" onclick="toggleModal('modal-cadastro', false)">Cancelar</button>
+        <button class="dsc-btn" id="btn-salvar-cadastro" onclick="salvarCadastro()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAT-CTG-03 — Editar Categoria (modal) -->
+  <div id="modal-edicao" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="dialog" aria-labelledby="titulo-edicao">
+      <div class="dsc-modal-header"><strong id="titulo-edicao">Editar categoria</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-edicao', false)">✕</button></div>
+      <div class="dsc-modal-body">
+        <div id="ed-erro-geral"></div>
+        <div class="dsc-lv" style="margin-bottom:16px"><span class="dsc-lv-label">Nome da categoria</span><span class="dsc-lv-value" id="e-nome">—</span></div>
+        <div class="dsc-field" id="fe-superior">
+          <label class="dsc-field-label" for="e-superior">Categoria superior <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+          <select class="dsc-select" id="e-superior"></select>
+          <span class="dsc-field-hint" id="e-superior-hint" style="display:none">Uma categoria com subcategorias não pode ter categoria superior.</span>
+        </div>
+        <div class="dsc-field" id="fe-descricao">
+          <label class="dsc-field-label" for="e-descricao">Descrição <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+          <textarea class="dsc-textarea" id="e-descricao"></textarea>
+          <span class="dsc-field-hint">Até 200 caracteres.</span>
+        </div>
+        <div class="dsc-field">
+          <label class="dsc-field-label" for="e-situacao">Situação</label>
+          <select class="dsc-select" id="e-situacao">
+            <option value="Ativa">Ativa</option>
+            <option value="Inativa">Inativa</option>
+          </select>
+        </div>
+      </div>
+      <div class="dsc-modal-footer">
+        <button class="dsc-btn dsc-btn--chromeless" onclick="toggleModal('modal-edicao', false)">Cancelar</button>
+        <button class="dsc-btn" id="btn-salvar-edicao" onclick="salvarEdicao()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAT-CTG-03 — confirmação de inativação de categoria com produtos -->
+  <div id="modal-inativar" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="alertdialog" aria-labelledby="titulo-inativar">
+      <div class="dsc-modal-header"><strong id="titulo-inativar">Inativar categoria</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-inativar', false)">✕</button></div>
+      <div class="dsc-modal-body"><p>Os produtos desta categoria deixarão de aparecer na vitrine. Deseja continuar?</p></div>
+      <div class="dsc-modal-footer">
+        <button class="dsc-btn dsc-btn--chromeless" onclick="toggleModal('modal-inativar', false)">Voltar</button>
+        <button class="dsc-btn" onclick="confirmarInativacao()">Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAT-CTG-05 — Visualizar Categoria (modal) -->
+  <div id="modal-visualizar" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="dialog" aria-labelledby="titulo-visualizar">
+      <div class="dsc-modal-header"><strong id="titulo-visualizar">Categoria</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-visualizar', false)">✕</button></div>
+      <div class="dsc-modal-body">
+        <div class="dsc-row">
+          <div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">Nome da categoria</span><span class="dsc-lv-value" id="v-nome">—</span></div></div>
+          <div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">Situação</span><span class="dsc-lv-value" id="v-situacao">—</span></div></div>
+          <div class="dsc-col-12"><div class="dsc-lv"><span class="dsc-lv-label">Descrição</span><span class="dsc-lv-value" id="v-descricao">—</span></div></div>
+          <div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">Data de cadastro</span><span class="dsc-lv-value" id="v-data">—</span></div></div>
+          <div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">Quantidade de produtos</span><span class="dsc-lv-value" id="v-qtd">—</span></div></div>
+          <div class="dsc-col-12"><div class="dsc-lv"><span class="dsc-lv-label">Categoria superior</span><span class="dsc-lv-value" id="v-superior">—</span></div></div>
+        </div>
+        <h2 class="dsc-card-title">Subcategorias</h2>
+        <div id="v-subcategorias"></div>
+      </div>
+      <div class="dsc-modal-footer">
+        <button class="dsc-btn dsc-btn--outline" onclick="toggleModal('modal-visualizar', false)">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAT-CTG-04 — confirmação da exclusão (caminho feliz) -->
+  <div id="modal-excluir" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="alertdialog" aria-labelledby="titulo-excluir">
+      <div class="dsc-modal-header"><strong id="titulo-excluir">Excluir categoria</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-excluir', false)">✕</button></div>
+      <div class="dsc-modal-body"><p>Deseja realmente excluir este registro?</p><p class="dsc-body-sm">Categoria: <strong id="x-nome">—</strong></p></div>
+      <div class="dsc-modal-footer">
+        <button class="dsc-btn dsc-btn--chromeless" onclick="toggleModal('modal-excluir', false)">Cancelar</button>
+        <button class="dsc-btn dsc-btn--danger" onclick="confirmarExclusao()">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAT-CTG-04 — bloqueio por produtos vinculados (RC-09), sem botão Excluir -->
+  <div id="modal-excluir-bloqueado" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="alertdialog" aria-labelledby="titulo-bloqueado">
+      <div class="dsc-modal-header"><strong id="titulo-bloqueado">Não é possível excluir</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-excluir-bloqueado', false)">✕</button></div>
+      <div class="dsc-modal-body">
+        <div class="dsc-alert dsc-alert--danger" role="alert" style="margin:0"><span id="b-motivo">Não é possível excluir: existem produtos vinculados a este registro.</span></div>
+        <p class="dsc-body-sm" style="margin-top:12px">Para tirar a categoria <strong id="b-nome">—</strong> da vitrine, inative-a em Editar categoria.</p>
+      </div>
+      <div class="dsc-modal-footer"><button class="dsc-btn dsc-btn--outline" onclick="toggleModal('modal-excluir-bloqueado', false)">Ok, entendi</button></div>
+    </div>
+  </div>
+
+  <!-- Toasts, canto superior direito -->
+  <div id="toast-salvo" class="dsc-toast dsc-toast--positive" role="status" style="display:none;position:fixed;top:24px;right:24px;z-index:300">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Registro salvo com sucesso.</span>
+  </div>
+  <div id="toast-excluido" class="dsc-toast dsc-toast--positive" role="status" style="display:none;position:fixed;top:24px;right:24px;z-index:300">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Registro excluído com sucesso.</span>
+  </div>
+  <div id="toast-erro" class="dsc-toast dsc-toast--danger" role="alert" style="display:none;position:fixed;top:24px;right:24px;z-index:300">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>Ocorreu um erro. Tente novamente.</span>
+  </div>
+
+  <script>
+    // ☰: abre/fecha o drawer do menu (sidebar oculta por padrão); ESC também fecha
+    function dscToggleMenu() {
+      document.querySelector('.dsc-app').classList.toggle('is-menu-open');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') document.querySelector('.dsc-app').classList.remove('is-menu-open');
+    });
+    function showScreen(id) {
+      document.querySelectorAll('.dsc-screen').forEach(function (s) { s.classList.remove('is-active'); });
+      document.getElementById(id).classList.add('is-active');
+      document.querySelector('.dsc-app').classList.remove('is-menu-open');
+    }
+    function toggleModal(id, abrir) { document.getElementById(id).style.display = abrir ? 'flex' : 'none'; }
+    function showToast(id) {
+      var t = document.getElementById(id);
+      t.style.display = 'flex';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function () { t.style.display = 'none'; }, 4000);
+    }
+
+    // Massa do modelo de entidades (global/data-models/catalogo.md)
+    var MASSA = [
+      { id: 1, nome: 'Cozinha', descricao: 'Canecas, garrafas e utensílios', situacao: 'Ativa', data: '02/09/2026', produtos: 2 },
+      { id: 2, nome: 'Vestuário', descricao: 'Camisetas e bonés', situacao: 'Ativa', data: '02/09/2026', produtos: 2 },
+      { id: 3, nome: 'Papelaria', descricao: 'Blocos, cadernos e canetas', situacao: 'Ativa', data: '05/09/2026', produtos: 2 },
+      { id: 4, nome: 'Acessórios', descricao: 'Ecobags e chaveiros', situacao: 'Ativa', data: '05/09/2026', produtos: 2 },
+      { id: 5, nome: 'Decoração', descricao: 'Almofadas e quadros', situacao: 'Inativa', data: '12/09/2026', produtos: 1 },
+      { id: 6, nome: 'Brinquedos', descricao: '', situacao: 'Ativa', data: '30/09/2026', produtos: 0 }
+    ];
+    var MASSA_SUBCATEGORIAS = [
+      { id: 7, nome: 'Canecas', superior: 1, descricao: '', situacao: 'Ativa', data: '18/10/2026', produtos: 0 },
+      { id: 8, nome: 'Garrafas', superior: 1, descricao: '', situacao: 'Ativa', data: '18/10/2026', produtos: 0 }
+    ];
+    var categorias = MASSA.map(function (c) { return Object.assign({}, c); });
+    var proximoId = 7;
+    var estado = 'normal';
+    var emEdicao = null;
+    var emExclusao = null;
+
+    var ICONE_VER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    var ICONE_EDITAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+    var ICONE_EXCLUIR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
+    var ICONE_ERRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+
+    // Sem diferenciar maiúsculas, minúsculas e acentos (RN-01 de Pesquisar e de Cadastrar)
+    function normaliza(t) { return t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim(); }
+    function porId(id) { return categorias.find(function (c) { return c.id === id; }); }
+    function escapar(texto) {
+      return String(texto).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+    }
+    function subcategorias(id) { return categorias.filter(function (c) { return c.superior === id; }); }
+    function preencherSuperiores(idCampo, categoria) {
+      var campo = document.getElementById(idCampo);
+      campo.replaceChildren(new Option('Sem categoria superior', ''));
+      categorias.filter(function (c) { return !c.superior && (!categoria || c.id !== categoria.id); })
+        .sort(function (a, b) { return a.nome.localeCompare(b.nome, 'pt-BR'); })
+        .forEach(function (c) { campo.add(new Option(c.nome + ' — ' + c.situacao, String(c.id))); });
+      campo.value = categoria && categoria.superior ? String(categoria.superior) : '';
+      campo.disabled = !!categoria && subcategorias(categoria.id).length > 0;
+    }
+    function lerSuperior(idCampo) {
+      var valor = document.getElementById(idCampo).value;
+      return valor === '' ? null : Number(valor);
+    }
+    function validarHierarquia(nome, superior, categoria, campo) {
+      erroNoCampo(campo, '');
+      if (superior !== null && categoria && subcategorias(categoria.id).length) {
+        erroNoCampo(campo, 'Uma categoria com subcategorias não pode ter categoria superior.');
+        return false;
+      }
+      var pai = porId(superior);
+      if (superior !== null && (!pai || pai.superior || (categoria && pai.id === categoria.id))) {
+        erroNoCampo(campo, 'Selecione uma categoria superior de primeiro nível, diferente da própria categoria.');
+        return false;
+      }
+      if (categorias.some(function (c) {
+        return (!categoria || c.id !== categoria.id) && (c.superior || null) === superior && normaliza(c.nome) === normaliza(nome);
+      })) {
+        erroNoCampo(categoria == null ? 'fc-nome' : campo, 'Já existe uma categoria com este nome nesta categoria superior.');
+        return false;
+      }
+      return true;
+    }
+    function tag(situacao) {
+      return '<span class="dsc-tag dsc-tag--sm ' + (situacao === 'Ativa' ? 'dsc-tag--success' : 'dsc-tag--neutral') + '">' + escapar(situacao) + '</span>';
+    }
+    function estadoTela(icone, titulo, texto) {
+      return '<div class="dsc-state" style="padding:32px 16px"><span class="dsc-state-icon">' + icone + '</span><span class="dsc-state-title">' + titulo + '</span>' + (texto ? '<span class="dsc-state-text">' + texto + '</span>' : '') + '</div>';
+    }
+
+    function renderLista(filtrados, comFiltro) {
+      var area = document.getElementById('resultado');
+      document.getElementById('total').textContent = filtrados.length + (filtrados.length === 1 ? ' registro' : ' registros');
+      if (!categorias.length) { area.innerHTML = estadoTela('🗂️', 'Nenhum registro encontrado.', ''); return; }
+      if (!filtrados.length) { area.innerHTML = estadoTela('🔎', 'Nenhum resultado para a busca.', ''); return; }
+      var linhas = filtrados.map(function (c) {
+        return '<tr><td>' + escapar(c.nome) + '</td><td>' + tag(c.situacao) + '</td><td class="dsc-num">' + c.produtos + '</td><td>' + c.data + '</td>' +
+          '<td class="dsc-col-actions">' +
+          '<button class="dsc-icon-action" aria-label="Visualizar ' + escapar(c.nome) + '" title="Visualizar" onclick="abrirVisualizar(' + c.id + ')">' + ICONE_VER + '</button>' +
+          '<button class="dsc-icon-action" aria-label="Editar ' + escapar(c.nome) + '" title="Editar" onclick="abrirEdicao(' + c.id + ')">' + ICONE_EDITAR + '</button>' +
+          '<button class="dsc-icon-action" aria-label="Excluir ' + escapar(c.nome) + '" title="Excluir" onclick="abrirExclusao(' + c.id + ')">' + ICONE_EXCLUIR + '</button>' +
+          '</td></tr>';
+      }).join('');
+      area.innerHTML = '<div class="dsc-table-wrap"><table class="dsc-table"><thead><tr>' +
+        '<th class="dsc-sortable is-sorted">Nome da categoria</th><th class="dsc-sortable">Situação</th><th class="dsc-sortable dsc-num">Quantidade de produtos</th><th class="dsc-sortable">Data de cadastro</th><th class="dsc-col-actions">Ações</th>' +
+        '</tr></thead><tbody>' + linhas + '</tbody></table></div>';
+    }
+
+    function filtrar() {
+      var termo = normaliza(document.getElementById('f-nome').value);
+      var situacao = document.getElementById('f-situacao').value;
+      return categorias.filter(function (c) {
+        return (!termo || normaliza(c.nome).indexOf(termo) >= 0) && (!situacao || c.situacao === situacao);
+      }).sort(function (a, b) { return a.nome.localeCompare(b.nome, 'pt-BR'); });
+    }
+
+    function pesquisar() {
+      var area = document.getElementById('resultado');
+      var btn = document.getElementById('btn-pesquisar');
+      area.innerHTML = '<div style="padding:16px"><p class="dsc-caption" style="margin-bottom:8px">Carregando…</p><span class="dsc-skeleton" style="height:20px;width:60%"></span></div>';
+      btn.classList.add('is-loading'); btn.disabled = true;
+      setTimeout(function () {
+        btn.classList.remove('is-loading'); btn.disabled = false;
+        if (estado === 'falha-carregar') {
+          document.getElementById('total').textContent = '—';
+          area.innerHTML = '<div style="padding:16px"><div class="dsc-alert dsc-alert--danger" role="alert" style="margin:0"><span>Não foi possível carregar os dados.</span></div></div>';
+          return;
+        }
+        renderLista(filtrar());
+      }, 500);
+    }
+    function limparFiltros() {
+      document.getElementById('f-nome').value = '';
+      document.getElementById('f-situacao').value = '';
+      pesquisar();
+    }
+
+    function erroNoCampo(idCampo, texto) {
+      var f = document.getElementById(idCampo);
+      var e = f.querySelector('.dsc-field-error');
+      if (!texto) { f.classList.remove('is-invalid'); if (e) e.remove(); return; }
+      f.classList.add('is-invalid');
+      if (!e) { e = document.createElement('span'); e.className = 'dsc-field-error'; f.appendChild(e); }
+      e.innerHTML = ICONE_ERRO + ' ' + texto;
+    }
+    function erroGeral(idArea, texto) {
+      document.getElementById(idArea).innerHTML = texto ? '<div class="dsc-alert dsc-alert--danger" role="alert" style="margin:0 0 16px"><span>' + texto + '</span></div>' : '';
+    }
+    function salvando(idBotao, depois) {
+      var btn = document.getElementById(idBotao);
+      btn.classList.add('is-loading'); btn.disabled = true;
+      setTimeout(function () { btn.classList.remove('is-loading'); btn.disabled = false; depois(); }, 600);
+    }
+
+    // CAT-CTG-02 — Cadastrar Categoria
+    function abrirCadastro() {
+      document.getElementById('c-nome').value = '';
+      document.getElementById('c-descricao').value = '';
+      preencherSuperiores('c-superior');
+      erroNoCampo('fc-superior', '');
+      erroNoCampo('fc-nome', ''); erroNoCampo('fc-descricao', ''); erroGeral('cad-erro-geral', '');
+      toggleModal('modal-cadastro', true);
+      document.getElementById('c-nome').focus();
+    }
+    function salvarCadastro() {
+      var nome = document.getElementById('c-nome').value.trim();
+      var descricao = document.getElementById('c-descricao').value.trim();
+      var superior = lerSuperior('c-superior');
+      erroNoCampo('fc-nome', ''); erroNoCampo('fc-descricao', ''); erroGeral('cad-erro-geral', '');
+      var ok = true;
+      if (!nome) { erroNoCampo('fc-nome', 'Campo obrigatório.'); ok = false; }
+      else if (nome.length > 40) { erroNoCampo('fc-nome', 'Máximo de 40 caracteres.'); ok = false; }
+      if (!validarHierarquia(nome, superior, null, 'fc-superior')) ok = false;
+      if (descricao.length > 200) { erroNoCampo('fc-descricao', 'Máximo de 200 caracteres.'); ok = false; }
+      if (!ok) return;
+      salvando('btn-salvar-cadastro', function () {
+        if (estado === 'falha-salvar') { erroGeral('cad-erro-geral', 'Ocorreu um erro. Tente novamente.'); return; }
+        if (!validarHierarquia(nome, superior, null, 'fc-superior')) return;
+        categorias.push({ id: proximoId++, nome: nome, superior: superior, descricao: descricao, situacao: 'Ativa', data: '18/10/2026', produtos: 0 });
+        toggleModal('modal-cadastro', false);
+        renderLista(filtrar());
+        showToast('toast-salvo');
+      });
+    }
+
+    // CAT-CTG-03 — Editar Categoria
+    function abrirEdicao(id) {
+      var c = porId(id);
+      emEdicao = c;
+      document.getElementById('e-nome').textContent = c.nome;
+      document.getElementById('e-descricao').value = c.descricao;
+      document.getElementById('e-situacao').value = c.situacao;
+      preencherSuperiores('e-superior', c);
+      document.getElementById('e-superior-hint').style.display = subcategorias(c.id).length ? '' : 'none';
+      erroNoCampo('fe-superior', '');
+      erroNoCampo('fe-descricao', ''); erroGeral('ed-erro-geral', '');
+      toggleModal('modal-edicao', true);
+    }
+    function salvarEdicao() {
+      var descricao = document.getElementById('e-descricao').value.trim();
+      var situacao = document.getElementById('e-situacao').value;
+      erroNoCampo('fe-descricao', ''); erroGeral('ed-erro-geral', '');
+      if (descricao.length > 200) { erroNoCampo('fe-descricao', 'Máximo de 200 caracteres.'); return; }
+      if (!validarHierarquia(emEdicao.nome, lerSuperior('e-superior'), emEdicao, 'fe-superior')) return;
+      // Confirmação ao inativar categoria com produtos (CAT_INATIVAR_COM_PRODUTOS)
+      if (situacao === 'Inativa' && emEdicao.situacao === 'Ativa' && emEdicao.produtos > 0) { toggleModal('modal-inativar', true); return; }
+      gravarEdicao(descricao, situacao);
+    }
+    function confirmarInativacao() {
+      toggleModal('modal-inativar', false);
+      gravarEdicao(document.getElementById('e-descricao').value.trim(), 'Inativa');
+    }
+    function gravarEdicao(descricao, situacao) {
+      var categoria = emEdicao;
+      var superior = lerSuperior('e-superior');
+      if (descricao.length > 200) { erroNoCampo('fe-descricao', 'Máximo de 200 caracteres.'); return; }
+      if (!validarHierarquia(categoria.nome, superior, categoria, 'fe-superior')) return;
+      salvando('btn-salvar-edicao', function () {
+        if (estado === 'falha-salvar') { erroGeral('ed-erro-geral', 'Ocorreu um erro. Tente novamente.'); return; }
+        if (!validarHierarquia(categoria.nome, superior, categoria, 'fe-superior')) return;
+        categoria.descricao = descricao;
+        categoria.superior = superior;
+        categoria.situacao = situacao; // os produtos continuam vinculados (RN-02)
+        toggleModal('modal-edicao', false);
+        renderLista(filtrar());
+        showToast('toast-salvo');
+      });
+    }
+
+    // CAT-CTG-05 — Visualizar Categoria
+    function abrirVisualizar(id) {
+      var c = porId(id);
+      document.getElementById('v-nome').textContent = c.nome;
+      document.getElementById('v-situacao').innerHTML = tag(c.situacao);
+      document.getElementById('v-descricao').textContent = c.descricao || '—';
+      document.getElementById('v-data').textContent = c.data;
+      document.getElementById('v-qtd').textContent = c.produtos;
+      var superior = porId(c.superior);
+      document.getElementById('v-superior').textContent = superior ? superior.nome : '—';
+      var area = document.getElementById('v-subcategorias');
+      area.replaceChildren();
+      var filhas = subcategorias(id).sort(function (a, b) { return a.nome.localeCompare(b.nome, 'pt-BR'); });
+      if (!filhas.length) area.textContent = 'Nenhuma subcategoria cadastrada.';
+      filhas.forEach(function (filha) {
+        var item = document.createElement('p');
+        item.textContent = filha.nome + ' — ' + filha.situacao;
+        area.appendChild(item);
+      });
+      toggleModal('modal-visualizar', true);
+    }
+
+    // CAT-CTG-04 — Excluir Categoria: confirmar × bloquear (RC-09)
+    function abrirExclusao(id) {
+      var c = porId(id);
+      emExclusao = c;
+      if (bloquearExclusao(c)) return;
+      document.getElementById('x-nome').textContent = c.nome;
+      toggleModal('modal-excluir', true);
+    }
+    function confirmarExclusao() {
+      toggleModal('modal-excluir', false);
+      if (bloquearExclusao(emExclusao)) return;
+      if (estado === 'falha-salvar') { showToast('toast-erro'); return; }
+      categorias = categorias.filter(function (c) { return c.id !== emExclusao.id; });
+      renderLista(filtrar());
+      showToast('toast-excluido');
+    }
+    function bloquearExclusao(c) {
+      var temFilhas = subcategorias(c.id).length > 0;
+      if (!temFilhas && c.produtos === 0) return false;
+      document.getElementById('b-motivo').textContent = temFilhas
+        ? 'Não é possível excluir: existem subcategorias vinculadas a este registro.'
+        : 'Não é possível excluir: existem produtos vinculados a este registro.';
+      document.getElementById('b-nome').textContent = c.nome;
+      toggleModal('modal-excluir-bloqueado', true);
+      return true;
+    }
+
+    function simular(valor) {
+      estado = valor;
+      var semAcesso = estado === 'sem-acesso';
+      document.getElementById('area-pesquisa').style.display = semAcesso ? 'none' : '';
+      document.getElementById('sem-acesso').style.display = semAcesso ? '' : 'none';
+      document.getElementById('sem-acesso').innerHTML = semAcesso ? '<div class="dsc-alert dsc-alert--danger" role="alert"><span>Você não tem permissão para esta ação.</span></div>' : '';
+      var massa = estado === 'subcategorias' ? MASSA.concat(MASSA_SUBCATEGORIAS) : MASSA;
+      categorias = estado === 'vazio' ? [] : massa.map(function (c) { return Object.assign({}, c); });
+      proximoId = categorias.reduce(function (maior, c) { return Math.max(maior, c.id); }, 0) + 1;
+      document.getElementById('f-nome').value = '';
+      document.getElementById('f-situacao').value = '';
+      if (!semAcesso) pesquisar();
+    }
+
+    renderLista(filtrar());
+  </script>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIMM STRY0013175</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+/* Identidade CAIXA */
+      --brand-blue: #005CA9;
+      --brand-blue-dark: #003B70;
+      --brand-blue-light: #EBF4FC;
+      --brand-blue-hover: #004b8a;
+      --brand-orange: #F37021;
+      --brand-orange-light: #FFF4EC;
+      
+      /* Superfícies & Bordas */
+      --bg-app: #F8F9FA;
+      --bg-sidebar: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-hover: #F1F4F8;
+      --bg-active: #E3EEF9;
+      --border-color: #E2E8F0;
+      --border-subtle: #EDF2F7;
+      
+      /* Compatibilidade mapa.css */
+      --primary-color: #005CA9;
+      --surface-ground: #F8F9FA;
+      --surface-card: #FFFFFF;
+      --surface-border: #E2E8F0;
+      --surface-hover: #F1F4F8;
+      --text-color: #1E293B;
+      --shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --focus-ring: 0 0 0 3px rgba(0, 92, 169, 0.15);
+      --dsc-font-family-1: "CAIXA Std", "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+      --dsc-font-title: var(--dsc-font-family-1);
+      --dsc-font-mono: ui-monospace, "SFMono-Regular", "Courier New", monospace;
+      --dsc-border-radius-pill: 9999px;
+      --dsc-border-radius-medium: 8px;
+      --transition-duration: 0.15s;
+      
+      /* Tipografia & Cores */
+      --text-main: #1E293B;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      --text-blue: #005CA9;
+      
+      /* Status & Badges */
+      --badge-success-bg: #ECFDF5;
+      --badge-success-text: #047857;
+      --badge-success-border: #A7F3D0;
+      
+      --badge-warning-bg: #FFFBEB;
+      --badge-warning-text: #B45309;
+      --badge-warning-border: #FDE68A;
+      
+      --badge-info-bg: #EFF6FF;
+      --badge-info-text: #1D4ED8;
+      --badge-info-border: #BFDBFE;
+      
+      --badge-purple-bg: #F5F3FF;
+      --badge-purple-text: #6D28D9;
+      --badge-purple-border: #DDD6FE;
+
+      /* Sombras & Raios */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-full: 9999px;
+
+      /* Dimensões */
+      --header-height: 60px;
+      --sidebar-width: 320px;
+}
+:root {
+  --_bg: var(--bg-app, #F6FAFD);
+  --_card: var(--bg-card, #FFFFFF);
+  --_borda: var(--border-color, #D6E3F0);
+  --_borda-sutil: var(--border-subtle, #E8F0F8);
+  --_hover: var(--bg-hover, #EDF3F9);
+  --_texto: var(--text-main, var(--text-color, #0A2440));
+  --_texto2: var(--text-secondary, #526981);
+  --_marca: var(--brand-blue, var(--primary-color, #005CA9));
+  --_marca-clara: var(--brand-blue-light, #E5F2FC);
+  --_titulo: var(--dsc-font-title, 'Archivo', 'Segoe UI', system-ui, sans-serif);
+  --_corpo: var(--dsc-font-family-1, 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif);
+  --_mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body { margin:0; background: var(--_bg); color: var(--_texto); font-family: var(--_corpo); font-size:14px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+.wrap { width: 100%; margin: 0; padding: 32px 40px 80px; }
+/* O conteúdo destes documentos é majoritariamente tabela larga — a tela inteira é
+   trabalho útil, não desperdício. A prosa corrida fica com medida de leitura própria
+   para não virar linha de 200 caracteres em monitor grande. */
+@media (max-width: 720px) { .wrap { padding: 24px 16px 60px; } }
+.doc-head { margin-bottom: 26px; }
+.eyebrow { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color: var(--_marca); margin-bottom:10px; }
+h1 { font-family: var(--_titulo); font-size: clamp(24px,3.4vw,32px); font-weight:700; line-height:1.2; margin:0 0 14px; color: var(--_texto); text-wrap: balance; }
+.doc-section { background: var(--_card); border:1px solid var(--_borda); border-radius:10px; padding: 0; margin-bottom:20px; box-shadow: 0 1px 3px rgba(10,36,64,.06); }
+.section-header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 20px 28px; cursor:pointer; list-style:none; }
+.section-header::-webkit-details-marker { display:none; }
+.section-title { font-family: var(--_titulo); font-size:18px; font-weight:700; color: var(--_texto); display:flex; align-items:center; gap:10px; }
+.section-title svg { color: var(--_marca); flex:none; }
+.chevron { color: var(--_texto2); transition: transform .18s; flex:none; }
+details[open] > .section-header .chevron { transform: rotate(180deg); }
+.section-body { padding: 18px 28px 24px; border-top:1px solid var(--_borda-sutil); }
+.markdown-body > :first-child { margin-top:0; }
+.markdown-body > :last-child { margin-bottom:0; }
+.markdown-body h3 { font-family: var(--_titulo); font-size:15.5px; font-weight:700; margin:26px 0 10px; color: var(--_texto); }
+.markdown-body h4 { font-size:14px; font-weight:700; margin:20px 0 8px; }
+.markdown-body p { margin: 0 0 12px; }
+.markdown-body ul, .markdown-body ol { margin:0 0 12px; padding-left:22px; }
+.markdown-body li { margin-bottom:6px; }
+.markdown-body code { font-family: var(--_mono); font-size:.86em; background: var(--_hover); border:1px solid var(--_borda-sutil); border-radius:4px; padding:1px 5px; overflow-wrap:anywhere; }
+/* caminho de arquivo e chave longa não têm espaço para quebrar: sem isto, um code
+   comprido empurra o corpo inteiro e a página ganha rolagem horizontal no celular */
+.markdown-body { overflow-wrap: break-word; }
+.custom-table .col-id  { white-space: nowrap; width: 1%; }
+.custom-table .col-num { white-space: nowrap; min-width: 5.5rem; }
+.custom-table .col-prosa { min-width: 38rem; }
+.custom-table .col-nome  { min-width: 15rem; max-width: 22rem; }
+.ficha { margin: 2px 0 22px; font-size: 13px; color: var(--_texto2); }
+.ficha blockquote { margin:0; border:0; padding:0; }
+.ficha p { margin: 0; line-height: 1.9; }
+.markdown-body pre { background: var(--_hover); border:1px solid var(--_borda); border-radius:8px; padding:14px 16px; overflow-x:auto; }
+.markdown-body pre code { background:none; border:0; padding:0; }
+.markdown-body blockquote { margin:0 0 14px; padding:12px 18px; border-left:3px solid var(--_marca); background: var(--_bg); border-radius:0 6px 6px 0; color: var(--_texto2); }
+.markdown-body blockquote > :first-child { margin-top:0; } .markdown-body blockquote > :last-child { margin-bottom:0; }
+.markdown-body a { color: var(--_marca); }
+.item-titulo { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:30px 0 12px; font-family: var(--_titulo); font-size:17px; font-weight:700; color: var(--_texto); }
+.item-nome { flex:0 1 auto; min-width:0; }
+.chave { font-family: var(--_mono); font-size:12px; font-weight:600; letter-spacing:.01em; color: var(--_texto2); background: var(--_hover); border:1px solid var(--_borda); border-radius:999px; padding:4px 12px; white-space:nowrap; }
+.badge { font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; border-radius:999px; padding:3px 11px; white-space:nowrap; }
+.badge--alterada { background:#DBEAFE; color:#1D4ED8; }
+.badge--nova     { background:#EDE9FE; color:#6D28D9; }
+.badge--mista    { background:#FEF3C7; color:#B45309; }
+.kpi-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap:14px; margin:16px 0 20px; }
+.stat { background: var(--_card); border:1px solid var(--_borda); border-left:4px solid var(--acento, var(--_marca)); border-radius:8px; padding:16px 20px; box-shadow:0 1px 3px rgba(10,36,64,.06); }
+.stat-n { font-family: var(--_titulo); font-size:30px; font-weight:700; line-height:1.05; color: var(--_texto); font-variant-numeric: tabular-nums; }
+.stat-k { margin-top:8px; font-size:13px; color: var(--_texto2); line-height:1.45; }
+.stat-k span { display:block; margin-top:3px; color: var(--_texto2); opacity:.85; }
+.table-container { width:100%; overflow-x:auto; margin: 12px 0; border:1px solid var(--_borda); border-radius:8px; }
+.custom-table { width:100%; border-collapse:collapse; text-align:left; font-size:13px; }
+.custom-table th { background: var(--_hover); color: var(--_texto); font-weight:600; font-family: var(--_titulo); padding:12px 16px; border-bottom:1px solid var(--_borda); white-space:nowrap; }
+.custom-table td { padding:12px 16px; border-bottom:1px solid var(--_borda-sutil); color: var(--_texto); vertical-align:top; line-height:1.5; }
+// A primeira coluna costuma ser um ID curto, que não deve partir. Mas quando ela é
+// um NOME ou a própria narrativa, o nowrap faz o texto transbordar por cima da
+// coluna vizinha — 665px de conteúdo numa célula de 304px. Essas ficam de fora.
+.custom-table th:first-child, .custom-table td:first-child:not(.col-nome):not(.col-prosa) { white-space:nowrap; }
+.custom-table tbody tr:last-child td { border-bottom:none; }
+.custom-table tbody tr:hover { background: var(--_hover); }
+.changelog-table td { font-size:12.5px; }
+.changelog-table th:first-child, .changelog-table td:first-child { width:120px; min-width:110px; }
+.req-tag { font-weight:600; color:#E11D48; font-size:11px; background:#FFE4E6; padding:2px 6px; border-radius:4px; display:inline-block; }
+.opt-tag { font-weight:500; color: var(--_texto2); font-size:11px; background: var(--_hover); padding:2px 6px; border-radius:4px; display:inline-block; }
+.rodape { margin-top:34px; padding-top:18px; border-top:1px solid var(--_borda); font-size:12.5px; color: var(--_texto2); }
+@media print { .doc-section { break-inside: avoid; border:1px solid #ccc; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="doc-head">
+    <div class="eyebrow">Análise de impacto</div>
+    <h1>AIMM STRY0013175</h1>
+  </header>
+  <div class="ficha markdown-body"><p><strong>Ticket</strong>: ServiceNow fictício <code>STRY0013175</code> — Navegar pela vitrine<br><strong>Link</strong>: ../mentoria/backlog.md#stry0013175--navegar-pela-vitrine<br><strong>Estado</strong>: Em análise — por Claude, em 31/10/2026 00:16  </p>
+</div>
+
+  <details class="doc-section" id="descricao-do-ticket" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Descrição do ticket
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<blockquote>
+<p>Transcrição do ticket fictício do backlog da demonstração; não é um registro do ServiceNow real.</p>
+</blockquote>
+<p>Como visitante da loja, quero ver os destaques, pesquisar produtos e abrir a página de um produto, para encontrar o que quero comprar e saber quanto custa.</p>
+
+    </div>
+  </details>
+  <details class="doc-section" id="criterios-de-aceite" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Critérios de aceite
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<blockquote>
+<p><strong>Numeração</strong>: a fonte fictícia numera os critérios; os números CA-n abaixo são os mesmos do backlog.</p>
+</blockquote>
+<div class="table-container"><table class="custom-table">
+<thead>
+<tr>
+<th>Critério</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CA-1</td>
+<td>Na página inicial, o sistema mostra os destaques vigentes, na ordem definida pela equipe de vendas.</td>
+</tr>
+<tr>
+<td>CA-2</td>
+<td>O visitante pesquisa produtos por parte do nome e pode filtrar por categoria; produtos de categoria inativa não aparecem.</td>
+</tr>
+<tr>
+<td>CA-3</td>
+<td>Ao abrir um produto, o sistema mostra nome, descrição, categoria e preço; o produto sem estoque aparece como esgotado.</td>
+</tr>
+</tbody></table></div>
+
+    </div>
+  </details>
+  <details class="doc-section" id="funcionalidades" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Funcionalidades
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<div class="table-container"><table class="custom-table">
+<thead>
+<tr>
+<th>Funcionalidade (N3)</th>
+<th>Domínio · Agrupamento Funcional</th>
+<th class="col-id">Operação</th>
+<th>Critérios cobertos</th>
+<th class="col-id">Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="../modules/vitrine/navegacao/f-listar-destaque.md"><code>VIT-NAV-01</code>: Listar Destaques</a></td>
+<td>Vitrine · Navegação</td>
+<td class="col-id">Criação</td>
+<td><code>CA-1</code></td>
+<td class="col-id">📋 Especificado</td>
+</tr>
+<tr>
+<td><a href="../modules/vitrine/navegacao/f-pesquisar-produto-vitrine.md"><code>VIT-NAV-02</code>: Pesquisar Produtos na Vitrine</a></td>
+<td>Vitrine · Navegação</td>
+<td class="col-id">Criação</td>
+<td><code>CA-2</code></td>
+<td class="col-id">✏️ Rascunho</td>
+</tr>
+<tr>
+<td><a href="../modules/vitrine/navegacao/f-visualizar-produto-vitrine.md"><code>VIT-NAV-03</code>: Visualizar Produto na Vitrine</a></td>
+<td>Vitrine · Navegação</td>
+<td class="col-id">Criação</td>
+<td><code>CA-3</code></td>
+<td class="col-id">📋 Especificado</td>
+</tr>
+</tbody></table></div>
+
+    </div>
+  </details>
+  <details class="doc-section" id="artefatos-impactados" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Artefatos impactados
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<p>O changeset abaixo descreve o pacote didático. Não há aval de PO registrado; os arquivos preenchidos são material de demonstração.</p>
+<div class="table-container"><table class="custom-table">
+<thead>
+<tr>
+<th>Artefato</th>
+<th>Tipo</th>
+<th class="col-id">Operação</th>
+<th>Seção</th>
+<th class="col-id">Natureza</th>
+<th>O quê</th>
+<th>Proveniência</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>modules/vitrine/README.md</code></td>
+<td>N1</td>
+<td class="col-id">criar</td>
+<td>—</td>
+<td class="col-id">funcional</td>
+<td>Vitrine, com as regras de exposição dos produtos</td>
+<td>elicitado</td>
+</tr>
+<tr>
+<td><code>modules/vitrine/navegacao/README.md</code></td>
+<td>N2</td>
+<td class="col-id">criar</td>
+<td>—</td>
+<td class="col-id">funcional</td>
+<td>Jornada da visita, telas e permissões abertas</td>
+<td>elicitado</td>
+</tr>
+<tr>
+<td><code>modules/vitrine/navegacao/f-listar-destaque.md</code></td>
+<td>N3</td>
+<td class="col-id">criar</td>
+<td>—</td>
+<td class="col-id">funcional</td>
+<td>VIT-NAV-01 — Listar Destaques</td>
+<td>derivado: âncora</td>
+</tr>
+<tr>
+<td><code>modules/vitrine/navegacao/f-pesquisar-produto-vitrine.md</code></td>
+<td>N3</td>
+<td class="col-id">criar</td>
+<td>—</td>
+<td class="col-id">funcional</td>
+<td>VIT-NAV-02 — Pesquisar Produtos na Vitrine</td>
+<td>derivado: âncora</td>
+</tr>
+<tr>
+<td><code>modules/vitrine/navegacao/f-visualizar-produto-vitrine.md</code></td>
+<td>N3</td>
+<td class="col-id">criar</td>
+<td>—</td>
+<td class="col-id">funcional</td>
+<td>VIT-NAV-03 — Visualizar Produto na Vitrine</td>
+<td>derivado: âncora</td>
+</tr>
+<tr>
+<td><code>global/MESSAGE-DICTIONARY.md</code></td>
+<td>MESSAGE-DICT</td>
+<td class="col-id">alterar</td>
+<td>Vitrine</td>
+<td class="col-id">funcional</td>
+<td>Selo de esgotado, página sem destaques e produto indisponível</td>
+<td>elicitado</td>
+</tr>
+<tr>
+<td><code>prototypes/vitrine/navegacao/flow.html</code></td>
+<td>PROTÓTIPO</td>
+<td class="col-id">criar</td>
+<td>—</td>
+<td class="col-id">funcional</td>
+<td>Página inicial, busca e página do produto</td>
+<td>derivado: espelho do N2</td>
+</tr>
+</tbody></table></div>
+
+    </div>
+  </details>
+  <details class="doc-section" id="alteracoes-em-funcionalidades-por-agrupamento-funcional" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Alterações em funcionalidades por Agrupamento Funcional
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<h3>Navegação</h3>
+<div class="table-container"><table class="custom-table">
+<thead>
+<tr>
+<th>Funcionalidade</th>
+<th class="col-id">CA-n</th>
+<th class="col-id">Natureza</th>
+<th class="col-prosa">Mudança</th>
+<th class="col-id">Regras</th>
+<th class="col-id">Cenários</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>VIT-NAV-01</code><br><strong>Listar Destaques</strong></td>
+<td class="col-id">CA-1</td>
+<td class="col-id">incluída</td>
+<td class="col-prosa"><strong>Inclusão</strong> da funcionalidade. <em>Antes</em>: não havia N3. <em>Agora</em>: ver os produtos em destaque na página inicial.</td>
+<td class="col-id">+5</td>
+<td class="col-id">+7</td>
+</tr>
+<tr>
+<td><code>VIT-NAV-02</code><br><strong>Pesquisar Produtos na Vitrine</strong></td>
+<td class="col-id">CA-2</td>
+<td class="col-id">incluída</td>
+<td class="col-prosa"><strong>Inclusão</strong> da funcionalidade. <em>Antes</em>: não havia N3. <em>Agora</em>: encontrar produtos por nome e por categoria.</td>
+<td class="col-id">+5</td>
+<td class="col-id">+11</td>
+</tr>
+<tr>
+<td><code>VIT-NAV-03</code><br><strong>Visualizar Produto na Vitrine</strong></td>
+<td class="col-id">CA-3</td>
+<td class="col-id">incluída</td>
+<td class="col-prosa"><strong>Inclusão</strong> da funcionalidade. <em>Antes</em>: não havia N3. <em>Agora</em>: ver a página do produto, com preço e disponibilidade.</td>
+<td class="col-id">+4</td>
+<td class="col-id">+7</td>
+</tr>
+</tbody></table></div>
+
+    </div>
+  </details>
+  <details class="doc-section" id="entidades-alteradas" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Entidades alteradas
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<p>Leitura de Destaque, Produto e Categoria; nenhuma entidade nova, sem alterações físicas ou contagem ALI/AIE.</p>
+
+    </div>
+  </details>
+  <details class="doc-section" id="impacto-em-dicionarios" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Impacto em dicionários
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<ul>
+<li>Mensagens de Vitrine: <code>VIT_SELO_ESGOTADO</code>, <code>VIT_SEM_DESTAQUES</code> e <code>VIT_PRODUTO_INDISPONIVEL</code>.</li>
+<li>Os destaques vigentes seguem a regra canônica RC-03 — Período de vigência (entrada criada pelo STRY0013180).</li>
+</ul>
+
+    </div>
+  </details>
+  <details class="doc-section" id="decisoes-pendentes" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Decisões pendentes
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<ul>
+<li>O responsável real deve revisar o escopo e conduzir CP1/CP2 antes de qualquer entrega.</li>
+<li>A contagem será feita via CT; nenhum PF foi estimado.</li>
+<li>A identificação de quem visita (entrar na conta) não está especificada; o Carrinho pede um cliente identificado.</li>
+</ul>
+
+    </div>
+  </details>
+  <details class="doc-section" id="reconciliacao" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Reconciliação
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<p>Não encerrada. Esta AIMM está em análise e não declara entrega, aprovação de escopo ou aprovação dos gates.</p>
+
+    </div>
+  </details>
+  <details class="doc-section" id="changelog" open>
+    <summary class="section-header">
+      <span class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Changelog
+      </span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </summary>
+    <div class="section-body markdown-body">
+<div class="table-container"><table class="custom-table changelog-table">
+<thead>
+<tr>
+<th>Data</th>
+<th>Autor</th>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>31/10/2026</td>
+<td>Docqui Caixa</td>
+<td>Ajuste</td>
+<td>Front-matter ganha <code>estado-por</code> e <code>estado-em</code> (9.1.0), preenchidos pelo histórico do git com quem levou a AIMM ao estado atual e quando.</td>
+</tr>
+<tr>
+<td>21/10/2026</td>
+<td>Docqui Caixa</td>
+<td>Ajuste</td>
+<td>Layout da AIMM do ticket: sem Contexto, alterações por Agrupamento Funcional, Decisões pendentes, nome abaixo do ID, entidades sem PF.</td>
+</tr>
+<tr>
+<td>20/10/2026</td>
+<td>Docqui Caixa</td>
+<td>Ajuste</td>
+<td>Layout da AIMM do ticket: nome abaixo do ID, entidades sem PF.</td>
+</tr>
+<tr>
+<td>18/10/2026</td>
+<td>Claude</td>
+<td>Demonstração</td>
+<td>Ticket fictício e Feature Set Navegação preenchidos, com 3 features em rascunho, sem aval e com a contagem pendente.</td>
+</tr>
+<tr>
+<td>20/10/2026</td>
+<td>Docqui Caixa</td>
+<td>Terminologia</td>
+<td>Adoção de AIMM; histórico e chave preservados.</td>
+</tr>
+<tr>
+<td>21/10/2026</td>
+<td>Docqui Caixa</td>
+<td>Terminologia</td>
+<td>Níveis em português: Domínio, Agrupamento Funcional e Funcionalidade; histórico preservado.</td>
+</tr>
+</tbody></table></div>
+
+    </div>
+  </details>
+
+  <footer class="rodape">
+    Gerado de <code>analise-impacto/AIMM-STRY0013175.md</code> por <code>scripts/gera-html-impacto.mjs</code>.
+    O <strong>.md é a fonte</strong> — edite lá e regenere; alterações feitas neste HTML se perdem.
+  </footer>
+</div>
+</body>
+</html>

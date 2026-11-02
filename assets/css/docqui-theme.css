@@ -1,0 +1,598 @@
+/* Identidade e layout do Docqui Caixa adaptados ao leitor e aos mapas do SIMPF. */
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --brand-1: #007ec2;
+  --brand-2: #005ca9;
+  --brand-3: #00a6df;
+  --primary: #005ca9;
+  --primary-strong: #003b6f;
+  --primary-soft: rgba(0, 92, 169, 0.12);
+  --on-primary: #ffffff;
+  --grifo: #f39200;
+  --grifo-soft: rgba(243, 146, 0, 0.2);
+  --bg: #f7fbfd;
+  --bg-elev: #ffffff;
+  --bg-subtle: #eaf5fa;
+  --bg-hover: #dceef6;
+  --bg-active: #d3eaf5;
+  --sidebar-bg: #f2f8fb;
+  --topbar-bg: rgba(255, 255, 255, 0.94);
+  --paper-grid: linear-gradient(rgba(0, 92, 169, 0.04) 1px, transparent 1px);
+  --text-strong: #003b6f;
+  --text: #25495d;
+  --text-muted: #5b7787;
+  --text-faint: #7895a5;
+  --border: #c9dee8;
+  --border-strong: #aacddd;
+  --green: #137a5a;
+  --green-soft: rgba(19, 122, 90, 0.13);
+  --amber: #b66800;
+  --amber-soft: rgba(243, 146, 0, 0.17);
+  --red: #b94b3c;
+  --link: #005ca9;
+  --shadow-sm: 0 2px 6px rgba(0, 70, 120, 0.07);
+  --shadow: 0 12px 30px rgba(0, 70, 120, 0.12);
+  --shadow-lg: 0 22px 54px rgba(0, 49, 88, 0.2);
+
+  --brand-blue: var(--primary);
+  --brand-blue-dark: var(--primary-strong);
+  --brand-blue-light: var(--primary-soft);
+  --brand-blue-hover: var(--primary-strong);
+  --brand-orange: var(--grifo);
+  --brand-orange-light: var(--grifo-soft);
+  --bg-app: var(--bg);
+  --bg-sidebar: var(--sidebar-bg);
+  --bg-card: var(--bg-elev);
+  --border-color: var(--border);
+  --border-subtle: var(--border);
+  --text-main: var(--text);
+  --text-secondary: var(--text-muted);
+  --text-blue: var(--link);
+  --primary-color: var(--primary);
+  --surface-ground: var(--bg);
+  --surface-card: var(--bg-elev);
+  --surface-border: var(--border);
+  --surface-hover: var(--bg-hover);
+  --text-color: var(--text);
+  --dsc-font-family-1: var(--font-sans);
+  --dsc-font-title: var(--font-sans);
+  --dsc-font-mono: var(--font-mono);
+  --badge-success-bg: var(--green-soft);
+  --badge-success-text: var(--green);
+  --badge-success-border: var(--green);
+  --badge-warning-bg: var(--amber-soft);
+  --badge-warning-text: var(--amber);
+  --badge-warning-border: var(--amber);
+  --badge-info-bg: var(--primary-soft);
+  --badge-info-text: var(--link);
+  --badge-info-border: var(--border-strong);
+  --badge-purple-bg: var(--primary-soft);
+  --badge-purple-text: var(--link);
+  --badge-purple-border: var(--border-strong);
+  --shadow-md: var(--shadow);
+  --shadow-1: var(--shadow-sm);
+  --header-height: 68px;
+  --sidebar-width: 286px;
+}
+
+[data-theme="dark"] {
+  --bg: #062b4b;
+  --bg-elev: #0b385d;
+  --bg-subtle: #0e426c;
+  --bg-hover: #165378;
+  --bg-active: #1a6088;
+  --sidebar-bg: #052641;
+  --topbar-bg: rgba(5, 38, 65, 0.94);
+  --paper-grid: linear-gradient(rgba(120, 211, 245, 0.08) 1px, transparent 1px);
+  --text-strong: #ffffff;
+  --text: #d7eaf3;
+  --text-muted: #a6cadb;
+  --text-faint: #78a9c3;
+  --border: #1c5b7f;
+  --border-strong: #31779d;
+  --primary: #3bb9eb;
+  --primary-strong: #ffffff;
+  --primary-soft: rgba(59, 185, 235, 0.17);
+  --on-primary: #003b6f;
+  --link: #70d0f2;
+  --green: #64d3a6;
+  --red: #ff9a84;
+  --amber: #ffb244;
+  --shadow-sm: 0 2px 6px rgba(0, 14, 27, 0.35);
+  --shadow: 0 12px 30px rgba(0, 14, 27, 0.45);
+  --shadow-lg: 0 22px 54px rgba(0, 14, 27, 0.55);
+
+  --brand-blue-light: var(--primary-soft);
+  --brand-orange-light: var(--grifo-soft);
+  --bg-app: var(--bg);
+  --bg-sidebar: var(--sidebar-bg);
+  --bg-card: var(--bg-elev);
+  --border-color: var(--border);
+  --border-subtle: var(--border);
+  --text-main: var(--text);
+  --text-secondary: var(--text-muted);
+  --text-blue: var(--link);
+  --primary-color: var(--primary);
+  --surface-ground: var(--bg);
+  --surface-card: var(--bg-elev);
+  --surface-border: var(--border);
+  --surface-hover: var(--bg-hover);
+  --text-color: var(--text);
+}
+
+body, button, input, select, textarea {
+  font-family: var(--font-sans);
+}
+
+body {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+::selection {
+  background: var(--grifo-soft);
+}
+
+code, pre, kbd, #documentContainer code, #documentContainer pre,
+.feature-code, .badge-id, .rn-tag, .scenario-body, .mm-badge {
+  font-family: var(--font-mono);
+}
+
+.app-header {
+  background: var(--topbar-bg);
+  height: var(--header-height);
+  padding: 0 24px 0 14px;
+  gap: 24px;
+}
+
+.header-left {
+  flex-shrink: 0;
+  gap: 14px;
+}
+
+.brand-logo {
+  gap: 12px;
+}
+
+.brand-sigla {
+  color: var(--primary-strong);
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+[data-theme="dark"] .brand-sigla {
+  color: var(--text-strong);
+}
+
+/* Assinatura Docqui Caixa: o docqui sobre a marca oficial da Caixa, alinhados à esquerda. Os
+   dois arquivos começam a tinta na borda da imagem, então basta não recuar nenhum. */
+.brand-marca {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.brand__docqui {
+  display: block;
+  width: 74px;
+  height: auto;
+}
+
+.brand__caixa {
+  display: block;
+  width: 40px;
+  height: auto;
+  margin-top: -5px;
+}
+
+.brand__caixa--negativa,
+[data-theme="dark"] .brand__caixa--positiva {
+  display: none;
+}
+
+[data-theme="dark"] .brand__caixa--negativa {
+  display: block;
+}
+
+.brand__divider {
+  width: 2px;
+  height: 30px;
+  border-radius: 2px;
+  background: var(--grifo);
+}
+
+.app-header .breadcrumb-bar {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.breadcrumb-current {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-right {
+  flex-shrink: 0;
+}
+
+.sidebar {
+  overflow: visible;
+}
+
+.sidebar__search {
+  position: relative;
+  padding: 18px 16px 13px;
+  flex-shrink: 0;
+}
+
+.sidebar__search input {
+  height: 40px;
+  background: var(--bg-elev);
+}
+
+.sidebar__search .search-results-modal {
+  top: 62px;
+  left: 16px;
+  right: 16px;
+}
+
+.sidebar-navigation {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.sidebar-label {
+  color: var(--primary);
+}
+
+#sidebar .nav-folder-icon {
+  color: var(--brand-blue);
+}
+
+.btn-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  color: var(--on-primary);
+  background: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.btn-github:hover {
+  filter: brightness(0.92);
+}
+
+.main-viewport {
+  min-width: 0;
+  padding: 25px clamp(24px, 4vw, 25px) 104px;
+  background-image: var(--paper-grid);
+  background-size: 100% 48px;
+}
+
+#documentContainer {
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-sm);
+}
+
+#documentContainer .doc-section,
+#documentContainer .doc-hero-card {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  margin-bottom: 32px;
+}
+
+#documentContainer .doc-section:last-child {
+  margin-bottom: 0;
+}
+
+/* Documentos: cada seção num card próprio — o contêiner some e cada seção vira card.
+   Nas demais páginas (dashboard, mapa, protótipo), o contêiner é o card. */
+#documentContainer.doc-cards {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+#documentContainer.doc-cards .doc-hero-card,
+#documentContainer.doc-cards .doc-section {
+  padding: 26px 32px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+
+#documentContainer.doc-cards .section-header > .section-title {
+  margin-top: 0;
+}
+
+/* No hero do N3, a Descrição tem o título das demais seções; da linha até ele, 35 px
+   (eram 70: o padding do bloco mais a margem de todo h2 do tema). Só o hero com esse
+   título: o do N1 e o do N2 ainda usam o h2 próprio. */
+#documentContainer.doc-cards .hero-description-block:has(> .section-header) {
+  padding-top: 35px;
+}
+
+@media (max-width: 820px) {
+  #documentContainer.doc-cards .doc-hero-card,
+  #documentContainer.doc-cards .doc-section {
+    padding: 20px 18px;
+  }
+}
+
+.doc-title, .section-title, .generic-markdown-body h1, .generic-markdown-body h2 {
+  color: var(--text-strong);
+}
+
+#documentContainer h1 {
+  margin: 0 0 20px;
+  padding-bottom: 3px;
+  border-bottom: 4px solid var(--grifo);
+  font-size: clamp(30px, 3.3vw, 42px);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+#documentContainer h2 {
+  margin: 52px 0 20px;
+  padding: 0;
+  border-left: 0;
+  color: var(--text-strong);
+  font-size: 24px;
+  line-height: 1.35;
+}
+
+#documentContainer .section-header {
+  margin-bottom: 0;
+}
+
+#documentContainer .section-header > .section-title {
+  margin-bottom: 15px;
+}
+
+/* A margem do Mermaid também usa !important no estilo-base. */
+#documentContainer .section-header + .generic-markdown-body > :first-child {
+  margin-top: 0 !important;
+}
+
+.generic-markdown-body h3 {
+  color: var(--primary);
+}
+
+.generic-markdown-body blockquote {
+  border-left-color: var(--grifo);
+  background: var(--grifo-soft);
+}
+
+#documentContainer :not(pre) > code {
+  color: var(--primary-strong);
+  background: var(--primary-soft);
+}
+
+.generic-markdown-body pre {
+  color: var(--text);
+  background: var(--bg-subtle);
+}
+
+#documentContainer pre code {
+  color: inherit;
+  background: transparent;
+}
+
+#documentContainer thead th {
+  color: var(--on-primary);
+  background: var(--primary);
+}
+
+#documentContainer thead th code, #documentContainer thead th a {
+  color: inherit;
+  background: transparent;
+}
+
+.rn-num, .nav-count, .chip.is-active {
+  color: var(--on-primary);
+}
+
+.gherkin-given { color: var(--primary); }
+.gherkin-when { color: var(--amber); }
+.gherkin-then { color: var(--green); }
+.gherkin-and { color: var(--text-muted); }
+
+.mm-btn.is-on {
+  color: var(--on-primary) !important;
+}
+
+.feature-item.active, .nav-item-fixed a.active, .nav-folder summary.active,
+[data-theme="dark"] .feature-item.active, [data-theme="dark"] .nav-item-fixed a.active,
+[data-theme="dark"] .nav-folder summary.active {
+  background: var(--primary) !important;
+  color: var(--on-primary) !important;
+  border-left-color: var(--grifo) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.feature-item.active .feature-code,
+[data-theme="dark"] .feature-item.active .feature-code {
+  background: var(--bg-elev) !important;
+  color: var(--primary) !important;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 820px) {
+  .app-header {
+    padding: 0 12px;
+    gap: 10px;
+  }
+
+  .header-left {
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .brand-logo {
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .app-header .breadcrumb-bar,
+  .mode-label,
+  .btn-github__label {
+    display: none;
+  }
+
+  .btn-github {
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .header-right {
+    gap: 6px;
+  }
+
+  .mode-btn {
+    padding: 7px;
+  }
+
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: var(--header-height);
+    bottom: 0;
+    left: 0;
+    width: min(286px, 90vw) !important;
+    z-index: 60;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.is-open {
+    display: flex;
+  }
+
+  .sidebar-resizer {
+    display: none;
+  }
+
+  .sidebar-open .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: var(--header-height) 0 0;
+    z-index: 55;
+    border: 0;
+    background: rgba(0, 14, 27, 0.4);
+  }
+
+  .table-container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header,
+  .header-left {
+    gap: 6px;
+  }
+
+  .brand-sigla {
+    font-size: 22px;
+  }
+
+  .brand__docqui {
+    width: 62px;
+  }
+
+  .brand__caixa {
+    width: 34px;
+    margin-top: -4px;
+  }
+
+}
+
+.lvl-root > .mm-card, .lvl-n1 > .mm-card { border-left-color: var(--primary); }
+.lvl-root > .mm-card .mm-badge, .lvl-root > .mm-card .mm-name { color: var(--text-strong); }
+.lvl-n2 > .mm-card { border-left-color: var(--link); }
+.lvl-n2 > .mm-card .mm-badge { color: var(--link); }
+.lvl-n3 > .mm-card { border-left-color: var(--border-strong); }
+.lvl-n3 > .mm-card .mm-badge { color: var(--text-muted); }
+
+.mermaid svg, .mermaid .nodeLabel, .mermaid .edgeLabel {
+  font-family: var(--font-sans) !important;
+}
+
+.mermaid .node rect, .mermaid .node polygon, .mermaid .node circle, .mermaid .entityBox {
+  fill: var(--bg-active) !important;
+  stroke: var(--primary) !important;
+}
+
+.mermaid .cluster rect {
+  fill: var(--bg-subtle) !important;
+  stroke: var(--border-strong) !important;
+}
+
+.mermaid .nodeLabel, .mermaid .edgeLabel, .mermaid .label, .mermaid .entityLabel {
+  color: var(--text-strong) !important;
+  fill: var(--text-strong) !important;
+}
+
+.mermaid .edgeLabel, .mermaid .edgeLabel p {
+  background-color: var(--bg-elev) !important;
+}
+
+.mermaid .flowchart-link, .mermaid .edgePath .path {
+  stroke: var(--border-strong) !important;
+}
+
+.mermaid marker path {
+  fill: var(--border-strong) !important;
+}
+
+@media (max-width: 480px) {
+  .brand-logo {
+    font-size: 12px;
+  }
+}
+
+/* Abaixo de 360 px, o botão do GitHub no header não cabe ao lado da assinatura Docqui Caixa:
+   fica a sigla do sistema, e o resto segue no rótulo acessível do link. */
+@media (max-width: 360px) {
+  .brand__divider,
+  .brand-marca {
+    display: none;
+  }
+}
+.changes-view .docqui-change {
+  min-width: 0;
+}
+
+#documentContainer.changes-view .docqui-diff {
+  max-width: 100%;
+  background: var(--bg-subtle);
+  color: var(--text);
+  border-color: var(--border);
+  font-family: var(--font-mono);
+}

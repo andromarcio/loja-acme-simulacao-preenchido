@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="118" height="24" viewBox="0 0 118 24" role="img" aria-label="docqui v2.0.0">
+  <rect width="66" height="24" rx="4" fill="#1B2B4B"/>
+  <rect x="66" width="52" height="24" rx="4" fill="#FFD94A"/>
+  <rect x="62" width="8" height="24" fill="#FFD94A"/>
+  <rect x="62" width="4" height="24" fill="#1B2B4B"/>
+  <text x="33" y="16" font-family="Consolas,'JetBrains Mono',monospace" font-size="11" fill="#FBF8F0" text-anchor="middle">docqui</text>
+  <text x="92" y="16" font-family="Consolas,'JetBrains Mono',monospace" font-size="11" font-weight="bold" fill="#14213D" text-anchor="middle">v2.0.0</text>
+</svg>

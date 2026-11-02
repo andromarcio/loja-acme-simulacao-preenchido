@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 92" role="img" aria-label="docqui">
+  <!-- variante simplificada para tamanhos ≤ 24px: só duas barras -->
+  <path fill="#1B2B4B" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/>
+  <rect x="26" y="18" width="40" height="10" rx="5" fill="#FBF8F0"/>
+  <rect x="34" y="40" width="32" height="10" rx="5" fill="#FFD94A"/>
+</svg>

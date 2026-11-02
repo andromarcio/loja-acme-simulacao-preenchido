@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 92" role="img" aria-label="docqui — símbolo doc-pin">
+  <!-- doc-pin: documento + pin de mapa + balão de conversa · versão positiva (fundo claro) -->
+  <path fill="#1B2B4B" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/>
+  <rect x="28" y="16" width="34" height="6.5" rx="3.25" fill="#FBF8F0"/>
+  <rect x="33" y="27" width="29" height="6.5" rx="3.25" fill="#FBF8F0"/>
+  <rect x="38" y="38" width="24" height="6.5" rx="3.25" fill="#FBF8F0"/>
+  <rect x="43" y="49" width="19" height="6.5" rx="3.25" fill="#FFD94A"/>
+</svg>

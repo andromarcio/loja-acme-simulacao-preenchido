@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo — _biblioteca-ds (CAIXA DS)</title>
+  <link rel="stylesheet" href="ds.css">
+</head>
+<body>
+
+  <main class="dsc-component-only">
+
+    <div class="dsc-flex dsc-justify-between dsc-items-center" style="margin-bottom:24px">
+      <div>
+        <h1 class="dsc-page-title">Catálogo da biblioteca <code>.dsc-*</code></h1>
+        <p class="dsc-page-subtitle">Todos os componentes com o markup canônico — inspecione o HTML para copiar. Ver <code>README.md</code>.</p>
+      </div>
+      <button class="dsc-btn dsc-btn--outline dsc-btn--sm" onclick="document.documentElement.classList.toggle('app-dark')">Alternar tema</button>
+    </div>
+
+    <!-- ================= Tipografia ================= -->
+    <div class="dsc-card">
+      <h2 class="dsc-card-title">Tipografia</h2>
+      <p class="dsc-display">Display 36</p>
+      <p class="dsc-title">Título de página 24 (.dsc-title / .dsc-page-title)</p>
+      <p class="dsc-title-sm">Título de seção 20 (.dsc-title-sm)</p>
+      <p class="dsc-body">Corpo 16 (.dsc-body) — texto padrão da interface.</p>
+      <p class="dsc-body-sm">Corpo pequeno 14 (.dsc-body-sm) <span class="dsc-text-muted">· .dsc-text-muted</span> <span class="dsc-text-primary">· .dsc-text-primary</span></p>
+      <p class="dsc-caption">Caption 12 (.dsc-caption) · obrigatório: Nome <span class="dsc-req">*</span></p>
+    </div>
+
+    <!-- ================= Botões ================= -->
+    <div class="dsc-card">
+      <h2 class="dsc-card-title">Botões</h2>
+      <div class="dsc-flex dsc-gap-1 dsc-items-center" style="flex-wrap:wrap">
+        <button class="dsc-btn">Ação principal</button>
+        <button class="dsc-btn dsc-btn--outline">Secundária</button>
+        <button class="dsc-btn dsc-btn--chromeless">Cancelar</button>
+        <button class="dsc-btn dsc-btn--danger">Excluir</button>
+        <button class="dsc-btn dsc-btn--danger dsc-btn--outline">Excluir (outline)</button>
+        <button class="dsc-btn" disabled>Desabilitado</button>
+        <button class="dsc-btn is-loading">Salvando</button>
+      </div>
+      <div class="dsc-flex dsc-gap-1 dsc-items-center" style="flex-wrap:wrap;margin-top:12px">
+        <button class="dsc-btn dsc-btn--sm">Pequeno 32px</button>
+        <button class="dsc-btn dsc-btn--sm dsc-btn--outline">Pequeno outline</button>
+        <button class="dsc-btn dsc-btn--icon dsc-btn--sm" aria-label="Adicionar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <span class="dsc-segmented">
+          <button class="is-active">Lista</button><button>Cards</button><button>Mapa</button>
+        </span>
+        <button class="dsc-icon-action" aria-label="Visualizar" title="Visualizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+      <div style="margin-top:12px;padding:16px;background:var(--dsc-primary-90);border-radius:var(--dsc-border-radius-medium)">
+        <button class="dsc-btn dsc-btn--on-media">On media bg</button>
+      </div>
+    </div>
+
+    <!-- ================= Formulários ================= -->
+    <div class="dsc-card">
+      <h2 class="dsc-card-title">Formulários</h2>
+      <div class="dsc-row">
+        <div class="dsc-col-4">
+          <div class="dsc-field">
+            <label class="dsc-field-label" for="cat-cpf">CPF <span class="dsc-req">*</span></label>
+            <input class="dsc-input" id="cat-cpf" placeholder="000.000.000-00">
+            <span class="dsc-field-hint">Somente números.</span>
+          </div>
+        </div>
+        <div class="dsc-col-4">
+          <div class="dsc-field is-invalid">
+            <label class="dsc-field-label" for="cat-email">E-mail <span class="dsc-req">*</span></label>
+            <input class="dsc-input" id="cat-email" value="ana.costa@">
+            <span class="dsc-field-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Informe um e-mail válido.</span>
+          </div>
+        </div>
+        <div class="dsc-col-4">
+          <div class="dsc-field">
+            <label class="dsc-field-label" for="cat-uf">UF <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+            <select class="dsc-select" id="cat-uf"><option>Selecione</option><option>DF</option><option>SP</option></select>
+          </div>
+        </div>
+        <div class="dsc-col-6">
+          <div class="dsc-field">
+            <label class="dsc-field-label" for="cat-busca">Busca (.dsc-search)</label>
+            <span class="dsc-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input class="dsc-input" id="cat-busca" placeholder="Pesquisar registro"></span>
+          </div>
+        </div>
+        <div class="dsc-col-6">
+          <div class="dsc-field">
+            <label class="dsc-field-label" for="cat-senha">Senha (.dsc-field-action)</label>
+            <span class="dsc-field-action"><input class="dsc-input" id="cat-senha" type="password" value="segredo"><button aria-label="Mostrar senha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></span>
+          </div>
+        </div>
+        <div class="dsc-col-4">
+          <div class="dsc-field">
+            <label class="dsc-field-label" for="cat-valor">Valor (.dsc-money)</label>
+            <span class="dsc-money"><input class="dsc-input" id="cat-valor" placeholder="0,00"></span>
+          </div>
+        </div>
+        <div class="dsc-col-8">
+          <div class="dsc-field">
+            <label class="dsc-field-label">Tags (.dsc-input-chips)</label>
+            <span class="dsc-input-chips"><span class="dsc-chip">urgente <button aria-label="Remover">✕</button></span><span class="dsc-chip">fiscal <button aria-label="Remover">✕</button></span><input placeholder="Adicionar…"></span>
+          </div>
+        </div>
+        <div class="dsc-col-12">
+          <div class="dsc-field">
+            <label class="dsc-field-label" for="cat-obs">Observações</label>
+            <textarea class="dsc-textarea" id="cat-obs" placeholder="Texto livre"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="dsc-flex dsc-gap-3 dsc-items-center" style="margin-top:16px;flex-wrap:wrap">
+        <label class="dsc-flex dsc-items-center dsc-gap-1"><input type="checkbox" class="dsc-check" checked> Checkbox</label>
+        <label class="dsc-flex dsc-items-center dsc-gap-1"><input type="radio" class="dsc-radio" name="cat-r" checked> Rádio</label>
+        <span class="dsc-flex dsc-items-center dsc-gap-1"><span class="dsc-switch is-on" onclick="this.classList.toggle('is-on')"></span> Switch</span>
+        <span class="dsc-stepper"><button>−</button><span>2</span><button>+</button></span>
+        <input type="range" class="dsc-slider" style="max-width:180px" value="60">
+        <span class="dsc-pin"><input maxlength="1" value="1"><input maxlength="1" value="2"><input maxlength="1"><input maxlength="1"></span>
+      </div>
+    </div>
+
+    <!-- ================= Tabela ================= -->
+    <div class="dsc-card" style="padding:0;overflow:hidden">
+      <div class="dsc-table-toolbar">
+        <span class="dsc-text-muted"><strong style="color:var(--text-color)">4 registros</strong></span>
+        <button class="dsc-btn dsc-btn--sm">Cadastrar registro</button>
+      </div>
+      <table class="dsc-table">
+        <thead>
+          <tr>
+            <th class="dsc-col-check"><input type="checkbox" class="dsc-check" aria-label="Selecionar todos"></th>
+            <th class="dsc-sortable is-sorted">Nome</th>
+            <th>Situação</th>
+            <th class="dsc-num">Valor</th>
+            <th class="dsc-col-actions">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dsc-col-check"><input type="checkbox" class="dsc-check" aria-label="Selecionar"></td>
+            <td>Ana Costa</td><td><span class="dsc-tag dsc-tag--success">Ativo</span></td><td class="dsc-num">R$ 1.200,53</td>
+            <td class="dsc-col-actions"><button class="dsc-icon-action" aria-label="Visualizar Ana Costa" title="Visualizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+          </tr>
+          <tr class="is-selected">
+            <td class="dsc-col-check"><input type="checkbox" class="dsc-check" checked aria-label="Selecionar"></td>
+            <td>Bruno Lima (selecionado)</td><td><span class="dsc-tag dsc-tag--warning">Pendente</span></td><td class="dsc-num">R$ 342,00</td>
+            <td class="dsc-col-actions"><button class="dsc-icon-action" aria-label="Visualizar Bruno Lima" title="Visualizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+          </tr>
+          <tr>
+            <td class="dsc-col-check"><input type="checkbox" class="dsc-check" aria-label="Selecionar"></td>
+            <td>Carla Souza — <span class="dsc-cell-editable">célula editável</span></td><td><span class="dsc-tag dsc-tag--danger">Bloqueado</span></td><td class="dsc-num">R$ 88,10</td>
+            <td class="dsc-col-actions"><button class="dsc-icon-action" aria-label="Visualizar Carla Souza" title="Visualizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+          </tr>
+          <tr>
+            <td class="dsc-col-check"><input type="checkbox" class="dsc-check" aria-label="Selecionar"></td>
+            <td>Diego Alves</td><td><span class="dsc-tag dsc-tag--neutral">Rascunho</span></td><td class="dsc-num">R$ 9.740,00</td>
+            <td class="dsc-col-actions"><button class="dsc-icon-action" aria-label="Visualizar Diego Alves" title="Visualizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="dsc-table-footer"><span>Mostrando 1–4 de 4</span><span class="dsc-flex dsc-gap-1"><button class="dsc-btn dsc-btn--sm dsc-btn--chromeless" disabled>‹ Anterior</button><button class="dsc-btn dsc-btn--sm dsc-btn--chromeless" disabled>Próxima ›</button></span></div>
+    </div>
+
+    <!-- ================= Ficha label-valor ================= -->
+    <div class="dsc-card">
+      <h2 class="dsc-card-title">Ficha de leitura (.dsc-lv)</h2>
+      <div class="dsc-row">
+        <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">CNPJ</span><span class="dsc-lv-value">12.345.678/0001-90</span></div></div>
+        <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">Razão social</span><span class="dsc-lv-value">Acme Participações S.A.</span></div></div>
+        <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">Situação</span><span class="dsc-lv-value"><span class="dsc-tag dsc-tag--success">Ativo</span></span></div></div>
+      </div>
+    </div>
+
+    <!-- ================= Feedback ================= -->
+    <div class="dsc-card">
+      <h2 class="dsc-card-title">Feedback</h2>
+      <div class="dsc-flex dsc-gap-1" style="flex-wrap:wrap;margin-bottom:16px">
+        <span class="dsc-tag dsc-tag--highlight">Destaque</span><span class="dsc-tag dsc-tag--neutral">Neutro</span><span class="dsc-tag dsc-tag--success">Sucesso</span><span class="dsc-tag dsc-tag--warning">Atenção</span><span class="dsc-tag dsc-tag--danger">Erro</span><span class="dsc-tag dsc-tag--sm dsc-tag--success">sm</span><span class="dsc-tag dsc-tag--lg dsc-tag--highlight">lg</span>
+        <span class="dsc-badge">3</span><span class="dsc-badge dsc-badge--dot" aria-label="Novidades"></span>
+        <span class="dsc-chip">Filtro: ativos <button aria-label="Remover filtro">✕</button></span>
+        <span class="dsc-avatar">AC</span><span class="dsc-avatar dsc-avatar--sm">BL</span>
+      </div>
+      <div style="display:grid;gap:8px">
+        <div class="dsc-alert" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>Card Alert informativo — aviso persistente na tela.</span></div>
+        <div class="dsc-alert dsc-alert--success" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Operação concluída com sucesso.</span></div>
+        <div class="dsc-alert dsc-alert--warning" role="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Atenção: a vigência termina em 3 dias.</span></div>
+        <div class="dsc-alert dsc-alert--danger" role="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>Não é possível excluir: o registro possui vínculos ativos.</span></div>
+      </div>
+      <div class="dsc-flex dsc-gap-1" style="flex-wrap:wrap;margin-top:16px">
+        <div class="dsc-toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>Toast informativo.</span></div>
+        <div class="dsc-toast dsc-toast--positive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Cadastro realizado com sucesso.</span></div>
+        <div class="dsc-toast dsc-toast--danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>Falha ao salvar — tente novamente.</span><button class="dsc-icon-action" aria-label="Fechar">✕</button></div>
+      </div>
+    </div>
+
+    <!-- ================= Estados de tela ================= -->
+    <div class="dsc-card">
+      <h2 class="dsc-card-title">Estados obrigatórios de tela</h2>
+      <div class="dsc-grid-3">
+        <div>
+          <p class="dsc-caption" style="margin-bottom:8px">Loading (skeleton)</p>
+          <span class="dsc-skeleton" style="height:20px;width:60%;margin-bottom:8px"></span>
+          <span class="dsc-skeleton" style="height:14px;margin-bottom:6px"></span>
+          <span class="dsc-skeleton" style="height:14px;width:80%"></span>
+        </div>
+        <div class="dsc-state">
+          <span class="dsc-state-icon">🗂️</span>
+          <span class="dsc-state-title">Nenhum registro por aqui</span>
+          <span class="dsc-state-text">Cadastre o primeiro registro para visualizar a lista.</span>
+          <button class="dsc-btn dsc-btn--sm">Cadastrar registro</button>
+        </div>
+        <div class="dsc-state">
+          <span class="dsc-state-icon">⚠️</span>
+          <span class="dsc-state-title">Não foi possível carregar</span>
+          <span class="dsc-state-text">Verifique sua conexão e tente de novo.</span>
+          <button class="dsc-btn dsc-btn--sm dsc-btn--outline">Tentar novamente</button>
+        </div>
+      </div>
+      <div class="dsc-flex dsc-gap-3 dsc-items-center" style="margin-top:16px">
+        <span class="dsc-spinner" role="status" aria-label="Carregando"></span>
+        <span class="dsc-progress" style="max-width:240px"><span style="width:64%"></span></span>
+      </div>
+    </div>
+
+    <!-- ================= Modal ================= -->
+    <div class="dsc-card">
+      <h2 class="dsc-card-title">Modal</h2>
+      <button class="dsc-btn dsc-btn--danger dsc-btn--outline" onclick="document.getElementById('cat-modal').style.display='flex'">Abrir modal de exclusão</button>
+      <div id="cat-modal" class="dsc-modal-mask" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+        <div class="dsc-modal">
+          <div class="dsc-modal-header"><strong>Excluir registro</strong><button class="dsc-modal-close" aria-label="Fechar" onclick="document.getElementById('cat-modal').style.display='none'">✕</button></div>
+          <div class="dsc-modal-body"><p>Deseja realmente excluir <strong>Ana Costa</strong> — CPF 000.000.000-00?</p></div>
+          <div class="dsc-modal-footer">
+            <button class="dsc-btn dsc-btn--chromeless" onclick="document.getElementById('cat-modal').style.display='none'">Cancelar</button>
+            <button class="dsc-btn dsc-btn--danger" onclick="document.getElementById('cat-modal').style.display='none'">Excluir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dsc-proto-notes">
+      <strong>📋 Notas:</strong>
+      <ul>
+        <li>Este catálogo usa somente classes da biblioteca — inspecione o markup para copiar.</li>
+        <li>Shell completo (header + drawer + grid) em <code>shell-responsive.html</code>.</li>
+      </ul>
+    </div>
+
+  </main>
+</body>
+</html>

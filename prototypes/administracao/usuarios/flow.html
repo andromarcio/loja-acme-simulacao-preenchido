@@ -1,0 +1,581 @@
+<!-- docqui: 6.4.10 | prompt: PROMPT_PROTOTYPE_FLOW_FULL | atualizado: 2026-10-18 -->
+<!DOCTYPE html>
+<!--
+  ⚠️ PROTÓTIPO NAVEGÁVEL — treino, não jogo.
+  Fonte de verdade de LAYOUT, COMPORTAMENTO e ESTADOS — NUNCA de implementação.
+  Não copie este HTML/CSS/JS para o código de produção: aqui tudo é autocontido
+  e procedural DE PROPÓSITO (simulação). A implementação real segue outra
+  estratégia: componentes do design system do projeto (mapa de equivalência no
+  README do tema), catálogo global/PATTERNS.md e convenções do global/MASTER.md.
+  Classes .dsc-* são EXCLUSIVAS de protótipo — proibidas em código de produção.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo: Usuários — Administração</title>
+  <link rel="stylesheet" href="../../_biblioteca-ds/ds.css">
+</head>
+<body>
+
+  <div class="dsc-proto-badge">🎨 PROTÓTIPO — não é o sistema real</div>
+
+  <div class="dsc-app">
+
+    <aside class="dsc-sidebar">
+      <div class="dsc-sidebar-backdrop" onclick="dscToggleMenu()"></div>
+      <div class="dsc-sidebar-brand"><span class="dsc-brand-mark">L</span> Loja ACME</div>
+      <ul class="dsc-menu">
+        <li class="dsc-menu-section">Catálogo</li>
+        <li><a class="dsc-menu-item" href="../../catalogo/categorias/flow.html">Categorias</a></li>
+        <li class="dsc-menu-section">Vitrine</li>
+        <li><a class="dsc-menu-item" href="../../vitrine/destaques/flow.html">Destaques</a></li>
+        <li class="dsc-menu-section">Vendas</li>
+        <li><a class="dsc-menu-item" href="../../vendas/gestao-pedidos/flow.html">Pedidos</a></li>
+        <li class="dsc-menu-section">Administração</li>
+        <li><a class="dsc-menu-item is-active" href="#" onclick="abrirPesquisa(); return false;">Usuários</a></li>
+        <li><a class="dsc-menu-item" href="../faixas-frete/flow.html">Faixas de frete</a></li>
+      </ul>
+    </aside>
+
+    <div class="dsc-shell-main">
+      <header class="dsc-header">
+        <div class="dsc-header-start">
+          <button class="dsc-menu-toggle" aria-label="Recolher/expandir menu" onclick="dscToggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <span class="dsc-header-logo">Loja ACME · <strong>CAIXA</strong></span>
+        </div>
+        <div class="dsc-header-actions">
+          <button class="dsc-header-item">
+            <span class="dsc-avatar dsc-avatar--sm">ER</span>
+            <span class="dsc-hi-body"><span class="dsc-hi-title">Elisa Rocha</span><span class="dsc-hi-sub dsc-text-primary">Administrador</span></span>
+            <svg class="dsc-hi-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dsc-main">
+
+        <!-- Tela 1 — Pesquisa de Usuários (/administracao/usuarios): ADM-USR-01 Pesquisar e ADM-USR-04 Inativar (ação na linha) -->
+        <div id="screen-pesquisa" class="dsc-screen is-active">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Administração</span><span class="dsc-sep">›</span><span class="is-current">Usuários</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Usuários</h1>
+            <p class="dsc-page-subtitle">Pesquise os usuários da loja por nome, e-mail, perfil e situação.</p>
+          </div>
+
+          <section class="dsc-card">
+            <h2 class="dsc-card-title">Filtros</h2>
+            <div class="dsc-row">
+              <div class="dsc-col-3">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="f-nome">Nome completo</label>
+                  <input class="dsc-input" id="f-nome" placeholder="Parte do nome" onkeydown="if (event.key === 'Enter') pesquisar()">
+                </div>
+              </div>
+              <div class="dsc-col-3">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="f-email">E-mail</label>
+                  <input class="dsc-input" id="f-email" placeholder="Parte do e-mail" onkeydown="if (event.key === 'Enter') pesquisar()">
+                </div>
+              </div>
+              <div class="dsc-col-3">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="f-perfil">Perfil</label>
+                  <select class="dsc-select" id="f-perfil">
+                    <option value="">Todos</option>
+                    <option>Cliente</option>
+                    <option>Atendente</option>
+                    <option>Gestor de catálogo</option>
+                    <option>Administrador</option>
+                  </select>
+                </div>
+              </div>
+              <div class="dsc-col-3">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="f-situacao">Situação</label>
+                  <select class="dsc-select" id="f-situacao">
+                    <option value="">Todas</option>
+                    <option selected>Ativo</option>
+                    <option>Inativo</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="dsc-flex dsc-gap-1" style="justify-content:flex-end">
+              <button class="dsc-btn dsc-btn--chromeless" onclick="limparFiltros()">Limpar</button>
+              <button class="dsc-btn" id="btn-pesquisar" onclick="pesquisar()">Pesquisar</button>
+            </div>
+          </section>
+
+          <section class="dsc-card" style="padding:0;overflow:hidden">
+            <div class="dsc-table-toolbar">
+              <span class="dsc-text-muted"><strong style="color:var(--text-color)" id="contagem">7 registros</strong></span>
+              <button class="dsc-btn dsc-btn--sm" id="btn-cadastrar" onclick="abrirCadastro()">Cadastrar usuário</button>
+            </div>
+            <div id="resultado" aria-live="polite"></div>
+          </section>
+        </div>
+
+        <!-- Tela 2 — Cadastrar Usuário (/administracao/usuarios/novo): ADM-USR-02 -->
+        <div id="screen-cadastrar" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Administração</span><span class="dsc-sep">›</span><span>Usuários</span><span class="dsc-sep">›</span><span class="is-current">Cadastrar usuário</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Cadastrar usuário</h1>
+            <p class="dsc-page-subtitle">O usuário nasce ativo. O e-mail identifica o usuário e não muda depois do cadastro.</p>
+          </div>
+          <section class="dsc-card">
+            <div id="c-alerta"></div>
+            <div class="dsc-row">
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="fc-nome">
+                  <label class="dsc-field-label" for="c-nome">Nome completo <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="c-nome" placeholder="Nome e sobrenome">
+                </div>
+              </div>
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="fc-email">
+                  <label class="dsc-field-label" for="c-email">E-mail <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="c-email" placeholder="nome@dominio.example">
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="fc-cpf">
+                  <label class="dsc-field-label" for="c-cpf">CPF <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+                  <input class="dsc-input" id="c-cpf" inputmode="numeric" maxlength="11" placeholder="Somente números">
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="fc-telefone">
+                  <label class="dsc-field-label" for="c-telefone">Telefone <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+                  <input class="dsc-input" id="c-telefone" inputmode="numeric" maxlength="11" placeholder="DDD e número">
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="fc-perfil">
+                  <label class="dsc-field-label" for="c-perfil">Perfil <span class="dsc-req">*</span></label>
+                  <select class="dsc-select" id="c-perfil">
+                    <option value="">Selecione</option>
+                    <option>Cliente</option>
+                    <option>Atendente</option>
+                    <option>Gestor de catálogo</option>
+                    <option>Administrador</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="dsc-flex dsc-gap-1" style="justify-content:flex-end">
+              <button class="dsc-btn dsc-btn--chromeless" onclick="abrirPesquisa()">Cancelar</button>
+              <button class="dsc-btn" id="btn-salvar-cad" onclick="salvarCadastro()">Salvar</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tela 3 — Editar Usuário (/administracao/usuarios/:id/editar): ADM-USR-03 -->
+        <div id="screen-editar" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Administração</span><span class="dsc-sep">›</span><span>Usuários</span><span class="dsc-sep">›</span><span class="is-current">Editar usuário</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Editar usuário</h1>
+            <p class="dsc-page-subtitle">O e-mail não muda depois do cadastro; a situação só muda pela inativação.</p>
+          </div>
+          <section class="dsc-card">
+            <div id="e-alerta"></div>
+            <div class="dsc-row">
+              <div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">E-mail</span><span class="dsc-lv-value" id="e-email">—</span></div></div>
+              <div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">Situação</span><span class="dsc-lv-value" id="e-situacao">—</span></div></div>
+            </div>
+            <hr class="dsc-divider">
+            <div class="dsc-row">
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="fe-nome">
+                  <label class="dsc-field-label" for="e-nome">Nome completo <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="e-nome">
+                </div>
+              </div>
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="fe-perfil">
+                  <label class="dsc-field-label" for="e-perfil">Perfil <span class="dsc-req">*</span></label>
+                  <select class="dsc-select" id="e-perfil">
+                    <option>Cliente</option>
+                    <option>Atendente</option>
+                    <option>Gestor de catálogo</option>
+                    <option>Administrador</option>
+                  </select>
+                </div>
+              </div>
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="fe-cpf">
+                  <label class="dsc-field-label" for="e-cpf">CPF <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+                  <input class="dsc-input" id="e-cpf" inputmode="numeric" maxlength="11" placeholder="Somente números">
+                </div>
+              </div>
+              <div class="dsc-col-6">
+                <div class="dsc-field" id="fe-telefone">
+                  <label class="dsc-field-label" for="e-telefone">Telefone <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+                  <input class="dsc-input" id="e-telefone" inputmode="numeric" maxlength="11" placeholder="DDD e número">
+                </div>
+              </div>
+            </div>
+            <div class="dsc-flex dsc-gap-1" style="justify-content:flex-end">
+              <button class="dsc-btn dsc-btn--chromeless" onclick="abrirPesquisa()">Cancelar</button>
+              <button class="dsc-btn" id="btn-salvar-ed" onclick="salvarEdicao()">Salvar</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tela 4 — Visualizar Usuário (/administracao/usuarios/:id): ADM-USR-05 -->
+        <div id="screen-visualizar" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Administração</span><span class="dsc-sep">›</span><span>Usuários</span><span class="dsc-sep">›</span><span class="is-current" id="v-migalha">Usuário</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title" id="v-titulo">Usuário</h1>
+            <p class="dsc-page-subtitle">Ficha somente leitura.</p>
+          </div>
+          <section class="dsc-card">
+            <div class="dsc-row">
+              <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">Nome completo</span><span class="dsc-lv-value" id="v-nome">—</span></div></div>
+              <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">E-mail</span><span class="dsc-lv-value" id="v-email">—</span></div></div>
+              <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">Perfil</span><span class="dsc-lv-value" id="v-perfil">—</span></div></div>
+              <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">CPF</span><span class="dsc-lv-value" id="v-cpf">—</span></div></div>
+              <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">Telefone</span><span class="dsc-lv-value" id="v-telefone">—</span></div></div>
+              <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">Situação</span><span class="dsc-lv-value" id="v-situacao">—</span></div></div>
+              <div class="dsc-col-4"><div class="dsc-lv"><span class="dsc-lv-label">Data de cadastro</span><span class="dsc-lv-value" id="v-cadastro">—</span></div></div>
+              <div class="dsc-col-4" id="v-bloco-inat-data"><div class="dsc-lv"><span class="dsc-lv-label">Data da inativação</span><span class="dsc-lv-value" id="v-inativacao">—</span></div></div>
+              <div class="dsc-col-4" id="v-bloco-inat-motivo"><div class="dsc-lv"><span class="dsc-lv-label">Motivo da inativação</span><span class="dsc-lv-value" id="v-motivo">—</span></div></div>
+            </div>
+            <div class="dsc-flex" style="justify-content:flex-end">
+              <button class="dsc-btn dsc-btn--outline" onclick="abrirPesquisa()">Voltar</button>
+            </div>
+          </section>
+        </div>
+
+        <div class="dsc-proto-notes">
+          <strong>📋 Notas do protótipo:</strong>
+          <ul>
+            <li>Quem está usando é Elisa Rocha, a única administradora ativa da massa: inativar a si mesma é bloqueado (ADM-USR-04) e trocar o próprio perfil para outro é bloqueado enquanto não houver outro administrador ativo (ADM-USR-03).</li>
+            <li>A Pesquisa abre com a situação Ativo: Fábio Nunes, inativo, só aparece com a situação Todas ou Inativo. Editar e inativar aparecem só nos usuários ativos.</li>
+            <li>Para os conflitos do cadastro: o e-mail fabio.nunes@acme.example já existe (usuário inativo) e o CPF 52998224725 é o de Ana Costa.</li>
+            <li>A inativação mantém o usuário nos pedidos (ex.: Carla Souza continua em "Cancelado por" no pedido 1003); isso não aparece nesta tela.</li>
+            <li>A senha, o primeiro acesso e a reativação de um usuário não estão especificados e ficam fora do fluxo.</li>
+          </ul>
+          <div class="dsc-field" style="margin-top:12px;max-width:360px">
+            <label class="dsc-field-label" for="simulacao">Simular estado <span class="dsc-text-muted" style="font-weight:400">(controle do protótipo, não faz parte da tela)</span></label>
+            <select class="dsc-select" id="simulacao" onchange="simular(this.value)">
+              <option value="normal">Normal</option>
+              <option value="desatualizada">Lista desatualizada (Fábio ainda aparece ativo)</option>
+              <option value="sem-acesso">Sem acesso</option>
+              <option value="falha-carga">Falha ao carregar</option>
+              <option value="falha-salvar">Falha ao salvar</option>
+            </select>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Inativação — confirmação (ADM-USR-04) -->
+  <div id="modal-inativar" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal">
+      <div class="dsc-modal-header"><strong>Inativar usuário</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-inativar', false)">✕</button></div>
+      <div class="dsc-modal-body">
+        <p id="inativar-pergunta">Deseja realmente inativar?</p>
+        <div id="inativar-alerta"></div>
+        <div class="dsc-field" id="fi-motivo">
+          <label class="dsc-field-label" for="i-motivo">Motivo da inativação <span class="dsc-text-muted" style="font-weight:400">(opcional)</span></label>
+          <textarea class="dsc-textarea" id="i-motivo" rows="3" placeholder="Até 200 caracteres"></textarea>
+        </div>
+      </div>
+      <div class="dsc-modal-footer">
+        <button class="dsc-btn dsc-btn--chromeless" onclick="toggleModal('modal-inativar', false)">Cancelar</button>
+        <button class="dsc-btn dsc-btn--danger" id="btn-inativar" onclick="confirmarInativacao()">Inativar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inativação — bloqueio, sem o botão de inativar (ADM-USR-04) -->
+  <div id="modal-bloqueio" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal">
+      <div class="dsc-modal-header"><strong>Não é possível inativar</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-bloqueio', false)">✕</button></div>
+      <div class="dsc-modal-body">
+        <div class="dsc-alert dsc-alert--danger" role="alert" style="margin:0" id="bloqueio-texto">—</div>
+      </div>
+      <div class="dsc-modal-footer"><button class="dsc-btn dsc-btn--outline" onclick="toggleModal('modal-bloqueio', false)">Ok, entendi</button></div>
+    </div>
+  </div>
+
+  <div id="toast-save" class="dsc-toast dsc-toast--positive" style="display:none;position:fixed;top:24px;right:24px;z-index:200">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Registro salvo com sucesso.</span>
+  </div>
+  <div id="toast-inativado" class="dsc-toast dsc-toast--positive" style="display:none;position:fixed;top:24px;right:24px;z-index:200">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Usuário inativado.</span>
+  </div>
+
+  <script>
+    // ☰: abre/fecha o drawer do menu (sidebar oculta por padrão); ESC também fecha
+    function dscToggleMenu() {
+      document.querySelector('.dsc-app').classList.toggle('is-menu-open');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') document.querySelector('.dsc-app').classList.remove('is-menu-open');
+    });
+    function showScreen(id) {
+      document.querySelectorAll('.dsc-screen').forEach(function (s) { s.classList.remove('is-active'); });
+      document.getElementById(id).classList.add('is-active');
+      document.querySelector('.dsc-app').classList.remove('is-menu-open');
+      window.scrollTo(0, 0);
+    }
+    function toggleModal(id, abrir) { document.getElementById(id).style.display = abrir ? 'flex' : 'none'; }
+    function showToast(id) {
+      var t = document.getElementById(id);
+      t.style.display = 'flex';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function () { t.style.display = 'none'; }, 4000);
+    }
+
+    var ICONE_ERRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    var ICONE_FALHA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    var ICONE_VER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    var ICONE_EDITAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+    var ICONE_INATIVAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>';
+
+    // Massa da demonstração (global/data-models/administracao.md)
+    var EU = 'elisa.rocha@acme.example';
+    var usuarios = [
+      { nome: 'Ana Costa', email: 'ana.costa@cliente.example', cpf: '52998224725', telefone: '11987654321', perfil: 'Cliente', situacao: 'Ativo', cadastro: '02/09/2026' },
+      { nome: 'Marcos Pereira', email: 'marcos.pereira@cliente.example', cpf: '', telefone: '21998765432', perfil: 'Cliente', situacao: 'Ativo', cadastro: '05/09/2026' },
+      { nome: 'Juliana Alves', email: 'juliana.alves@cliente.example', cpf: '', telefone: '19991234567', perfil: 'Cliente', situacao: 'Ativo', cadastro: '20/09/2026' },
+      { nome: 'Roberto Dias', email: 'roberto.dias@cliente.example', cpf: '', telefone: '', perfil: 'Cliente', situacao: 'Ativo', cadastro: '01/10/2026' },
+      { nome: 'Carla Souza', email: 'carla.souza@acme.example', cpf: '', telefone: '1133334444', perfil: 'Atendente', situacao: 'Ativo', cadastro: '10/08/2026' },
+      { nome: 'Diego Martins', email: 'diego.martins@acme.example', cpf: '', telefone: '', perfil: 'Gestor de catálogo', situacao: 'Ativo', cadastro: '10/08/2026' },
+      { nome: 'Elisa Rocha', email: 'elisa.rocha@acme.example', cpf: '', telefone: '1133335555', perfil: 'Administrador', situacao: 'Ativo', cadastro: '01/08/2026' },
+      { nome: 'Fábio Nunes', email: 'fabio.nunes@acme.example', cpf: '', telefone: '', perfil: 'Atendente', situacao: 'Inativo', cadastro: '15/08/2026', inativacao: '30/09/2026', motivo: 'Desligado da equipe de atendimento' }
+    ];
+    var estado = 'normal';
+    var atual = null; // e-mail do usuário aberto em editar, visualizar ou inativar
+
+    function semAcento(t) { return (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+    function porEmail(email) { return usuarios.filter(function (u) { return u.email === email; })[0]; }
+    function hoje() { return '18/10/2026'; }
+    function tag(sit) { return '<span class="dsc-tag dsc-tag--' + (sit === 'Ativo' ? 'success' : 'neutral') + '">' + sit + '</span>'; }
+    function alerta(variante, icone, texto) { return '<div class="dsc-alert dsc-alert--' + variante + '" role="alert">' + icone + '<span>' + texto + '</span></div>'; }
+    function vazio(v) { return v ? v : '—'; }
+
+    // Situação mostrada na lista: com a lista desatualizada, Fábio ainda aparece ativo
+    function situacaoNaLista(u) { return (estado === 'desatualizada' && u.email === 'fabio.nunes@acme.example') ? 'Ativo' : u.situacao; }
+
+    function renderizar() {
+      var r = document.getElementById('resultado');
+      var cont = document.getElementById('contagem');
+      if (estado === 'sem-acesso') { cont.textContent = '—'; r.innerHTML = '<div style="padding:16px">' + alerta('danger', ICONE_FALHA, 'Você não tem permissão para esta ação.') + '</div>'; return; }
+      if (estado === 'falha-carga') { cont.textContent = '—'; r.innerHTML = '<div style="padding:16px">' + alerta('danger', ICONE_FALHA, 'Não foi possível carregar os dados.') + '</div>'; return; }
+      var nome = semAcento(document.getElementById('f-nome').value.trim());
+      var email = semAcento(document.getElementById('f-email').value.trim());
+      var perfil = document.getElementById('f-perfil').value;
+      var situacao = document.getElementById('f-situacao').value;
+      var lista = usuarios.filter(function (u) {
+        var sit = situacaoNaLista(u);
+        return (!nome || semAcento(u.nome).indexOf(nome) >= 0) &&
+               (!email || semAcento(u.email).indexOf(email) >= 0) &&
+               (!perfil || u.perfil === perfil) &&
+               (!situacao || sit === situacao);
+      }).sort(function (a, b) { return a.nome.localeCompare(b.nome, 'pt-BR'); });
+      cont.textContent = lista.length + (lista.length === 1 ? ' registro' : ' registros');
+      if (!lista.length) {
+        r.innerHTML = '<div class="dsc-state"><span class="dsc-state-icon">🔎</span><span class="dsc-state-title">Sem resultado</span><span class="dsc-state-text">Nenhum resultado para a busca.</span></div>';
+        return;
+      }
+      var linhas = lista.map(function (u) {
+        var sit = situacaoNaLista(u);
+        var acoes = '<button class="dsc-icon-action" aria-label="Visualizar ' + u.nome + '" title="Visualizar" onclick="abrirVisualizacao(\'' + u.email + '\')">' + ICONE_VER + '</button>';
+        if (sit === 'Ativo') {
+          acoes += '<button class="dsc-icon-action" aria-label="Editar ' + u.nome + '" title="Editar" onclick="abrirEdicao(\'' + u.email + '\')">' + ICONE_EDITAR + '</button>';
+          acoes += '<button class="dsc-icon-action" aria-label="Inativar ' + u.nome + '" title="Inativar" onclick="abrirInativacao(\'' + u.email + '\')">' + ICONE_INATIVAR + '</button>';
+        }
+        return '<tr><td>' + u.nome + '</td><td>' + u.email + '</td><td>' + u.perfil + '</td><td>' + tag(sit) + '</td><td>' + u.cadastro + '</td><td class="dsc-col-actions">' + acoes + '</td></tr>';
+      }).join('');
+      r.innerHTML = '<div class="dsc-table-wrap"><table class="dsc-table"><thead><tr><th class="dsc-sortable is-sorted">Nome completo</th><th class="dsc-sortable">E-mail</th><th class="dsc-sortable">Perfil</th><th>Situação</th><th class="dsc-sortable">Data de cadastro</th><th class="dsc-col-actions">Ações</th></tr></thead><tbody>' + linhas + '</tbody></table></div>';
+    }
+
+    function pesquisar() {
+      var r = document.getElementById('resultado');
+      var btn = document.getElementById('btn-pesquisar');
+      btn.classList.add('is-loading'); btn.disabled = true;
+      r.innerHTML = '<div style="padding:16px"><p class="dsc-caption" style="margin-bottom:8px">Carregando…</p><span class="dsc-skeleton" style="height:20px;width:60%"></span></div>';
+      setTimeout(function () { btn.classList.remove('is-loading'); btn.disabled = false; renderizar(); }, 500);
+    }
+    function limparFiltros() {
+      document.getElementById('f-nome').value = '';
+      document.getElementById('f-email').value = '';
+      document.getElementById('f-perfil').value = '';
+      document.getElementById('f-situacao').value = 'Ativo';
+      renderizar();
+    }
+    function abrirPesquisa() { showScreen('screen-pesquisa'); renderizar(); }
+
+    // ---------- validação de campo (FIELD-DICTIONARY) ----------
+    function erroNoCampo(idCampo, texto) {
+      var f = document.getElementById(idCampo);
+      var e = f.querySelector('.dsc-field-error');
+      if (!texto) { f.classList.remove('is-invalid'); if (e) e.remove(); return; }
+      f.classList.add('is-invalid');
+      if (!e) { e = document.createElement('span'); e.className = 'dsc-field-error'; f.appendChild(e); }
+      e.innerHTML = ICONE_ERRO + ' ' + texto;
+    }
+    function cpfValido(c) {
+      if (!/^\d{11}$/.test(c) || /^(\d)\1{10}$/.test(c)) return false;
+      for (var t = 9; t < 11; t++) {
+        var s = 0;
+        for (var i = 0; i < t; i++) s += Number(c[i]) * (t + 1 - i);
+        var d = (s * 10) % 11 % 10;
+        if (d !== Number(c[t])) return false;
+      }
+      return true;
+    }
+    function validarDados(p, campos) {
+      var ok = true;
+      var nome = document.getElementById(p + '-nome').value.trim();
+      var cpf = document.getElementById(p + '-cpf').value.trim();
+      var tel = document.getElementById(p + '-telefone').value.trim();
+      var perfil = document.getElementById(p + '-perfil').value;
+      campos.forEach(function (c) { erroNoCampo('f' + p + '-' + c, ''); });
+      if (!nome) { erroNoCampo('f' + p + '-nome', 'Campo obrigatório.'); ok = false; }
+      else if (!/^\S+(\s+\S+)+$/.test(nome) || nome.length < 5 || nome.length > 100) { erroNoCampo('f' + p + '-nome', 'Informe nome e sobrenome.'); ok = false; }
+      if (cpf && !cpfValido(cpf)) { erroNoCampo('f' + p + '-cpf', 'CPF inválido.'); ok = false; }
+      if (tel && !/^\d{10,11}$/.test(tel)) { erroNoCampo('f' + p + '-telefone', 'Telefone inválido.'); ok = false; }
+      if (!perfil) { erroNoCampo('f' + p + '-perfil', 'Campo obrigatório.'); ok = false; }
+      return ok;
+    }
+    function gravar(btnId, alvoAlerta, aoConcluir) {
+      var btn = document.getElementById(btnId);
+      btn.classList.add('is-loading'); btn.disabled = true;
+      setTimeout(function () {
+        btn.classList.remove('is-loading'); btn.disabled = false;
+        if (estado === 'falha-salvar') { document.getElementById(alvoAlerta).innerHTML = alerta('danger', ICONE_FALHA, 'Ocorreu um erro. Tente novamente.'); return; }
+        aoConcluir();
+      }, 600);
+    }
+
+    // ---------- ADM-USR-02 Cadastrar ----------
+    function abrirCadastro() {
+      if (estado === 'sem-acesso') { document.getElementById('resultado').innerHTML = '<div style="padding:16px">' + alerta('danger', ICONE_FALHA, 'Você não tem permissão para esta ação.') + '</div>'; return; }
+      ['nome', 'email', 'cpf', 'telefone', 'perfil'].forEach(function (c) { document.getElementById('c-' + c).value = ''; erroNoCampo('fc-' + c, ''); });
+      document.getElementById('c-alerta').innerHTML = '';
+      showScreen('screen-cadastrar');
+    }
+    function salvarCadastro() {
+      document.getElementById('c-alerta').innerHTML = '';
+      var ok = validarDados('c', ['nome', 'email', 'cpf', 'telefone', 'perfil']);
+      var email = document.getElementById('c-email').value.trim().toLowerCase();
+      var cpf = document.getElementById('c-cpf').value.trim();
+      if (!email) { erroNoCampo('fc-email', 'Campo obrigatório.'); ok = false; }
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { erroNoCampo('fc-email', 'E-mail inválido.'); ok = false; }
+      if (!ok) return;
+      if (porEmail(email)) { erroNoCampo('fc-email', 'Já existe um usuário com este e-mail.'); return; }
+      if (cpf && usuarios.some(function (u) { return u.cpf === cpf; })) { erroNoCampo('fc-cpf', 'Já existe um usuário com este CPF.'); return; }
+      gravar('btn-salvar-cad', 'c-alerta', function () {
+        usuarios.push({
+          nome: document.getElementById('c-nome').value.trim(), email: email, cpf: cpf,
+          telefone: document.getElementById('c-telefone').value.trim(), perfil: document.getElementById('c-perfil').value,
+          situacao: 'Ativo', cadastro: hoje()
+        });
+        showToast('toast-save');
+        abrirPesquisa();
+      });
+    }
+
+    // ---------- ADM-USR-03 Editar ----------
+    function abrirEdicao(email) {
+      var u = porEmail(email);
+      if (estado === 'desatualizada' && u.situacao === 'Inativo') {
+        document.getElementById('resultado').insertAdjacentHTML('afterbegin', '<div style="padding:16px 16px 0">' + alerta('danger', ICONE_FALHA, 'Usuário inativo não pode ser alterado.') + '</div>');
+        return;
+      }
+      atual = email;
+      document.getElementById('e-email').textContent = u.email;
+      document.getElementById('e-situacao').innerHTML = tag(u.situacao);
+      document.getElementById('e-nome').value = u.nome;
+      document.getElementById('e-perfil').value = u.perfil;
+      document.getElementById('e-cpf').value = u.cpf;
+      document.getElementById('e-telefone').value = u.telefone;
+      ['nome', 'cpf', 'telefone', 'perfil'].forEach(function (c) { erroNoCampo('fe-' + c, ''); });
+      document.getElementById('e-alerta').innerHTML = '';
+      showScreen('screen-editar');
+    }
+    function salvarEdicao() {
+      document.getElementById('e-alerta').innerHTML = '';
+      if (!validarDados('e', ['nome', 'cpf', 'telefone', 'perfil'])) return;
+      var u = porEmail(atual);
+      var cpf = document.getElementById('e-cpf').value.trim();
+      var perfil = document.getElementById('e-perfil').value;
+      if (cpf && usuarios.some(function (o) { return o.cpf === cpf && o.email !== u.email; })) { erroNoCampo('fe-cpf', 'Já existe um usuário com este CPF.'); return; }
+      var outrosAdmins = usuarios.filter(function (o) { return o.email !== u.email && o.perfil === 'Administrador' && o.situacao === 'Ativo'; }).length;
+      if (u.perfil === 'Administrador' && perfil !== 'Administrador' && outrosAdmins === 0) {
+        document.getElementById('e-alerta').innerHTML = alerta('danger', ICONE_FALHA, 'A loja precisa de ao menos um administrador ativo.');
+        return;
+      }
+      gravar('btn-salvar-ed', 'e-alerta', function () {
+        u.nome = document.getElementById('e-nome').value.trim();
+        u.cpf = cpf; u.telefone = document.getElementById('e-telefone').value.trim(); u.perfil = perfil;
+        showToast('toast-save');
+        abrirPesquisa();
+      });
+    }
+
+    // ---------- ADM-USR-05 Visualizar ----------
+    function abrirVisualizacao(email) {
+      var u = porEmail(email);
+      document.getElementById('v-migalha').textContent = u.nome;
+      document.getElementById('v-titulo').textContent = u.nome;
+      document.getElementById('v-nome').textContent = u.nome;
+      document.getElementById('v-email').textContent = u.email;
+      document.getElementById('v-perfil').textContent = u.perfil;
+      document.getElementById('v-cpf').textContent = vazio(u.cpf);
+      document.getElementById('v-telefone').textContent = vazio(u.telefone);
+      document.getElementById('v-situacao').innerHTML = tag(u.situacao);
+      document.getElementById('v-cadastro').textContent = u.cadastro;
+      var inativo = u.situacao === 'Inativo';
+      document.getElementById('v-bloco-inat-data').style.display = inativo ? '' : 'none';
+      document.getElementById('v-bloco-inat-motivo').style.display = inativo ? '' : 'none';
+      document.getElementById('v-inativacao').textContent = vazio(u.inativacao);
+      document.getElementById('v-motivo').textContent = vazio(u.motivo);
+      showScreen('screen-visualizar');
+    }
+
+    // ---------- ADM-USR-04 Inativar ----------
+    function bloquear(texto) { document.getElementById('bloqueio-texto').textContent = texto; toggleModal('modal-bloqueio', true); }
+    function abrirInativacao(email) {
+      var u = porEmail(email);
+      if (email === EU) { bloquear('Você não pode inativar o próprio usuário.'); return; }
+      atual = email;
+      document.getElementById('inativar-pergunta').textContent = 'Deseja realmente inativar ' + u.nome + '? O usuário perderá o acesso à loja.';
+      document.getElementById('i-motivo').value = '';
+      document.getElementById('inativar-alerta').innerHTML = '';
+      erroNoCampo('fi-motivo', '');
+      toggleModal('modal-inativar', true);
+    }
+    function confirmarInativacao() {
+      var u = porEmail(atual);
+      var motivo = document.getElementById('i-motivo').value.trim();
+      erroNoCampo('fi-motivo', '');
+      document.getElementById('inativar-alerta').innerHTML = '';
+      if (motivo.length > 200) { erroNoCampo('fi-motivo', 'Máximo de 200 caracteres.'); return; }
+      if (u.situacao === 'Inativo') { toggleModal('modal-inativar', false); bloquear('Este usuário já está inativo.'); return; }
+      gravar('btn-inativar', 'inativar-alerta', function () {
+        u.situacao = 'Inativo'; u.inativacao = hoje(); u.motivo = motivo;
+        toggleModal('modal-inativar', false);
+        showToast('toast-inativado');
+        renderizar();
+      });
+    }
+
+    function simular(valor) {
+      estado = valor;
+      showScreen('screen-pesquisa');
+      renderizar();
+    }
+
+    renderizar();
+  </script>
+</body>
+</html>

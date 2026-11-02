@@ -1,0 +1,571 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Docqui Caixa no Copilot Studio",
+    "output": "docqui-copilot.html",
+    "quality_profile": "showcase",
+    "locale": "pt-BR",
+    "translations": {
+      "page.title": "{title}",
+      "diagram.description.architecture": "Diagrama de arquitetura gerado pelo Archify.",
+      "node.focus": "Focar {label}",
+      "node.focus.detail": "Focar {label}, {detail}",
+      "node.context.architecture": "Componente",
+      "legend.title": "Legenda",
+      "legend.architecture.frontend": "Tela do GitHub",
+      "legend.architecture.backend": "Automação",
+      "legend.architecture.database": "Arquivos",
+      "legend.architecture.cloud": "Serviço do GitHub",
+      "legend.architecture.security": "Controle",
+      "legend.architecture.messagebus": "Fila",
+      "legend.architecture.external": "Pessoa",
+      "viewer.kind.frontend": "Tela do GitHub",
+      "viewer.kind.backend": "Automação",
+      "viewer.kind.database": "Arquivos",
+      "viewer.kind.cloud": "Serviço do GitHub",
+      "viewer.kind.security": "Controle",
+      "viewer.kind.messagebus": "Fila",
+      "viewer.kind.external": "Pessoa",
+      "viewer.kind.neutral": "Neutro",
+      "viewer.kind.node": "Nó",
+      "viewer.toolbar.actions": "Ações do diagrama",
+      "viewer.theme.toggle.title": "Alternar tema (T)",
+      "viewer.theme.toggle": "Alternar tema claro e escuro",
+      "viewer.theme.dark": "Escuro",
+      "viewer.theme.light": "Claro",
+      "viewer.preset.choose.title": "Escolher estilo visual (S alterna)",
+      "viewer.preset.choose": "Escolher estilo visual",
+      "viewer.preset.style": "Estilo",
+      "viewer.preset.menu": "Estilo visual",
+      "viewer.preset.identity": "Identidade visual",
+      "viewer.preset.cycles": "para alternar",
+      "viewer.preset.classic": "Clássico",
+      "viewer.preset.classic.short": "Clássico",
+      "viewer.preset.classic.hint": "Padrão técnico estável",
+      "viewer.preset.flow": "Fluxo",
+      "viewer.preset.flow.short": "Fluxo",
+      "viewer.preset.flow.hint": "Apresentação com movimento",
+      "viewer.preset.blueprint": "Planta",
+      "viewer.preset.blueprint.hint": "Revisão de engenharia",
+      "viewer.preset.editorial": "Editorial",
+      "viewer.preset.editorial.hint": "Publicação e notas",
+      "viewer.preset.current": "Estilo visual: {style}. Escolher estilo visual",
+      "viewer.motion.live": "Animado",
+      "viewer.motion.still": "Parado",
+      "viewer.motion.pause": "Pausar animação",
+      "viewer.motion.resume": "Retomar animação",
+      "viewer.motion.reduced": "Animação pausada pela preferência de movimento reduzido",
+      "viewer.motion.hidden": "Animação pausada enquanto a página está oculta",
+      "viewer.present.enter": "Entrar no modo apresentação",
+      "viewer.present.enter.title": "Modo apresentação (F)",
+      "viewer.present.exit": "Sair do modo apresentação",
+      "viewer.present.exit.title": "Sair do modo apresentação (F ou Esc)",
+      "viewer.present.present": "Apresentar",
+      "viewer.present.exit.label": "Sair",
+      "viewer.export.button": "Exportar",
+      "viewer.export.button.title": "Exportar diagrama (E)",
+      "viewer.export.diagram": "Exportar diagrama",
+      "viewer.export.menu": "Exportar",
+      "viewer.export.subtitle": "Arquivos prontos para usar",
+      "viewer.export.share": "Compartilhar",
+      "viewer.export.shareCard": "Cartão para compartilhar",
+      "viewer.export.copyDiagram": "Copiar diagrama",
+      "viewer.export.clipboardPng": "PNG para a área de transferência",
+      "viewer.export.raster": "Imagens",
+      "viewer.export.image": "Imagem",
+      "viewer.export.lossless": "Imagem sem perda",
+      "viewer.export.compact": "Imagem compacta",
+      "viewer.export.modern": "Imagem moderna",
+      "viewer.export.vectorMotion": "Vetor e animação",
+      "viewer.export.vectorMotion.heading": "Vetor e animação",
+      "viewer.export.editable": "Vetor editável",
+      "viewer.export.svg.auto": "SVG · Automático",
+      "viewer.export.svg.auto.hint": "Segue o tema de quem abre",
+      "viewer.export.svg.light": "SVG · Claro",
+      "viewer.export.svg.light.hint": "Sempre claro",
+      "viewer.export.svg.dark": "SVG · Escuro",
+      "viewer.export.svg.dark.hint": "Sempre escuro",
+      "viewer.export.motion6s": "Animação de 6 s",
+      "viewer.export.unsupported": "Este navegador não permite",
+      "viewer.export.failed": "A exportação falhou: {message}",
+      "viewer.export.copyFailed": "A cópia falhou: {message}",
+      "viewer.export.copiedPng": "PNG copiado para a área de transferência",
+      "viewer.export.downloadedWebm": "WebM baixado",
+      "viewer.export.recording": "Gravando 6 segundos de animação…",
+      "viewer.guide.title": "Explore o sistema",
+      "viewer.guide.eyebrow": "Guia do diagrama",
+      "viewer.guide.close": "Fechar o guia do diagrama",
+      "viewer.guide.actions": "Ações para explorar o diagrama",
+      "viewer.guide.find": "Encontrar um nó",
+      "viewer.guide.find.hint": "Busque por nome, tipo ou identificador.",
+      "viewer.guide.route": "Traçar um caminho",
+      "viewer.guide.route.aria": "Traçar um caminho seguindo as setas",
+      "viewer.guide.route.hint": "Veja como dois nós se ligam, no sentido das setas.",
+      "viewer.guide.map": "Ver o sistema inteiro",
+      "viewer.guide.map.hint": "Abre o radar, com a visão geral e a área visível.",
+      "viewer.guide.lens": "Comparar tipos",
+      "viewer.guide.lens.hint": "Conte os nós de cada tipo e veja as ligações entre eles.",
+      "viewer.guide.present": "Entrar no modo apresentação",
+      "viewer.guide.present.hint": "O diagrama ocupa a tela toda, sem mudar a exportação.",
+      "viewer.guide.shortcuts": "Outros atalhos de teclado",
+      "viewer.guide.shortcut.export": "Exportar",
+      "viewer.guide.shortcut.theme": "Tema",
+      "viewer.guide.shortcut.style": "Estilo",
+      "viewer.guide.shortcut.reset": "Restaurar",
+      "viewer.guide.shortcut.zoomIn": "Aproximar",
+      "viewer.guide.shortcut.zoomOut": "Afastar",
+      "viewer.guide.shortcut.close": "Fechar",
+      "viewer.guide.facts": "{nodes} · {relationships}",
+      "viewer.guide.fact.node.one": "{count} nó",
+      "viewer.guide.fact.node.other": "{count} nós",
+      "viewer.guide.fact.relationship.one": "{count} ligação",
+      "viewer.guide.fact.relationship.other": "{count} ligações",
+      "viewer.guide.open": "Abrir o guia do diagrama",
+      "viewer.finder.title": "Encontrar um nó",
+      "viewer.finder.close": "Fechar a busca",
+      "viewer.finder.placeholder": "Busque por nome ou identificador",
+      "viewer.finder.search": "Buscar nós do diagrama",
+      "viewer.finder.results": "Nós do diagrama",
+      "viewer.finder.empty": "Nenhum nó encontrado",
+      "viewer.finder.result.focus": "Focar {label}",
+      "viewer.finder.status.empty": "Nenhum nó encontrado",
+      "viewer.finder.status.count.one": "{count} nó encontrado",
+      "viewer.finder.status.count.other": "{count} nós encontrados",
+      "viewer.finder.noun.nodes": "nós",
+      "viewer.finder.link.one": "{count} ligação",
+      "viewer.finder.link.other": "{count} ligações",
+      "viewer.finder.result.focus.one": "Focar {label}, {count} ligação",
+      "viewer.finder.result.focus.other": "Focar {label}, {count} ligações",
+      "viewer.finder.status.filtered": "{visible} de {available} {noun}",
+      "viewer.finder.status.all": "{available} {noun}",
+      "viewer.passport.eyebrow": "Detalhes do nó",
+      "viewer.passport.metadata": "Dados do nó",
+      "viewer.passport.close": "Fechar os detalhes",
+      "viewer.passport.move": "Mover o painel de detalhes. Arraste, use as setas ou Home para voltar.",
+      "viewer.passport.copy": "Copiar link",
+      "viewer.passport.copy.focus": "Copiar link para o nó em foco",
+      "viewer.passport.relations": "Ligações",
+      "viewer.passport.relations.show": "Mostrar as ligações",
+      "viewer.passport.relations.hide": "Esconder as ligações",
+      "viewer.passport.relations.list": "Ligações do nó",
+      "viewer.passport.upstream": "Antes",
+      "viewer.passport.downstream": "Depois",
+      "viewer.passport.relationship.none": "Nenhuma ligação",
+      "viewer.passport.relationship.count.one": "{count} ligação",
+      "viewer.passport.relationship.count.other": "{count} ligações",
+      "viewer.passport.relationship.show.one": "Mostrar {count} ligação",
+      "viewer.passport.relationship.show.other": "Mostrar {count} ligações",
+      "viewer.passport.relationship.summary": "{out} saindo · {in} chegando{loops}",
+      "viewer.passport.relationship.connectsTo": "liga a",
+      "viewer.passport.relationship.connectsFrom": "vem de",
+      "viewer.passport.relationship.group.out": "Saindo",
+      "viewer.passport.relationship.group.in": "Chegando",
+      "viewer.passport.relationship.direction.out": "SAI →",
+      "viewer.passport.relationship.direction.in": "← CHEGA",
+      "viewer.route.eyebrow": "Caminho",
+      "viewer.route.start": "Clique onde o caminho começa",
+      "viewer.route.start.find": "Buscar o início",
+      "viewer.route.copy": "Copiar link",
+      "viewer.route.clear": "Limpar",
+      "viewer.route.clear.aria": "Limpar o caminho",
+      "viewer.route.traced": "Caminho",
+      "viewer.route.pickTwo": "Clique em dois nós do diagrama",
+      "viewer.route.pickOne": "Clique em um nó do diagrama",
+      "viewer.route.play": "Percorrer o caminho",
+      "viewer.route.pause": "Pausar",
+      "viewer.route.replay": "Percorrer de novo",
+      "viewer.route.journey": "Percurso",
+      "viewer.route.pause.label": "Pausar",
+      "viewer.route.replay.label": "De novo",
+      "viewer.route.overview": "Visão geral",
+      "viewer.route.instructions": "Clique no início e depois no fim. O caminho segue as setas.",
+      "viewer.route.destination": "Onde termina o caminho que sai de {label}?",
+      "viewer.route.destination.find": "Buscar o destino",
+      "viewer.route.distinct": "Escolha dois nós diferentes.",
+      "viewer.route.unreachable": "Não dá para chegar a {label} daqui",
+      "viewer.route.unreachable.detail": "Seguindo as setas, {source} não chega a {target}. Escolha um nó destacado.",
+      "viewer.route.start.instructions": "Agora escolha o fim. Só acendem os nós alcançáveis.",
+      "viewer.route.noOutgoing": "Nenhuma seta sai deste nó. Limpe e escolha outro início.",
+      "viewer.route.result.title": "De {source} a {target}",
+      "viewer.route.destination.count.one": "{count} nó alcançável está destacado. Clique nele.",
+      "viewer.route.destination.count.other": "{count} nós alcançáveis estão destacados. Clique em um.",
+      "viewer.route.overview.node.one": "{count} nó",
+      "viewer.route.overview.node.other": "{count} nós",
+      "viewer.route.overview.hop.one": "{count} passo",
+      "viewer.route.overview.hop.other": "{count} passos",
+      "viewer.route.hop.one": "{count} passo",
+      "viewer.route.hop.other": "{count} passos",
+      "viewer.lens.eyebrow": "Lente",
+      "viewer.lens.title": "Comparar os papéis do sistema",
+      "viewer.lens.close": "Fechar a lente",
+      "viewer.lens.instruction": "Escolha até dois tipos. Um mostra as ligações dele; dois comparam as ligações diretas entre eles.",
+      "viewer.lens.kinds": "Tipos",
+      "viewer.lens.choose": "Escolha um tipo para ver os nós e as ligações dele.",
+      "viewer.lens.clear": "Limpar a lente",
+      "viewer.lens.open": "Abrir a lente",
+      "viewer.lens.legend": "Legenda",
+      "viewer.radar.title": "Radar",
+      "viewer.radar.open": "Abrir o radar",
+      "viewer.radar.close": "Fechar o radar",
+      "viewer.radar.click": "Clique num nó",
+      "viewer.radar.drag": "Arraste para mover",
+      "viewer.nav.controls": "Controles de visualização",
+      "viewer.nav.route": "Traçar um caminho",
+      "viewer.nav.route.title": "Traçar caminho (R)",
+      "viewer.nav.route.short": "CAMINHO",
+      "viewer.nav.radar": "Abrir o radar",
+      "viewer.nav.radar.title": "Radar (M)",
+      "viewer.nav.radar.short": "MAPA",
+      "viewer.nav.lens": "Abrir a lente",
+      "viewer.nav.lens.title": "Lente (L)",
+      "viewer.nav.lens.short": "LENTE",
+      "viewer.nav.find": "Encontrar um nó",
+      "viewer.nav.find.title": "Encontrar um nó (/)",
+      "viewer.outline.title": "Índice de nós",
+      "viewer.rail.show": "Notas e índice",
+      "viewer.rail.controls": "Painel lateral",
+      "viewer.rail.collapse": "Recolher o painel",
+      "viewer.rail.bottom": "Mover o painel para baixo do diagrama",
+      "viewer.rail.right": "Mover o painel para o lado do diagrama",
+      "viewer.nav.guide": "Abrir o guia do diagrama",
+      "viewer.nav.guide.title": "Guia do diagrama (?)",
+      "viewer.nav.zoomOut": "Afastar",
+      "viewer.nav.zoomOut.title": "Afastar (-)",
+      "viewer.nav.reset": "Restaurar a visualização",
+      "viewer.nav.reset.title": "Restaurar (0)",
+      "viewer.nav.read": "LEITURA",
+      "viewer.nav.zoomIn": "Aproximar",
+      "viewer.nav.zoomIn.title": "Aproximar (+)",
+      "viewer.nav.camera": "{hint}. Restaurar a visualização",
+      "viewer.nav.level.map": "MAPA",
+      "viewer.nav.level.read": "LEITURA",
+      "viewer.nav.level.full": "COMPLETO",
+      "viewer.nav.level.auto": "AUTO",
+      "viewer.nav.detail.map": "Aproxime para ver os rótulos das ligações",
+      "viewer.nav.detail.read": "Aproxime mais para ver etiquetas e anotações",
+      "viewer.nav.detail.full": "Diagrama completo",
+      "viewer.common.copied": "Copiado",
+      "viewer.common.copyFailed": "A cópia falhou",
+      "viewer.common.copyLink": "Copiar link",
+      "viewer.common.clear": "Limpar",
+      "viewer.common.close": "Fechar"
+    }
+  },
+  "components": [
+    {
+      "id": "analista",
+      "type": "external",
+      "label": "Analista",
+      "sublabel": "Teams ou navegador",
+      "icon": "person",
+      "pos": [
+        40,
+        220
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "topico",
+      "type": "backend",
+      "label": "Data de hoje",
+      "sublabel": "tópico · Power Fx",
+      "pos": [
+        270,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "agente",
+      "type": "backend",
+      "label": "Agente Docqui Caixa",
+      "sublabel": "instruções + skill",
+      "pos": [
+        270,
+        220
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "retro",
+      "type": "backend",
+      "label": "Retro",
+      "sublabel": "agente filho",
+      "pos": [
+        270,
+        420
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "engine",
+      "type": "database",
+      "label": "Repositório do engine",
+      "sublabel": "método na main · issues",
+      "pos": [
+        730,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "mcp",
+      "type": "cloud",
+      "label": "GitHub MCP",
+      "sublabel": "OAuth do analista",
+      "pos": [
+        500,
+        220
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "spec",
+      "type": "database",
+      "label": "Especificação",
+      "sublabel": "branch historia/<CHAVE>",
+      "pos": [
+        730,
+        220
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "revisor",
+      "type": "external",
+      "label": "Revisor",
+      "sublabel": "e code owner",
+      "icon": "person",
+      "pos": [
+        960,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "pr",
+      "type": "frontend",
+      "label": "Pull request",
+      "sublabel": "draft → revisão",
+      "pos": [
+        960,
+        220
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "app",
+      "type": "security",
+      "label": "GitHub App",
+      "sublabel": "docqui-bot · segredos",
+      "pos": [
+        500,
+        420
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "regen",
+      "type": "backend",
+      "label": "regenera-gerados",
+      "sublabel": "commit [gerado] + HTML",
+      "pos": [
+        730,
+        420
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "checks",
+      "type": "security",
+      "label": "Checks do PR",
+      "sublabel": "spec-guard · gate-check",
+      "pos": [
+        960,
+        420
+      ],
+      "size": [
+        140,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Microsoft Copilot Studio",
+      "wraps": [
+        "topico",
+        "agente",
+        "retro"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Repositório <sistema>-doc",
+      "wraps": [
+        "spec"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "GitHub Actions",
+      "wraps": [
+        "regen",
+        "checks"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "conversa",
+      "from": "analista",
+      "to": "agente",
+      "label": "conversa",
+      "variant": "emphasis"
+    },
+    {
+      "id": "data",
+      "from": "agente",
+      "to": "topico",
+      "label": "data do carimbo"
+    },
+    {
+      "id": "fim",
+      "from": "agente",
+      "to": "retro",
+      "label": "retro no fim"
+    },
+    {
+      "id": "ferramenta",
+      "from": "agente",
+      "to": "mcp",
+      "label": "lê e grava",
+      "variant": "emphasis"
+    },
+    {
+      "id": "le-metodo",
+      "from": "mcp",
+      "to": "engine",
+      "label": "lê o método · issue",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "commit",
+      "from": "mcp",
+      "to": "spec",
+      "label": "commit",
+      "variant": "emphasis"
+    },
+    {
+      "id": "abre-pr",
+      "from": "spec",
+      "to": "pr",
+      "label": "PR",
+      "variant": "emphasis"
+    },
+    {
+      "id": "revisao",
+      "from": "revisor",
+      "to": "pr",
+      "label": "revisa e mescla"
+    },
+    {
+      "id": "push",
+      "from": "spec",
+      "to": "regen",
+      "label": "push dispara",
+      "variant": "dashed"
+    },
+    {
+      "id": "gerado",
+      "from": "regen",
+      "to": "spec",
+      "label": "commit [gerado]"
+    },
+    {
+      "id": "token",
+      "from": "app",
+      "to": "regen",
+      "label": "token",
+      "variant": "security"
+    },
+    {
+      "id": "pr-checks",
+      "from": "pr",
+      "to": "checks",
+      "label": "dispara",
+      "variant": "dashed"
+    },
+    {
+      "id": "redispara",
+      "from": "regen",
+      "to": "checks",
+      "label": "re-dispara",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "O que o analista faz",
+      "items": [
+        "Conversa com o agente e aprova cada artefato antes da gravação",
+        "Acompanha o PR no navegador e pede a revisão"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "O que roda sozinho",
+      "items": [
+        "regenera-gerados grava o espelho do INDEX, o diagrama ER, os dicionários e o HTML da AIMM",
+        "spec-guard e gate-check conferem cada push; o agente lê o resultado pelo MCP",
+        "O Pages publica a prévia da branch"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Credenciais",
+      "items": [
+        "O agente grava com a conta do analista (OAuth)",
+        "O workflow grava com o GitHub App, para que os checks rodem de novo",
+        "A main só recebe PR aprovado"
+      ]
+    }
+  ]
+}

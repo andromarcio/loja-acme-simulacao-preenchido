@@ -1,0 +1,423 @@
+<!-- docqui: 6.4.10 | prompt: PROMPT_PROTOTYPE_FLOW_FULL | atualizado: 2026-10-18 -->
+<!DOCTYPE html>
+<!--
+  ⚠️ PROTÓTIPO NAVEGÁVEL — treino, não jogo.
+  Fonte de verdade de LAYOUT, COMPORTAMENTO e ESTADOS — NUNCA de implementação.
+  Não copie este HTML/CSS/JS para o código de produção: aqui tudo é autocontido
+  e procedural DE PROPÓSITO (simulação). A implementação real segue outra
+  estratégia: componentes do design system do projeto (mapa de equivalência no
+  README do tema), catálogo global/PATTERNS.md e convenções do global/MASTER.md.
+  Classes .dsc-* são EXCLUSIVAS de protótipo — proibidas em código de produção.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo: Gestão de Pedidos — Vendas</title>
+  <link rel="stylesheet" href="../../_biblioteca-ds/ds.css">
+</head>
+<body>
+
+  <div class="dsc-proto-badge">🎨 PROTÓTIPO — não é o sistema real</div>
+
+  <div class="dsc-app">
+
+    <aside class="dsc-sidebar">
+      <div class="dsc-sidebar-backdrop" onclick="dscToggleMenu()"></div>
+      <div class="dsc-sidebar-brand"><span class="dsc-brand-mark">L</span> Loja ACME</div>
+      <ul class="dsc-menu">
+        <li class="dsc-menu-section">Vendas</li>
+        <li><a class="dsc-menu-item is-active" href="#" onclick="irPesquisa(); return false;">Pedidos</a></li>
+        <li class="dsc-menu-section">Administração</li>
+        <li><a class="dsc-menu-item" href="../../administracao/faixas-frete/flow.html">Faixas de frete</a></li>
+      </ul>
+    </aside>
+
+    <div class="dsc-shell-main">
+      <header class="dsc-header">
+        <div class="dsc-header-start">
+          <button class="dsc-menu-toggle" aria-label="Recolher/expandir menu" onclick="dscToggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <span class="dsc-header-logo">Loja ACME · <strong>CAIXA</strong></span>
+        </div>
+        <div class="dsc-header-actions">
+          <button class="dsc-header-item">
+            <span class="dsc-avatar dsc-avatar--sm">CS</span>
+            <span class="dsc-hi-body"><span class="dsc-hi-title">Carla Souza</span><span class="dsc-hi-sub dsc-text-primary">Atendente</span></span>
+            <svg class="dsc-hi-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dsc-main">
+
+        <!-- Tela 1 do N2: Pesquisa de Pedidos (/vendas/pedidos) — atende VND-PED-01 Pesquisar Pedidos -->
+        <div id="screen-pesquisa" class="dsc-screen is-active">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Vendas</span><span class="dsc-sep">›</span><span class="is-current">Pedidos</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Pedidos</h1>
+            <p class="dsc-page-subtitle">Encontre os pedidos confirmados e cancelados dos clientes.</p>
+          </div>
+
+          <section class="dsc-card">
+            <h2 class="dsc-card-title">Filtros</h2>
+            <div class="dsc-row">
+              <div class="dsc-col-3">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="f-numero">Número do pedido</label>
+                  <input class="dsc-input" id="f-numero" inputmode="numeric" placeholder="Ex.: 1002" onkeydown="if (event.key === 'Enter') pesquisar()">
+                </div>
+              </div>
+              <div class="dsc-col-5">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="f-cliente">Cliente</label>
+                  <input class="dsc-input" id="f-cliente" placeholder="Parte do nome do cliente" onkeydown="if (event.key === 'Enter') pesquisar()">
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="f-situacao">Situação</label>
+                  <select class="dsc-select" id="f-situacao">
+                    <option value="">Todas</option>
+                    <option value="Confirmado">Confirmado</option>
+                    <option value="Cancelado">Cancelado</option>
+                  </select>
+                </div>
+              </div>
+              <div class="dsc-col-3">
+                <div class="dsc-field">
+                  <label class="dsc-field-label" for="f-de">Confirmado de</label>
+                  <input class="dsc-input" id="f-de" type="date">
+                </div>
+              </div>
+              <div class="dsc-col-3">
+                <div class="dsc-field" id="campo-ate">
+                  <label class="dsc-field-label" for="f-ate">Confirmado até</label>
+                  <input class="dsc-input" id="f-ate" type="date">
+                </div>
+              </div>
+              <div class="dsc-col-6" style="display:flex;align-items:flex-start;justify-content:flex-end;gap:8px;padding-top:26px">
+                <button class="dsc-btn dsc-btn--chromeless" onclick="limpar()">Limpar</button>
+                <button class="dsc-btn" id="btn-pesquisar" onclick="pesquisar()">Pesquisar</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="dsc-card" style="padding:0;overflow:hidden">
+            <div class="dsc-table-toolbar">
+              <span class="dsc-text-muted"><strong style="color:var(--text-color)" id="contador">5 pedidos</strong></span>
+              <span class="dsc-caption" id="legenda-lista">Confirmados nos últimos 30 dias</span>
+            </div>
+            <div id="resultado"></div>
+          </section>
+        </div>
+
+        <!-- Tela 2 do N2: Detalhe do Pedido (/vendas/pedidos/:numero) — atende VND-PED-02 Visualizar Pedido e VND-PED-03 Cancelar Pedido -->
+        <div id="screen-detalhe" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Vendas</span><span class="dsc-sep">›</span><a href="#" onclick="irPesquisa(); return false;">Pedidos</a><span class="dsc-sep">›</span><span class="is-current" id="bc-pedido">Pedido</span></nav>
+          <div class="dsc-flex dsc-justify-between dsc-items-center" style="flex-wrap:wrap;gap:12px;margin-bottom:16px">
+            <div class="dsc-flex dsc-items-center dsc-gap-2">
+              <h1 class="dsc-page-title" id="titulo-pedido" style="margin:0">Pedido</h1>
+              <span id="tag-situacao"></span>
+            </div>
+            <div class="dsc-flex dsc-gap-1">
+              <button class="dsc-btn dsc-btn--outline" onclick="irPesquisa()">Voltar</button>
+              <button class="dsc-btn dsc-btn--danger" id="btn-cancelar" onclick="abrirCancelamento()">Cancelar pedido</button>
+            </div>
+          </div>
+          <div id="ficha"></div>
+        </div>
+
+        <div class="dsc-proto-notes">
+          <strong>📋 Notas do protótipo:</strong>
+          <ul>
+            <li>Massa do modelo de Vendas, com hoje = 18/10/2026: pedidos confirmados 1001, 1002, 1005 e 1006 e o cancelado 1003. Os pedidos abertos 1004 e 1007 são carrinhos e não aparecem na pesquisa — experimente o número 1007.</li>
+            <li>Os CEPs de entrega são ilustrativos, dentro da faixa de frete de cada pedido.</li>
+            <li>O cancelamento só muda o pedido nesta página; ao recarregar, a massa volta ao estado inicial. Situação, Data do cancelamento e Cancelado por são preenchidos automaticamente e aparecem na ficha depois de cancelar.</li>
+            <li>O frete mantido depois de uma mudança na faixa (VND-PED-02 — Visualizar Pedido, RN-05) não tem gatilho aqui: a ficha mostra sempre o valor registrado no pedido.</li>
+          </ul>
+          <div class="dsc-field" style="margin-top:12px;max-width:360px">
+            <label class="dsc-field-label" for="simulacao">Simular estado <span class="dsc-text-muted" style="font-weight:400">(controle do protótipo, não faz parte da tela)</span></label>
+            <select class="dsc-select" id="simulacao" onchange="simular(this.value)">
+              <option value="normal">Normal</option>
+              <option value="vazio">Nenhum pedido nos últimos 30 dias</option>
+              <option value="sem-acesso">Sem acesso</option>
+              <option value="falha">Falha inesperada</option>
+              <option value="cancelado-por-outro">Pedido cancelado por outra pessoa</option>
+            </select>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Caixa de confirmação do cancelamento — VND-PED-03 Cancelar Pedido -->
+  <div id="modal-cancelar" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="dialog" aria-labelledby="modal-cancelar-titulo">
+      <div class="dsc-modal-header"><strong id="modal-cancelar-titulo">Cancelar pedido</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-cancelar', false)">✕</button></div>
+      <div class="dsc-modal-body">
+        <p id="pergunta-cancelar">Deseja realmente cancelar o pedido?</p>
+        <div class="dsc-field" id="campo-motivo">
+          <label class="dsc-field-label" for="motivo">Motivo do cancelamento <span class="dsc-req">*</span></label>
+          <textarea class="dsc-textarea" id="motivo" aria-describedby="motivo-hint" placeholder="Por que o cliente pediu o cancelamento"></textarea>
+          <span class="dsc-field-hint" id="motivo-hint">De 10 a 200 caracteres.</span>
+        </div>
+        <div id="alerta-cancelar" aria-live="polite"></div>
+      </div>
+      <div class="dsc-modal-footer">
+        <button class="dsc-btn dsc-btn--chromeless" onclick="toggleModal('modal-cancelar', false)">Voltar</button>
+        <button class="dsc-btn dsc-btn--danger" id="btn-confirmar-cancelamento" onclick="confirmarCancelamento()">Cancelar pedido</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-cancelado" class="dsc-toast dsc-toast--positive" role="status" style="display:none;position:fixed;top:24px;right:24px;z-index:200">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Pedido cancelado.</span>
+  </div>
+
+  <script>
+    // ☰: abre/fecha o drawer do menu (sidebar oculta por padrão); ESC também fecha
+    function dscToggleMenu() {
+      document.querySelector('.dsc-app').classList.toggle('is-menu-open');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.querySelector('.dsc-app').classList.remove('is-menu-open');
+        toggleModal('modal-cancelar', false);
+      }
+    });
+    function showScreen(id) {
+      document.querySelectorAll('.dsc-screen').forEach(function (s) { s.classList.remove('is-active'); });
+      document.getElementById(id).classList.add('is-active');
+      document.querySelector('.dsc-app').classList.remove('is-menu-open');
+      window.scrollTo(0, 0);
+    }
+    function toggleModal(id, abrir) { document.getElementById(id).style.display = abrir ? 'flex' : 'none'; }
+    function showToast(id) {
+      var t = document.getElementById(id);
+      t.style.display = 'flex';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function () { t.style.display = 'none'; }, 4000);
+    }
+
+    // Massa do modelo de Vendas (global/data-models/vendas.md); hoje = 18/10/2026
+    var HOJE = '2026-10-18';
+    var pedidos = {
+      '1001': { cliente: 'Ana Costa', email: 'ana.costa@cliente.example', situacao: 'Confirmado', confirmacao: '2026-10-12', cep: '01310100', faixa: 'Centro — São Paulo', frete: 18.90,
+                itens: [['Caneca de cerâmica ACME 300 ml', 2, 39.90], ['Camiseta ACME algodão — tamanho M', 1, 59.90]] },
+      '1002': { cliente: 'Marcos Pereira', email: 'marcos.pereira@cliente.example', situacao: 'Confirmado', confirmacao: '2026-10-14', cep: '03105000', faixa: 'Mooca — São Paulo', frete: 22.50,
+                itens: [['Garrafa térmica ACME 500 ml', 1, 89.90]] },
+      '1003': { cliente: 'Ana Costa', email: 'ana.costa@cliente.example', situacao: 'Cancelado', confirmacao: '2026-10-15', cep: '01310200', faixa: 'Centro — São Paulo', frete: 18.90,
+                itens: [['Bloco de notas ACME A5', 3, 24.90]],
+                cancelamento: { motivo: 'Cliente desistiu da compra', data: '2026-10-16', por: 'Carla Souza' } },
+      '1005': { cliente: 'Juliana Alves', email: 'juliana.alves@cliente.example', situacao: 'Confirmado', confirmacao: '2026-10-16', cep: '13010000', faixa: 'Campinas', frete: 32.90,
+                itens: [['Boné ACME aba curva', 1, 49.90]] },
+      '1006': { cliente: 'Roberto Dias', email: 'roberto.dias@cliente.example', situacao: 'Confirmado', confirmacao: '2026-10-17', cep: '05410000', faixa: 'Pinheiros — São Paulo', frete: 21.00,
+                itens: [['Caneta esferográfica ACME azul', 4, 6.90], ['Chaveiro ACME de metal', 1, 14.90]] }
+    };
+
+    var estado = 'normal';
+    var pedidoAberto = null;
+    var ICONE_ERRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    var ICONE_ALERTA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+    var ICONE_FALHA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    var ICONE_VER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+    function brl(v) { return 'R$&nbsp;' + v.toFixed(2).replace('.', ','); }
+    function dataBR(iso) { var p = iso.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
+    function normaliza(t) { return t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+    function totalItens(p) { return p.itens.reduce(function (s, i) { return s + i[1] * i[2]; }, 0); }
+    function totalPedido(p) { return totalItens(p) + p.frete; }
+    function tag(situacao) {
+      return '<span class="dsc-tag ' + (situacao === 'Confirmado' ? 'dsc-tag--success' : 'dsc-tag--danger') + '">' + situacao + '</span>';
+    }
+    function alerta(variante, icone, texto) {
+      return '<div class="dsc-alert dsc-alert--' + variante + '" role="alert" style="margin:16px">' + icone + '<span>' + texto + '</span></div>';
+    }
+    function estadoVazio(icone, titulo, texto) {
+      return '<div class="dsc-state" style="padding:32px 16px"><span class="dsc-state-icon">' + icone + '</span><span class="dsc-state-title">' + titulo + '</span><span class="dsc-state-text">' + texto + '</span></div>';
+    }
+    function erroNoCampo(campoId, texto) {
+      var f = document.getElementById(campoId);
+      var e = f.querySelector('.dsc-field-error');
+      if (!texto) { f.classList.remove('is-invalid'); if (e) e.remove(); return; }
+      f.classList.add('is-invalid');
+      if (!e) { e = document.createElement('span'); e.className = 'dsc-field-error'; f.appendChild(e); }
+      e.innerHTML = ICONE_ERRO + ' ' + texto;
+    }
+
+    // ---------- VND-PED-01 Pesquisar Pedidos ----------
+    function listaInicial() {
+      // RN-02: sem critério, os confirmados nos últimos 30 dias (desde 18/09/2026), do mais recente
+      return Object.keys(pedidos).filter(function (n) { return pedidos[n].confirmacao >= '2026-09-18' && pedidos[n].confirmacao <= HOJE; });
+    }
+    function desenhaLista(numeros, comFiltro) {
+      var area = document.getElementById('resultado');
+      numeros.sort(function (a, b) { return pedidos[b].confirmacao.localeCompare(pedidos[a].confirmacao); });
+      document.getElementById('contador').textContent = numeros.length + (numeros.length === 1 ? ' pedido' : ' pedidos');
+      document.getElementById('legenda-lista').textContent = comFiltro ? 'Resultado da pesquisa' : 'Confirmados nos últimos 30 dias';
+      if (!numeros.length) {
+        area.innerHTML = comFiltro
+          ? estadoVazio('🔍', 'Busca sem resultado', 'Nenhum resultado para a busca.')
+          : estadoVazio('🗂️', 'Sem pedidos no período', 'Nenhum registro encontrado.');
+        return;
+      }
+      var linhas = numeros.map(function (n) {
+        var p = pedidos[n];
+        return '<tr><td>' + n + '</td><td>' + p.cliente + '</td><td>' + dataBR(p.confirmacao) + '</td><td>' + tag(p.situacao) + '</td>' +
+          '<td class="dsc-num">' + brl(totalPedido(p)) + '</td>' +
+          '<td class="dsc-col-actions"><button class="dsc-icon-action" aria-label="Visualizar pedido ' + n + '" title="Visualizar" onclick="abrirPedido(\'' + n + '\')">' + ICONE_VER + '</button></td></tr>';
+      }).join('');
+      area.innerHTML = '<div class="dsc-table-wrap"><table class="dsc-table"><thead><tr><th>Número do pedido</th><th>Cliente</th><th>Data da confirmação</th><th>Situação</th><th class="dsc-num">Total do pedido</th><th class="dsc-col-actions">Ações</th></tr></thead><tbody>' + linhas + '</tbody></table></div>';
+    }
+    function carregar(fn) {
+      var btn = document.getElementById('btn-pesquisar');
+      btn.classList.add('is-loading'); btn.disabled = true;
+      document.getElementById('resultado').innerHTML = '<div style="padding:16px"><p class="dsc-caption" style="margin-bottom:8px">Carregando…</p><span class="dsc-skeleton" style="height:20px;width:60%"></span></div>';
+      setTimeout(function () { btn.classList.remove('is-loading'); btn.disabled = false; fn(); }, 600);
+    }
+    function semLista(html) {
+      document.getElementById('contador').textContent = '—';
+      document.getElementById('resultado').innerHTML = html;
+    }
+    function pesquisar() {
+      erroNoCampo('campo-ate', '');
+      var numero = document.getElementById('f-numero').value.trim();
+      var cliente = normaliza(document.getElementById('f-cliente').value.trim());
+      var situacao = document.getElementById('f-situacao').value;
+      var de = document.getElementById('f-de').value;
+      var ate = document.getElementById('f-ate').value;
+      // RN-04: a data final é igual ou posterior à inicial
+      if (de && ate && ate < de) { erroNoCampo('campo-ate', 'A data final não pode ser anterior à data inicial.'); return; }
+      var comFiltro = !!(numero || cliente || situacao || de || ate);
+      carregar(function () {
+        if (estado === 'sem-acesso') { semLista(alerta('danger', ICONE_FALHA, 'Você não tem permissão para esta ação.')); return; }
+        if (estado === 'falha') { semLista(alerta('danger', ICONE_FALHA, 'Não foi possível carregar os dados.')); return; }
+        if (estado === 'vazio' && !comFiltro) { desenhaLista([], false); return; }
+        if (!comFiltro) { desenhaLista(listaInicial(), false); return; }
+        // RN-01: só confirmados e cancelados existem nesta massa — os abertos (1004, 1007) não aparecem
+        var achados = Object.keys(pedidos).filter(function (n) {
+          var p = pedidos[n];
+          if (numero && n !== numero) return false;
+          if (cliente && normaliza(p.cliente).indexOf(cliente) === -1) return false; // RN-05
+          if (situacao && p.situacao !== situacao) return false;
+          if (de && p.confirmacao < de) return false;
+          if (ate && p.confirmacao > ate) return false;
+          return true;
+        });
+        desenhaLista(estado === 'vazio' ? achados.filter(function () { return false; }) : achados, true);
+      });
+    }
+    function limpar() {
+      ['f-numero', 'f-cliente', 'f-de', 'f-ate'].forEach(function (id) { document.getElementById(id).value = ''; });
+      document.getElementById('f-situacao').value = '';
+      erroNoCampo('campo-ate', '');
+      pesquisar();
+    }
+    function irPesquisa() { showScreen('screen-pesquisa'); }
+
+    // ---------- VND-PED-02 Visualizar Pedido ----------
+    function lv(rotulo, valor, col) {
+      return '<div class="dsc-col-' + (col || 4) + '"><div class="dsc-lv"><span class="dsc-lv-label">' + rotulo + '</span><span class="dsc-lv-value">' + valor + '</span></div></div>';
+    }
+    function abrirPedido(n) {
+      pedidoAberto = n;
+      var p = pedidos[n];
+      document.getElementById('bc-pedido').textContent = 'Pedido ' + n;
+      document.getElementById('titulo-pedido').textContent = 'Pedido ' + n;
+      showScreen('screen-detalhe');
+      if (estado === 'falha') {
+        document.getElementById('tag-situacao').innerHTML = '';
+        document.getElementById('btn-cancelar').style.display = 'none';
+        document.getElementById('ficha').innerHTML = alerta('danger', ICONE_FALHA, 'Não foi possível carregar os dados.');
+        return;
+      }
+      document.getElementById('tag-situacao').innerHTML = tag(p.situacao);
+      // O botão Cancelar pedido (VND-PED-03) só aparece no pedido confirmado
+      document.getElementById('btn-cancelar').style.display = p.situacao === 'Confirmado' ? '' : 'none';
+      var itens = p.itens.map(function (i) {
+        return '<tr><td>' + i[0] + '</td><td class="dsc-num">' + i[1] + '</td><td class="dsc-num">' + brl(i[2]) + '</td><td class="dsc-num">' + brl(i[1] * i[2]) + '</td></tr>';
+      }).join('');
+      var html =
+        '<section class="dsc-card"><h2 class="dsc-card-title">Pedido</h2><div class="dsc-row">' +
+          lv('Número do pedido', n) + lv('Situação', tag(p.situacao)) + lv('Data da confirmação', dataBR(p.confirmacao)) +
+        '</div></section>' +
+        '<div class="dsc-row">' +
+          '<div class="dsc-col-6"><section class="dsc-card"><h2 class="dsc-card-title">Cliente</h2><div class="dsc-row">' +
+            lv('Cliente', p.cliente, 12) + lv('E-mail do cliente', p.email, 12) +
+          '</div></section></div>' +
+          '<div class="dsc-col-6"><section class="dsc-card"><h2 class="dsc-card-title">Entrega</h2><div class="dsc-row">' +
+            lv('CEP de entrega', p.cep, 6) + lv('Faixa de frete', p.faixa, 6) + lv('Valor do frete', brl(p.frete), 12) +
+          '</div></section></div>' +
+        '</div>' +
+        '<section class="dsc-card"><h2 class="dsc-card-title">Itens</h2>' +
+          '<div class="dsc-table-wrap"><table class="dsc-table"><thead><tr><th>Produto</th><th class="dsc-num">Quantidade</th><th class="dsc-num">Preço unitário</th><th class="dsc-num">Subtotal</th></tr></thead><tbody>' + itens + '</tbody></table></div>' +
+          '<div class="dsc-row" style="margin-top:16px">' +
+            lv('Total dos itens', brl(totalItens(p))) + lv('Valor do frete', brl(p.frete)) + lv('Total do pedido', '<strong>' + brl(totalPedido(p)) + '</strong>') +
+          '</div>' +
+        '</section>';
+      // RN-04: os dados do cancelamento só existem no pedido cancelado
+      if (p.cancelamento) {
+        html += '<section class="dsc-card"><h2 class="dsc-card-title">Cancelamento</h2><div class="dsc-row">' +
+          lv('Motivo do cancelamento', p.cancelamento.motivo, 6) + lv('Data do cancelamento', dataBR(p.cancelamento.data), 3) + lv('Cancelado por', p.cancelamento.por, 3) +
+          '</div></section>';
+      }
+      document.getElementById('ficha').innerHTML = html;
+    }
+
+    // ---------- VND-PED-03 Cancelar Pedido ----------
+    function abrirCancelamento() {
+      document.getElementById('pergunta-cancelar').textContent = 'Deseja realmente cancelar o pedido ' + pedidoAberto + '?';
+      document.getElementById('motivo').value = '';
+      document.getElementById('alerta-cancelar').innerHTML = '';
+      erroNoCampo('campo-motivo', '');
+      toggleModal('modal-cancelar', true);
+      document.getElementById('motivo').focus();
+    }
+    function confirmarCancelamento() {
+      var motivo = document.getElementById('motivo').value.trim();
+      document.getElementById('alerta-cancelar').innerHTML = '';
+      erroNoCampo('campo-motivo', '');
+      if (!motivo) { erroNoCampo('campo-motivo', 'Campo obrigatório.'); return; }
+      if (motivo.length < 10) { erroNoCampo('campo-motivo', 'Mínimo de 10 caracteres.'); return; }
+      if (motivo.length > 200) { erroNoCampo('campo-motivo', 'Máximo de 200 caracteres.'); return; }
+      var btn = document.getElementById('btn-confirmar-cancelamento');
+      btn.classList.add('is-loading'); btn.disabled = true;
+      document.getElementById('alerta-cancelar').innerHTML = '<p class="dsc-caption" style="margin:8px 0 0">Carregando…</p>';
+      setTimeout(function () {
+        btn.classList.remove('is-loading'); btn.disabled = false;
+        var alertaEl = document.getElementById('alerta-cancelar');
+        var p = pedidos[pedidoAberto];
+        if (estado === 'sem-acesso') { alertaEl.innerHTML = alerta('danger', ICONE_FALHA, 'Você não tem permissão para esta ação.').replace('margin:16px', 'margin:12px 0 0'); return; }
+        if (estado === 'falha') { alertaEl.innerHTML = alerta('danger', ICONE_FALHA, 'Ocorreu um erro. Tente novamente.').replace('margin:16px', 'margin:12px 0 0'); return; }
+        if (estado === 'cancelado-por-outro' || p.situacao !== 'Confirmado') {
+          // RN-01: só pedido confirmado é cancelado — o primeiro cancelamento é mantido
+          if (p.situacao === 'Confirmado') {
+            p.situacao = 'Cancelado';
+            p.cancelamento = { motivo: 'Cliente pediu o cancelamento pelo chat', data: HOJE, por: 'Outra pessoa (simulação do protótipo)' };
+          }
+          alertaEl.innerHTML = alerta('warning', ICONE_ALERTA, 'Somente pedidos confirmados podem ser cancelados.').replace('margin:16px', 'margin:12px 0 0');
+          abrirPedido(pedidoAberto);
+          return;
+        }
+        // Campos automáticos: Situação, Data do cancelamento e Cancelado por; itens e valores não mudam (RN-02)
+        p.situacao = 'Cancelado';
+        p.cancelamento = { motivo: motivo, data: HOJE, por: 'Carla Souza' };
+        toggleModal('modal-cancelar', false);
+        abrirPedido(pedidoAberto);
+        showToast('toast-cancelado');
+      }, 700);
+    }
+
+    function simular(valor) {
+      estado = valor;
+      toggleModal('modal-cancelar', false);
+      irPesquisa();
+      pesquisar();
+    }
+
+    desenhaLista(listaInicial(), false);
+  </script>
+</body>
+</html>
