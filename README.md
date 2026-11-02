@@ -1,0 +1,1 @@
+# loja-acme-simulacao-preenchido
