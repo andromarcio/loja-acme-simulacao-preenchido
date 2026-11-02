@@ -10,8 +10,8 @@
 //   1. a AIMM da unidade (`AIMM-<CHAVE>.md` na história, `AIMM-<id>.md` na sprint) existe,
 //      está `concluído` e passa no validate-impact — na sprint, conferida com as AIMMs dos
 //      tickets (S1–S4); na história, com a reconciliação contra a base (--git-base);
-//   2. toda AIMM de ticket que a branch trouxe está `concluído` e válida — o validate-impact
-//      exige cada funcionalidade dela no ESTADO FINAL da esteira (`implementado`; `especificado`
+//   2. toda AIMM de ticket que a branch trouxe está `concluído` e válida — o validate-impact,
+//      com `--entrega`, exige cada funcionalidade dela no ESTADO FINAL da esteira (`implementado`; `especificado`
 //      no perfil `requisitos`) ou deprecada. AIMM aberta é ticket não entregue: sai da
 //      branch pelo `reverte-ticket.mjs` antes do merge;
 //   3. (sprint) todo arquivo de spec que a branch altera foi declarado por um ticket
@@ -58,7 +58,7 @@ try {
 
 const erros = [];
 const valida = (rel, extra = []) => {
-  const r = spawnSync('node', [join(SCRIPTS, 'validate-impact.mjs'), join(ROOT, rel), '--root', ROOT, ...extra], { encoding: 'utf8' });
+  const r = spawnSync('node', [join(SCRIPTS, 'validate-impact.mjs'), join(ROOT, rel), '--root', ROOT, '--entrega', ...extra], { encoding: 'utf8' });
   return { ok: r.status === 0, out: `${r.stdout || ''}${r.stderr || ''}` };
 };
 const fmDe = (rel) => frontMatterCampos(readFileSync(join(ROOT, rel), 'utf8').split(/\r?\n/));
@@ -99,7 +99,11 @@ if (unidade.tipo === 'sprint') {
   for (const f of entregues) {
     const ls = readFileSync(join(ROOT, f), 'utf8').split(/\r?\n/);
     const i = ls.findIndex((l) => l.trim() === '## Artefatos impactados');
+    let iStatus = -1; // coluna Status (9.2.0): artefato Não se aplica não é declarado
     for (let k = i + 1; i >= 0 && k < ls.length && !/^##\s/.test(ls[k]); k++) {
+      const celulas = ls[k].trim().replace(/^\||\|$/g, '').split('|').map((c) => norm(c));
+      if (/^\|\s*artefato\s*\|/i.test(ls[k].trim())) { iStatus = celulas.indexOf('status'); continue; }
+      if (iStatus >= 0 && /^nao se aplica$/.test(celulas[iStatus] || '')) continue;
       const cel = (ls[k].trim().match(/^\|\s*`?([^`|]+?)`?\s*\|/) || [])[1];
       if (cel && SPEC_RE.test(cel) && !/[()<>[\]]| de /.test(cel)) declarados.add(cel.trim());
     }

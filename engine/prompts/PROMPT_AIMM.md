@@ -35,22 +35,21 @@ PROTÓTIPO`. O código (repositórios) e os artefatos técnicos (SDD, migração
 |---|---|---|
 | `em-análise` | Descrição do ticket, Critérios de aceite, Funcionalidades e o que **será** alterado: Artefatos impactados, Alterações previstas, Entidades alteradas, Impacto em dicionários e Decisões pendentes | este prompt, passos 1–5, na mesma passada |
 | `escopo-aprovado` | + `avalizado-por` — o aval do PO | este prompt, passo 6 |
-| `em-execução` | as passadas de spec e código, uma por linha do changeset | 3A/4A/4B, NFR, QA… (disparadas no passo 6) |
-| `concluído` | o que **foi** alterado — as seções de impacto reescritas e a Reconciliação; cada funcionalidade no estado final da esteira | skill `analise-impacto` (passo 7) |
+| `em-execução` | as passadas de spec e código, uma por linha do changeset; cada artefato passa de `Pendente` a `Especificado` e, depois da revisão, a `Validado` | 3A/4A/4B, NFR, QA… (disparadas no passo 6) |
+| `concluído` | todo artefato `Validado` ou `Não se aplica` — basta alguém dizer que o ticket está concluído | quem disser, com o agente (passo 7) |
 
 **A AIMM nasce completa.** Não existe AIMM de ticket parcial: ela é aberta já em `em-análise`, com todas as seções de impacto preenchidas, e depois só é atualizada a cada passada. Nenhum N2, N3 ou data-model muda antes disso, e o `validate-impact` reprova `estado: rascunho` e o exemplo do template em qualquer seção de impacto.
 
 Cada mudança de estado é uma **versão**: registre-a no `## Changelog` e, no front-matter, grave
-`estado-por` — o nome de quem levou a AIMM ao estado: o analista na abertura, o PO no aval, quem
-fechou no fechamento; nunca o agente — e `estado-em`, com data, hora e fuso
+`estado-por` — o nome de quem aprovou o que o agente fez e levou a AIMM ao estado: quem conduziu
+a abertura, quem deu o aval, quem disse que o ticket está concluído; nunca o agente — e `estado-em`, com data, hora e fuso
 (`AAAA-MM-DD HH:MM ±HH:MM`; no terminal, `date '+%Y-%m-%d %H:%M %:z'`). O git guarda as
 anteriores — é lá que se vê o escopo aprovado depois que a AIMM passa a mostrar o que foi
 feito.
 
-**A AIMM e o N3 têm máquinas de estado próprias** — o ticket e a funcionalidade são N:N — e se
-encontram no fechamento: a AIMM só vai a `concluído` com cada funcionalidade dela no **estado
-final da esteira** da instância (`implementado` no perfil `completo`; `especificado` no
-`requisitos`) ou `deprecado`. O `validate-impact` cobra.
+**O Status de cada artefato** (coluna Status de `## Artefatos impactados`): `Pendente` até ser especificado; `Especificado` quando o agente o grava — ele avisa que está pronto para revisar e pergunta se pode especificar os demais, sem pedir aprovação ali —; `Validado` quando a pessoa o revisa e aprova, depois; `Não se aplica` quando o artefato previsto deixa de ser necessário. A AIMM só vai a `concluído` com todos `Validado` ou `Não se aplica`, e o `validate-impact` cobra.
+
+**A AIMM e o N3 têm máquinas de estado próprias** — o ticket e a funcionalidade são N:N — e se encontram na entrega: o merge na `main` só passa com cada funcionalidade da AIMM no **estado final da esteira** da instância (`implementado` no perfil `completo`; `especificado` no `requisitos`) ou `deprecado`. O `valida-entrega` cobra.
 
 **Onde a AIMM vive** (MASTER → `**Cadência**`). A `main` só recebe o que foi entregue; até
 a entrega, a AIMM e as passadas que ela dispara vivem na branch da unidade de entrega:
@@ -274,9 +273,9 @@ Scenario: [resultado esperado]
 
 ## Artefatos impactados
 
-| Artefato | Tipo | Operação | Seção | Natureza | O quê | Proveniência |
-|---|---|---|---|---|---|---|
-| `modules/<dom>/<fs>/f-<slug>.md` | N3 | alterar | Campos/Regras/Cenários | funcional | [o que muda] | derivado: âncora |
+| Artefato | Tipo | Operação | Seção | Natureza | O quê | Proveniência | Status |
+|---|---|---|---|---|---|---|---|
+| `modules/<dom>/<fs>/f-<slug>.md` | N3 | alterar | Campos/Regras/Cenários | funcional | [o que muda] | derivado: âncora | Pendente |
 
 ## Alterações em funcionalidades por Agrupamento Funcional
 
@@ -377,8 +376,7 @@ caminhos; e o portão de estado. No perfil `requisitos`, a falta da `QA` (C2 e m
 C3) é aviso; o `NFR` do C3 continua exigido.
 
 Com a AIM verde, **apresente-a ao PO**. No aval:
-- mude `estado:` para `escopo-aprovado`, preencha `avalizado-por:`, `estado-por:` (o PO) e
-  `estado-em:` e registre a versão no Changelog;
+- mude `estado:` para `escopo-aprovado`, preencha `avalizado-por:` e `estado-por:` (quem deu o aval) e `estado-em:` e registre a versão no Changelog;
 - só então dispare as passadas de execução (`PROMPT_3A` para funcionalidade nova, `PROMPT_4A/4B`
   por N3 alterado, `PROMPT_NFR`, `PROMPT_QA`) — **uma por linha do
   changeset** — e mude `estado:` para `em-execução`, com `estado-por:` e `estado-em:`.
@@ -401,7 +399,9 @@ Conclua:
 
 ## PASSO 7 — Fechamento: o que foi alterado
 
-Depois da entrega, a skill `analise-impacto` fecha a AIMM: reescreve **Alterações em funcionalidades**,
+**Para concluir, basta alguém dizer que o ticket está concluído.** Confira que todo artefato de `## Artefatos impactados` está `Validado` ou `Não se aplica`; se algum estiver `Pendente` ou `Especificado`, diga quais faltam e não conclua. Com todos, mude `estado:` para `concluído`, com `estado-por:` (quem disse) e `estado-em:`, e registre a versão no Changelog. É só isso que o `validate-impact` exige no `concluído`; o que vem abaixo enriquece a AIMM, mas não a trava.
+
+Depois da entrega, a skill `analise-impacto` também pode reescrever a AIMM: reescreve **Alterações em funcionalidades**,
 **Entidades alteradas**, **Impacto em dicionários** e **Decisões pendentes** com o
 que mudou (o contraste *Antes*/*Agora*; sem PF na AIMM do ticket),
 preenche `sprint:` e consolida o ticket na AIM da sprint. A reconciliação compara o
@@ -411,9 +411,8 @@ declarado com o que o diff tocou:
 node scripts/validate-impact.mjs analise-impacto/AIM-<CHAVE>.md --git-base <base-da-evolução>
 ```
 
-Escreva o resultado em `## Reconciliação` — abaixo da citação de instrução, que pode
-ficar: o validador só conta o que está fora dela — e mude `estado:` para `concluído`, com
-`estado-por:` e `estado-em:`.
+Escreva o resultado em `## Reconciliação`, abaixo da citação de instrução, que pode
+ficar. Artefato `Não se aplica` não conta como declarado.
 Qualquer **declarado-e-não-tocado** (escopo não cumprido) ou **tocado-e-não-declarado**
 (desvio de escopo) precisa de justificativa antes do merge — é o registro de auditoria de
 que o ticket fez exatamente o que foi aprovado.

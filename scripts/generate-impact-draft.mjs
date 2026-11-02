@@ -242,8 +242,10 @@ push({ artefato: 'global/NFR.md', tipo: 'NFR', operacao: opOf('global/NFR.md'), 
 
 /* ------------------------ emite o changeset ------------------------ */
 const cell = (s) => String(s).replace(/\|/g, '\\|');
-const CAB = ['| Artefato | Tipo | Operação | Seção | Natureza | O quê | Proveniência |', '|---|---|---|---|---|---|---|'];
-const linha = (r) => `| \`${cell(r.artefato)}\` | ${r.tipo} | ${r.operacao} | ${cell(r.secao)} | ${r.natureza} | ${cell(r.oque)} | ${r.proveniencia} |`;
+// Status (9.2.0): a linha nasce Pendente; o agente a passa a Especificado ao gravar o artefato,
+// e a pessoa, ao revisar e aprovar, a Validado (ou Não se aplica).
+const CAB = ['| Artefato | Tipo | Operação | Seção | Natureza | O quê | Proveniência | Status |', '|---|---|---|---|---|---|---|---|'];
+const linha = (r) => `| \`${cell(r.artefato)}\` | ${r.tipo} | ${r.operacao} | ${cell(r.secao)} | ${r.natureza} | ${cell(r.oque)} | ${r.proveniencia} | Pendente |`;
 for (const f of semN3) console.error(`⚠️  ${f}: sem N3 ainda — acrescente à mão as linhas de criação (${semQA ? 'N3' : 'N3 e QA'} \`criar\`).`);
 
 if (!aimPath) {
@@ -262,7 +264,10 @@ const tIni = ls.findIndex((l, k) => k > ini && k < fim && /^\|\s*Artefato\s*\|/.
 let tFim = tIni;
 if (tIni >= 0) while (tFim + 1 < fim && ls[tFim + 1].trim().startsWith('|')) tFim++;
 const EXEMPLO = /<(?:dom|fs|slug)>|\[[^\]]*\]/;
-const existentes = (tIni >= 0 ? ls.slice(tIni + 2, tFim + 1) : []).filter((l) => !EXEMPLO.test(l));
+// Tabela anterior à 9.2.0, sem a coluna Status: as linhas que já estavam entram como Pendente.
+const semStatus = tIni >= 0 && !splitRow(ls[tIni]).some((c) => /^status$/i.test(c.trim()));
+const existentes = (tIni >= 0 ? ls.slice(tIni + 2, tFim + 1) : []).filter((l) => !EXEMPLO.test(l))
+  .map((l) => (semStatus ? `${l.trimEnd()} Pendente |` : l));
 const chave = (l) => { const c = splitRow(l); return `${(c[0] || '').replace(/`/g, '')}|${c[3] || '—'}`; };
 const ja = new Set(existentes.map(chave));
 const novas = rows.filter((r) => !ja.has(`${r.artefato}|${r.secao}`)).map(linha);

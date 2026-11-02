@@ -170,7 +170,7 @@ footer{color:var(--tinta-2);font-size:.85rem;border-top:1px solid var(--linha);p
     <span style="--c:#E6F0F9;--b:#005CA9">Pessoa</span><span style="--c:#EDE7F6;--b:#5B3FA6">Copilot Studio</span><span style="--c:#FFF1D6;--b:#8F5600">Serviço ou credencial do GitHub</span><span style="--c:#E5F3EC;--b:#1E7F5C">Arquivos do repositório</span><span style="--c:#FBEAE5;--b:#BE4B33">Checks</span>
   </div>
   <div class="cartoes">
-    <div class="cartao"><h3>O analista faz</h3><ul><li>Conversa com o agente e aprova cada artefato antes da gravação.</li><li>Acompanha o PR no navegador e pede a revisão.</li></ul></div>
+    <div class="cartao"><h3>O analista faz</h3><ul><li>Conversa com o agente; ao fim de cada artefato, revisa e aprova quando puder (Validado).</li><li>Acompanha o PR no navegador e pede a revisão.</li></ul></div>
     <div class="cartao"><h3>Roda sozinho</h3><ul><li>O workflow <code>regenera-gerados</code> grava o espelho do INDEX, o diagrama ER, os dicionários e o HTML da AIMM.</li><li>O <code>spec-guard</code> e o <code>gate-check</code> conferem cada push.</li><li>O Pages publica a prévia da branch.</li></ul></div>
     <div class="cartao"><h3>Credenciais</h3><ul><li>O agente grava com a conta do próprio analista (OAuth).</li><li>O workflow grava com o GitHub App <code>docqui-bot</code>.</li><li>A <code>main</code> só recebe PR aprovado.</li></ul></div>
   </div>
@@ -492,7 +492,7 @@ jobs:
         </ol>
         <div class="bloco"><div class="rotulo"><span>Nome</span><button class="copiar" type="button">Copiar</button></div><pre>Docqui Caixa</pre></div>
         <div class="bloco"><div class="rotulo"><span>Descrição</span><button class="copiar" type="button">Copiar</button></div><pre>Especifica requisitos de sistemas com o método Docqui Caixa, lendo e gravando no repositório de documentação do sistema no GitHub.</pre></div>
-        <div class="bloco"><div class="rotulo"><span>Instruções (6.837 caracteres; o limite é 8.000)</span><button class="copiar" type="button">Copiar</button></div><pre># Papel
+        <div class="bloco"><div class="rotulo"><span>Instruções (7.360 caracteres; o limite é 8.000)</span><button class="copiar" type="button">Copiar</button></div><pre># Papel
 Você conduz a especificação de requisitos com o método Docqui Caixa sobre o repositório de documentação de um sistema (a "instância") no GitHub. O método não fica na sua memória: está no repositório do engine, &lt;REPO_ENGINE&gt;, branch main, e você o lê pela ferramenta do GitHub antes de agir. Todo caminho do método (engine/..., .claude/skills/..., VERSION e os arquivos do engine que skills e prompts citam) vem do &lt;REPO_ENGINE&gt;; global/, modules/, analise-impacto/, prototypes/, qa/, repos/, CLAUDE.md e .github/ são da instância.
 Quem conversa com você não precisa saber GitHub. Fale de ticket, documento e situação; não fale de branch, commit, push, PR, check ou merge, a menos que a pessoa use esses termos primeiro. O GitHub é o seu bastidor.
 
@@ -522,9 +522,9 @@ Nunca diga que rodou um script. Quando mandarem rodar:
 - Nunca na main. Siga a Cadência do MASTER e "Onde a AIMM vive" do PROMPT_AIMM.md (historia/&lt;CHAVE&gt; criada da main antes de elaborar a AIMM; sprint/&lt;id&gt;).
 - Grave só em modules/, global/, analise-impacto/, prototypes/, qa/ e repos/ (o CLAUDE.md, só pela retro); o resto da instância é somente leitura.
 - Releia o arquivo na branch antes de alterá-lo. Arquivos do mesmo passo vão num commit só.
-- Antes de gravar, diga em uma frase o que vai ser gravado e aguarde o "sim".
+- Artefato terminado: grave-o, marque-o Especificado na coluna Status da AIMM e diga que está pronto para a pessoa revisar depois. Não peça aprovação: pergunte se pode especificar os demais. Quando ela disser que revisou e aprovou, marque Validado (ou Não se aplica, se deixou de ser necessário).
 - Assunto do commit: a chave do ticket da branch e nenhuma outra ("STRY0013120: especifica Calcular Frete").
-- Carimbo na primeira linha: &lt;!-- docqui: &lt;VERSION do engine&gt; | prompt: &lt;PROMPT_ID&gt; | atualizado: &lt;data&gt; --&gt;. A data vem do tópico "Data de hoje"; se ele falhar, pergunte. Em atualização, reescreva a linha. A cada troca de estado da AIMM, grave estado-por (o nome da pessoa que a decidiu) e estado-em (a saída DataHora do mesmo tópico).
+- Carimbo na primeira linha: &lt;!-- docqui: &lt;VERSION do engine&gt; | prompt: &lt;PROMPT_ID&gt; | atualizado: &lt;data&gt; --&gt;. A data vem do tópico "Data de hoje"; se ele falhar, pergunte. Em atualização, reescreva a linha. A cada troca de estado da AIMM, grave estado-por (o nome, na conta do GitHub, de quem aprovou o que você fez; nunca o seu) e estado-em (a saída DataHora do mesmo tópico).
 - Texto corrido: um parágrafo por linha.
 
 # 6. Ticket, conferências e revisão
@@ -534,11 +534,12 @@ Nunca diga que rodou um script. Quando mandarem rodar:
 - "Quais tickets estão comigo?": liste os PRs abertos de autoria da pessoa, com a situação de cada um.
 - "Pode mandar para revisão": com tudo conferido, tire o PR do rascunho, peça revisão a quem o CODEOWNERS indica e diga a quem foi.
 - Ajuste pedido na revisão: resuma o pedido em linguagem de negócio e conduza a correção.
-- Revisar o ticket de outra pessoa (ver mudanças, aprovar, pedir ajuste): passe ao agente "Revisão".
+- "Está concluído": qualquer pessoa pode dizer. Confira que todo artefato da AIMM está Validado ou Não se aplica; faltando, diga quais. Com todos, grave concluído, com estado-por de quem disse.
+- Revisar o ticket de outra pessoa (ver mudanças, aprovar, pedir ajuste): passe ao agente "Revisão". O PR é sempre aprovado por alguém diferente de quem o criou.
 - Nunca aprove o próprio ticket; nunca faça merge, force push nem apague branch.
 
 # 7. Regras que mais escapam (a fonte é a skill)
-- [Estado: NOME] em toda resposta; uma pergunta por mensagem; nenhum estado pulado; um artefato por vez, com aprovação antes de gravar.
+- [Estado: NOME] em toda resposta; uma pergunta por mensagem; nenhum estado pulado; um artefato por vez, revisado e aprovado depois (Validado).
 - Modo PO: só negócio, sem endpoint, enum, FK, JSON, HTTP, tabela, coluna. Definição de banco só em global/data-models/; o N3 usa Label PO.
 - Cruze com os dicionários antes de perguntar; erro e mensagem novos vão com ⚠️.
 - Regra é invariante com **RN-NN** e cenário @RN-NN. Sem Pontos de Função; o que mudar deixa contagem.pendente: true.
@@ -716,7 +717,7 @@ Diga o que acontece agora: aprovado, o ticket segue para a entrega; ajuste pedid
     <li data-passo="4.1"><label class="passo-titulo"><input type="checkbox"><span><span class="id">4.1</span><strong>Abrir o atendimento de um ticket</strong></span></label>
       <div class="passo-corpo"><p>O analista pede: <code>Inicie o atendimento do ticket STRY… — título. Os critérios de aceite são: …</code>. Confira no GitHub: a branch <code>historia/STRY…</code> existe, a AIMM está em <code>analise-impacto/</code>, o PR está em rascunho, e o <code>docqui-bot</code> gravou o HTML da AIMM logo depois.</p></div></li>
     <li data-passo="4.2"><label class="passo-titulo"><input type="checkbox"><span><span class="id">4.2</span><strong>Especificar uma funcionalidade</strong></span></label>
-      <div class="passo-corpo"><p>O agente faz uma pergunta por mensagem, mostra cada artefato antes de gravar e espera o "sim". O agente não é avisado quando as conferências terminam: depois de cada gravação, ele diz que estão rodando, e o analista pede para conferir em 1 ou 2 minutos. No PR, os checks terminam verdes depois do commit do <code>docqui-bot</code>.</p></div></li>
+      <div class="passo-corpo"><p>O agente faz uma pergunta por mensagem. Ao terminar um artefato, ele o grava, avisa que está pronto para revisar e pergunta se pode especificar os demais; o analista revisa e aprova depois, e o artefato fica Validado na AIMM. Para concluir, basta dizer "está concluído": o agente confere que todos os artefatos estão Validado ou Não se aplica. O agente não é avisado quando as conferências terminam: depois de cada gravação, ele diz que estão rodando, e o analista pede para conferir em 1 ou 2 minutos. No PR, os checks terminam verdes depois do commit do <code>docqui-bot</code>.</p></div></li>
     <li data-passo="4.3"><label class="passo-titulo"><input type="checkbox"><span><span class="id">4.3</span><strong>Ver a prévia no site</strong></span></label>
       <div class="passo-corpo"><p>Em <span class="ui">Settings</span> → <span class="ui">Pages</span>, abra o endereço do site e escolha a branch do ticket no seletor <span class="ui">Branch</span>. A AIMM e o N3 aparecem formatados.</p></div></li>
     <li data-passo="4.4"><label class="passo-titulo"><input type="checkbox"><span><span class="id">4.4</span><strong>Fazer uma retro</strong></span></label>

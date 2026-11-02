@@ -31,16 +31,19 @@
 //   sempre (ticket e sprint): `estado-por` (quem levou a AIMM ao estado atual) e `estado-em`
 //                 (`AAAA-MM-DD HH:MM ±HH:MM`). Sem os dois campos, a AIMM anterior à 9.1.0
 //                 só recebe aviso; com eles, vazio ou fora do formato reprova.
-//   concluído     → `sprint`; a visão final em `## Alterações em funcionalidades por Agrupamento Funcional`
-//                   (linha com ID de funcionalidade, sem exemplo do template); a
-//                   `## Reconciliação` preenchida — com conteúdo fora da citação de
-//                   instrução, que pode ficar —; e cada funcionalidade da `## Funcionalidades` com N3
+//   Status dos artefatos (9.2.0): a coluna Status de `## Artefatos impactados` aceita
+//                   Pendente, Especificado (o agente gravou; falta a revisão), Validado (a
+//                   pessoa revisou e aprovou) e Não se aplica. Valor fora disso reprova; sem a
+//                   coluna, a AIMM anterior à 9.2.0 só recebe aviso.
+//   concluído     → todo artefato Validado ou Não se aplica — e só isso (decisão do PO,
+//                   2026-11-01): sprint e Reconciliação deixam de ser exigidas aqui.
+//   --entrega     → (o valida-entrega passa) cada funcionalidade da `## Funcionalidades` com N3
 //                   no ESTADO FINAL da esteira da instância — `implementado` no perfil
 //                   `completo`, `especificado` no `requisitos` — ou `deprecado`. A AIMM e
 //                   o N3 têm máquinas de estado próprias (o ticket e a funcionalidade são N:N);
-//                   é aqui que elas se encontram: o ticket não está entregue enquanto
-//                   uma funcionalidade dele está em `revisao-necessaria`, em desenvolvimento
-//                   ou por especificar.
+//                   é no portão da entrega que elas se encontram: o ticket não entra na main
+//                   enquanto uma funcionalidade dele está em `revisao-necessaria`, em
+//                   desenvolvimento ou por especificar.
 //
 // AIMM da sprint (`tipo: sprint`): `sprint` no front-matter; `## Tickets da sprint` e
 // `## Alterações em funcionalidades por Agrupamento Funcional` com linhas; e conferida com as AIMMs dos tickets
@@ -63,9 +66,10 @@
 //   --touched "a,b,c"    compara os artefatos declarados (caminhos) com esta lista
 //   --git-base <ref>     usa `git -C <root> diff --name-only <ref>...HEAD`
 //   → declarado e não tocado = escopo não cumprido; tocado e não declarado = desvio.
+//     Artefato com Status Não se aplica não conta como declarado.
 //
 // Uso:
-//   node scripts/validate-impact.mjs <analise-impacto/AIMM-….md> [--root <inst>] [--touched …|--git-base …]
+//   node scripts/validate-impact.mjs <analise-impacto/AIMM-….md> [--root <inst>] [--touched …|--git-base …] [--entrega]
 
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
@@ -321,10 +325,16 @@ if (depoisDe('em-analise') && temSecao('Funcionalidades') && !features.length)
 const TIPOS = new Set(['N1', 'N2', 'N3', 'QA', 'DATA-MODEL', 'FIELD-DICT', 'RULES-DICT', 'MESSAGE-DICT', 'ERROR-DICT',
   'NFR', 'PATTERNS', 'API-PATTERNS', 'MÉTRICA', 'METRICA', 'PROTÓTIPO', 'PROTOTIPO', 'REPOSITÓRIO', 'REPOSITORIO']);
 const tabCs = tabelasDe('Artefatos impactados')[0] || { cab: [], linhas: [] };
+const iStatus = tabCs.cab.indexOf('status');
 const rows = tabCs.linhas.map((c) => ({
   artefato: (c[0] || '').replace(/`/g, ''), tipo: (c[1] || '').toUpperCase(), operacao: norm(c[2]),
   secao: c[3] || '', natureza: norm(c[4]), oque: c[5] || '', prov: c[6] || '', bruta: c.join(' | '),
+  status: iStatus >= 0 ? norm(c[iStatus]).replace(/\s+/g, ' ') : null,
 }));
+// Status de cada artefato (9.2.0): o agente grava e marca Especificado; a pessoa revisa e o
+// artefato vira Validado. A AIMM só conclui com todos Validado ou Não se aplica.
+const STATUS = { pendente: 'Pendente', especificado: 'Especificado', validado: 'Validado', 'nao se aplica': 'Não se aplica' };
+const naoSeAplica = (r) => r.status === 'nao se aplica';
 if (depoisDe('em-analise') && temSecao('Artefatos impactados')) {
   if (!rows.length) errors.push('a seção `## Artefatos impactados` não tem tabela de linhas.');
   if (rows.length && !(tabCs.cab.includes('artefato') && tabCs.cab.includes('tipo') && tabCs.cab.includes('natureza')))
@@ -343,6 +353,12 @@ if (depoisDe('em-analise') && temSecao('Artefatos impactados')) {
       // existe por construção, e o aviso seria ruído em toda AIMM que criou algo.
       if (r.operacao === 'criar' && exists && !depoisDe('em-execucao')) warns.push(`\`${r.artefato}\` marcado \`criar\` mas já existe — é \`alterar\`?`);
     }
+  }
+  if (rows.length && iStatus < 0)
+    warns.push('`## Artefatos impactados` sem a coluna Status (Pendente, Especificado, Validado, Não se aplica) — AIMM anterior à 9.2.0: acrescente-a.');
+  for (const r of rows) {
+    if (iStatus >= 0 && !STATUS[r.status])
+      errors.push(`\`${r.artefato}\`: Status "${r.status || '—'}" — use Pendente, Especificado, Validado ou Não se aplica.`);
   }
   const has = (pred) => rows.some(pred);
   const isFunc = (n) => n.startsWith('funcional');
@@ -383,17 +399,12 @@ for (const [s, re] of Object.entries(EXEMPLOS_DE_SECAO)) {
 /* --------------------- portões por estado --------------------- */
 if (depoisDe('escopo-aprovado') && !fm['avalizado-por'])
   errors.push(`estado \`${fm.estado}\` exige front-matter \`avalizado-por\` (o aval do PO no escopo).`);
-if (est === 'concluido') {
-  if (!fm.sprint) errors.push('estado `concluído` exige `sprint:` — a sprint em que o ticket foi entregue.');
-  const final = tabelasDe('Alterações em funcionalidades por Agrupamento Funcional').flatMap((t) => t.linhas)
-    .filter((c) => ID_RE.test(c[0] || '') && !EXEMPLO.test(c.join(' ')));
-  if (!final.length)
-    errors.push('estado `concluído` exige a visão final em `## Alterações em funcionalidades por Agrupamento Funcional` — o que foi alterado, uma linha por funcionalidade, sem o exemplo do template.');
-  // A instrução do template vem em citação (`> Preenchida no fechamento…`) e pode ficar;
-  // o que conta é o conteúdo FORA dela (e fora de comentário).
-  if (!conteudoForaDaCitacao('Reconciliação').length)
-    errors.push('estado `concluído` exige `## Reconciliação` preenchida (declarado × tocado) — escreva o resultado fora da citação de instrução.');
-
+if (est === 'concluido' && iStatus >= 0) {
+  const abertos = rows.filter((r) => STATUS[r.status] && !['validado', 'nao se aplica'].includes(r.status));
+  for (const r of abertos)
+    errors.push(`estado \`concluído\` exige todo artefato Validado ou Não se aplica — \`${r.artefato}\` está ${STATUS[r.status]}.`);
+}
+if (args.includes('--entrega')) {
   // Cada funcionalidade no estado final da esteira do perfil (lib/instancia.mjs).
   const perfil = perfilDa(ROOT);
   const alvo = ESTADO_FINAL[perfil];
@@ -425,7 +436,7 @@ else if (gitBase) {
   } catch (e) { warns.push(`reconciliação: git diff falhou (${String(e.message).split('\n')[0]}).`); }
 }
 if (touched) {
-  const declared = rows.filter((r) => /^(modules|global|qa|prototypes)\//.test(r.artefato) && !/[()]| de /.test(r.artefato))
+  const declared = rows.filter((r) => !naoSeAplica(r) && /^(modules|global|qa|prototypes)\//.test(r.artefato) && !/[()]| de /.test(r.artefato))
     .map((r) => r.artefato);
   const inSpec = (p) => /^(modules|global|qa|prototypes)\//.test(p);
   const notTouched = declared.filter((d) => !touched.includes(d));

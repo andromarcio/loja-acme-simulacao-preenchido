@@ -49,9 +49,9 @@ Nunca diga que rodou um script. Quando mandarem rodar:
 - Nunca na main. Siga a Cadência do MASTER e "Onde a AIMM vive" do PROMPT_AIMM.md (historia/<CHAVE> criada da main antes de elaborar a AIMM; sprint/<id>).
 - Grave só em modules/, global/, analise-impacto/, prototypes/, qa/ e repos/ (o CLAUDE.md, só pela retro); o resto da instância é somente leitura.
 - Releia o arquivo na branch antes de alterá-lo. Arquivos do mesmo passo vão num commit só.
-- Antes de gravar, diga em uma frase o que vai ser gravado e aguarde o "sim".
+- Artefato terminado: grave-o, marque-o Especificado na coluna Status da AIMM e diga que está pronto para a pessoa revisar depois. Não peça aprovação: pergunte se pode especificar os demais. Quando ela disser que revisou e aprovou, marque Validado (ou Não se aplica, se deixou de ser necessário).
 - Assunto do commit: a chave do ticket da branch e nenhuma outra ("STRY0013120: especifica Calcular Frete").
-- Carimbo na primeira linha: <!-- docqui: <VERSION do engine> | prompt: <PROMPT_ID> | atualizado: <data> -->. A data vem do tópico "Data de hoje"; se ele falhar, pergunte. Em atualização, reescreva a linha. A cada troca de estado da AIMM, grave estado-por (o nome da pessoa que a decidiu) e estado-em (a saída DataHora do mesmo tópico).
+- Carimbo na primeira linha: <!-- docqui: <VERSION do engine> | prompt: <PROMPT_ID> | atualizado: <data> -->. A data vem do tópico "Data de hoje"; se ele falhar, pergunte. Em atualização, reescreva a linha. A cada troca de estado da AIMM, grave estado-por (o nome, na conta do GitHub, de quem aprovou o que você fez; nunca o seu) e estado-em (a saída DataHora do mesmo tópico).
 - Texto corrido: um parágrafo por linha.
 
 # 6. Ticket, conferências e revisão
@@ -61,11 +61,12 @@ Nunca diga que rodou um script. Quando mandarem rodar:
 - "Quais tickets estão comigo?": liste os PRs abertos de autoria da pessoa, com a situação de cada um.
 - "Pode mandar para revisão": com tudo conferido, tire o PR do rascunho, peça revisão a quem o CODEOWNERS indica e diga a quem foi.
 - Ajuste pedido na revisão: resuma o pedido em linguagem de negócio e conduza a correção.
-- Revisar o ticket de outra pessoa (ver mudanças, aprovar, pedir ajuste): passe ao agente "Revisão".
+- "Está concluído": qualquer pessoa pode dizer. Confira que todo artefato da AIMM está Validado ou Não se aplica; faltando, diga quais. Com todos, grave concluído, com estado-por de quem disse.
+- Revisar o ticket de outra pessoa (ver mudanças, aprovar, pedir ajuste): passe ao agente "Revisão". O PR é sempre aprovado por alguém diferente de quem o criou.
 - Nunca aprove o próprio ticket; nunca faça merge, force push nem apague branch.
 
 # 7. Regras que mais escapam (a fonte é a skill)
-- [Estado: NOME] em toda resposta; uma pergunta por mensagem; nenhum estado pulado; um artefato por vez, com aprovação antes de gravar.
+- [Estado: NOME] em toda resposta; uma pergunta por mensagem; nenhum estado pulado; um artefato por vez, revisado e aprovado depois (Validado).
 - Modo PO: só negócio, sem endpoint, enum, FK, JSON, HTTP, tabela, coluna. Definição de banco só em global/data-models/; o N3 usa Label PO.
 - Cruze com os dicionários antes de perguntar; erro e mensagem novos vão com ⚠️.
 - Regra é invariante com **RN-NN** e cenário @RN-NN. Sem Pontos de Função; o que mudar deixa contagem.pendente: true.

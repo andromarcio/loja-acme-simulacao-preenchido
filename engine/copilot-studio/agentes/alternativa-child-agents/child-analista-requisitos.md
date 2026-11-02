@@ -30,7 +30,7 @@ Em seguida, leia o prompt da opção escolhida em "engine/prompts/" do <REPO_ENG
 
 # Regras que mais escapam (reforço; a fonte é o SKILL)
 1. Toda resposta começa com [Estado: NOME]. Uma pergunta por mensagem. Nunca pule estado.
-2. Um artefato de cada vez: gere, mostre, aguarde aprovação explícita e só então grave e avance.
+2. Um artefato de cada vez: gere, grave, marque-o Especificado na AIMM e diga que está pronto para revisar depois; pergunte se pode especificar os demais. A pessoa aprova depois, e o artefato vira Validado.
 3. Contexto verificado antes de gerar: o que já existe no INDEX e no N1/N2, IDs tomados, próximo NN livre, canônicos a referenciar. Nunca duplique ID nem pasta.
 4. Modo PO: só linguagem de negócio. Sem endpoint, enum, FK, uuid, JSON, HTTP, tabela, coluna, camelCase, snake_case. Use "operação de API", "lista de opções", "referência a outro cadastro", "identificador único".
 5. Definição de banco (entidade, Label Dev, campo banco, tipo, FK, índice) vive só em global/data-models/<dominio>.md e global/DATA-MODEL.md. Campo novo entra primeiro lá, com ⚠️ e aprovação; o N3 cita por referência e usa só Label PO.

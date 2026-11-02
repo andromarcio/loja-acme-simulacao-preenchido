@@ -6,7 +6,7 @@ ferramenta: [ServiceNow | Jira | GitHub | experimento]
 link: [URL do ticket na ferramenta de origem]
 titulo: [título curto do ticket]
 estado: em-análise        # em-análise → escopo-aprovado → em-execução → concluído
-estado-por: ""            # quem levou a AIMM ao estado atual — a pessoa, não o agente
+estado-por: ""            # quem aprovou o que levou a AIMM ao estado atual — a pessoa, não o agente
 estado-em: ""             # quando: AAAA-MM-DD HH:MM ±HH:MM (data, hora e fuso)
 aberta-na-entrega: false  # true quando a AIMM nasce depois da entrega (skill analise-impacto)
 sprint: ""                # sprint da entrega — preenchida no fechamento
@@ -26,9 +26,9 @@ aberta-em: [AAAA-MM-DD]
                      todas as seções de impacto preenchidas (PROMPT_AIMM, passos 1–5)
     escopo-aprovado  o PO avalizou o escopo (`avalizado-por`) — só então a spec muda (passo 6)
     em-execução      as passadas de spec e código, uma por linha do changeset
-    concluído        o que FOI alterado: as seções de impacto reescritas com o que mudou
-                     e a Reconciliação com o escopo aprovado (skill analise-impacto,
-                     PROMPT_AIMM passo 7)
+    concluído        todo artefato do changeset (Artefatos impactados) Validado ou Não se aplica;
+                     basta alguém dizer ao agente que o ticket está concluído (skill
+                     analise-impacto, PROMPT_AIMM passo 7)
 
   Front-matter: fonte única dos metadados — o HTML da AIMM o mostra como ficha.
     ticket · ferramenta · link · titulo → o ticket na ferramenta de origem; a chave é a
@@ -123,11 +123,16 @@ Scenario: [resultado esperado em linguagem de negócio]
 > linha `funcional` tem uma linha `QA`; **C3** toda linha `não-funcional` tem `NFR`
 > **e** `QA`. No perfil `requisitos` não há linha `QA` (sem checkpoint de testes): a falta
 > dela é aviso, e a linha de exemplo abaixo sai.
+>
+> **Status** de cada artefato: `Pendente` (ainda não especificado) → `Especificado` (o agente
+> gravou e avisou que está pronto para revisar) → `Validado` (a pessoa revisou e aprovou,
+> depois). `Não se aplica` marca o artefato previsto que deixou de ser necessário. A AIMM só
+> vai a `concluído` com todos `Validado` ou `Não se aplica`.
 
-| Artefato | Tipo | Operação | Seção | Natureza | O quê | Proveniência |
-|---|---|---|---|---|---|---|
-| `modules/<dom>/<fs>/f-<slug>.md` | N3 | alterar | Campos/Regras/Cenários | funcional | [o que muda] | derivado: âncora |
-| `qa/<dom>/<fs>/<slug>.md` | QA | criar | — | funcional | plano E2E | derivado: espelho do N3 |
+| Artefato | Tipo | Operação | Seção | Natureza | O quê | Proveniência | Status |
+|---|---|---|---|---|---|---|---|
+| `modules/<dom>/<fs>/f-<slug>.md` | N3 | alterar | Campos/Regras/Cenários | funcional | [o que muda] | derivado: âncora | Pendente |
+| `qa/<dom>/<fs>/<slug>.md` | QA | criar | — | funcional | plano E2E | derivado: espelho do N3 | Pendente |
 
 > Tipos: `N1 · N2 · N3 · QA · DATA-MODEL · FIELD-DICT · RULES-DICT · MESSAGE-DICT · ERROR-DICT ·
 > NFR · PATTERNS · API-PATTERNS · MÉTRICA · PROTÓTIPO · REPOSITÓRIO`.

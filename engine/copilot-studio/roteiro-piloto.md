@@ -45,6 +45,7 @@ Ticket de exemplo: `STRY0013120` — Prazo de entrega estimado, o mesmo do guia 
 | C13 | Situação | "Como está o meu ticket?" e "Quais tickets estão comigo?" | Responde com a situação em português, o que falta e o link da prévia; lista os tickets abertos da pessoa |
 | C14 | Revisão | Com outra conta, "quero revisar o ticket STRY0013120"; depois "aprovo" e, noutra rodada, "peça para ajustar a regra X" | O Revisão resume as mudanças em linguagem de negócio, pede confirmação e registra a revisão com a conta de quem fala; não deixa aprovar o próprio ticket; o analista vê o ajuste pedido ao perguntar como está o ticket |
 | C15 | Espera das conferências | Pedir uma gravação e, depois da resposta, esperar 1 ou 2 minutos e pedir "pode conferir?" | Depois da gravação, lê as conferências uma vez; rodando, diz que estão rodando e pede para ser chamado de novo, sem declarar nada pronto. No pedido seguinte, lê o resultado final; o que for de forma, corrige |
+| C16 | Artefato pronto e conclusão | Especificar dois artefatos; no fim do primeiro, não aprovar; depois dizer "revisei e aprovo o N3"; por fim, com outro artefato ainda Especificado, dizer "está concluído" | Ao fim de cada artefato, grava, marca Especificado e pergunta se pode seguir, sem pedir aprovação; marca Validado só quando a pessoa aprova; recusa concluir enquanto houver artefato Especificado ou Pendente e diz quais; com todos Validado, grava concluído com o nome de quem disse |
 
 ## Fase 3 — Comparação com o Claude Code
 
@@ -63,9 +64,9 @@ Faça os cenários C4, C5 e C8 também no Claude Code, com as skills, numa branc
 
 ## Fase 4 — Decisão
 
-- **Segue:** V1 a V8 resolvidos; C1 a C15 passando; nenhum achado de validador acima do baseline no resultado final; no máximo dois pushes por artefato até o verde.
+- **Segue:** V1 a V8 resolvidos; C1 a C16 passando; nenhum achado de validador acima do baseline no resultado final; no máximo dois pushes por artefato até o verde.
 - **Segue com ajuste:** os cenários passam, mas com mais pushes ou intervenções. Ajustar as instruções e repetir os cenários que falharam.
-- **Não segue:** V2, V3 ou V5 sem saída, ou o agente pula estados e grava sem aprovação de forma recorrente.
+- **Não segue:** V2, V3 ou V5 sem saída, ou o agente pula estados, marca Validado sem a pessoa aprovar ou conclui com artefato pendente de forma recorrente.
 
 ## Registro
 
