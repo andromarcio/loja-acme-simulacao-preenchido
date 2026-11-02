@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docqui — Proposta de Marca (v1)</title>
+<meta name="description" content="Proposta de identidade visual do framework docqui — símbolo doc-pin, logotipo, cores, tipografia e aplicações.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20rx%3D%2211%22%20fill%3D%22%23FFD94A%22%2F%3E%3Cg%20transform%3D%22translate%284.4%205%29%20scale%280.325%29%22%3E%3Cpath%20fill%3D%22%231B2B4B%22%20d%3D%22M30%204%20H66%20A16%2016%200%200%201%2082%2020%20V50%20A16%2016%200%200%201%2066%2066%20H57%20L48%2079%20L39%2066%20H30%20A16%2016%200%200%201%2014%2050%20V20%20A16%2016%200%200%201%2030%204%20Z%22%2F%3E%3Crect%20x%3D%2226%22%20y%3D%2218%22%20width%3D%2240%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FFD94A%22%2F%3E%3Crect%20x%3D%2234%22%20y%3D%2240%22%20width%3D%2232%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF8F0%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<style>
+  :root{
+    --bg:#FBF8F0;
+    --surface:#FFFEFA;
+    --ink:#1B2B4B;
+    --ink-soft:#44506B;
+    --ink-faint:#6B7691;
+    --accent:#FFD94A;
+    --on-accent:#14213D;
+    --rule:rgba(27,43,75,.16);
+    --rule-soft:rgba(27,43,75,.08);
+    --ok:#1E7F5C;
+    --warn:#BE4B33;
+    --card-border:rgba(27,43,75,.14);
+    --shadow:0 1px 2px rgba(27,43,75,.06),0 8px 28px rgba(27,43,75,.07);
+    --grid-img:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,var(--rule-soft) 43px,var(--rule-soft) 44px);
+    --mono:ui-monospace,"JetBrains Mono","Cascadia Code",Consolas,"Roboto Mono",monospace;
+    --round:ui-rounded,"SF Pro Rounded","Segoe UI",system-ui,-apple-system,sans-serif;
+    --body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0F1B33;
+      --surface:#16233F;
+      --ink:#EAE7DB;
+      --ink-soft:#B9C0D6;
+      --ink-faint:#8E99B8;
+      --rule:rgba(234,231,219,.18);
+      --rule-soft:rgba(126,190,220,.10);
+      --card-border:rgba(234,231,219,.16);
+      --shadow:0 1px 2px rgba(0,0,0,.25),0 10px 30px rgba(0,0,0,.28);
+      --ok:#4CC495;
+      --warn:#E8836B;
+      --grid-img:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,var(--rule-soft) 43px,var(--rule-soft) 44px),repeating-linear-gradient(to right,transparent 0,transparent 43px,var(--rule-soft) 43px,var(--rule-soft) 44px);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F1B33;
+    --surface:#16233F;
+    --ink:#EAE7DB;
+    --ink-soft:#B9C0D6;
+    --ink-faint:#8E99B8;
+    --rule:rgba(234,231,219,.18);
+    --rule-soft:rgba(126,190,220,.10);
+    --card-border:rgba(234,231,219,.16);
+    --shadow:0 1px 2px rgba(0,0,0,.25),0 10px 30px rgba(0,0,0,.28);
+    --ok:#4CC495;
+    --warn:#E8836B;
+    --grid-img:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,var(--rule-soft) 43px,var(--rule-soft) 44px),repeating-linear-gradient(to right,transparent 0,transparent 43px,var(--rule-soft) 43px,var(--rule-soft) 44px);
+  }
+  :root[data-theme="light"]{
+    --bg:#FBF8F0;
+    --surface:#FFFEFA;
+    --ink:#1B2B4B;
+    --ink-soft:#44506B;
+    --ink-faint:#6B7691;
+    --rule:rgba(27,43,75,.16);
+    --rule-soft:rgba(27,43,75,.08);
+    --card-border:rgba(27,43,75,.14);
+    --shadow:0 1px 2px rgba(27,43,75,.06),0 8px 28px rgba(27,43,75,.07);
+    --ok:#1E7F5C;
+    --warn:#BE4B33;
+    --grid-img:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,var(--rule-soft) 43px,var(--rule-soft) 44px);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background-color:var(--bg);
+    background-image:var(--grid-img);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{max-width:1060px;margin:0 auto;padding:0 24px 96px}
+  a{color:inherit}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  section{margin-top:88px}
+  section>header{display:flex;align-items:baseline;gap:16px;border-bottom:1px solid var(--rule);padding-bottom:14px;margin-bottom:34px}
+  section>header h2{font-family:var(--round);font-weight:800;font-size:26px;margin:0;letter-spacing:-.01em;text-wrap:balance}
+  .prose{max-width:64ch;color:var(--ink-soft)}
+  .prose strong{color:var(--ink)}
+  .note{font-size:13.5px;color:var(--ink-faint);max-width:64ch}
+
+  /* ---------- hero ---------- */
+  .hero{padding:96px 0 72px;display:flex;flex-direction:column;gap:40px}
+  .hero .eyebrow{display:flex;gap:12px;align-items:center}
+  .lockup{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+  .lockup svg{display:block}
+  .wm-hero{width:min(560px,78vw);height:auto}
+  .sym-hero{width:min(118px,17vw);height:auto}
+  .tagline{font-family:var(--round);font-weight:700;font-size:clamp(19px,2.6vw,26px);letter-spacing:-.01em;margin:0}
+  .tagline .swipe{white-space:nowrap}
+  .hero .sub{max-width:56ch;color:var(--ink-soft);margin:0}
+  .theme-hint{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint)}
+
+  /* grifo swipe (gesto da marca) */
+  .swipe{
+    position:relative;
+    display:inline-block;
+    padding:.04em .18em;
+    margin:-.04em -.06em;
+  }
+  .swipe::before{
+    content:"";
+    position:absolute;inset:0;
+    background:var(--accent);
+    border-radius:.32em .5em .38em .55em;
+    transform:rotate(-1.4deg);
+    z-index:-1;
+    transform-origin:left center;
+  }
+  .swipe{color:var(--on-accent)}
+  @media (prefers-reduced-motion:no-preference){
+    .hero .swipe::before{animation:swipein .5s cubic-bezier(.2,.7,.2,1) .35s backwards}
+    @keyframes swipein{from{transform:rotate(-1.4deg) scaleX(0)}to{transform:rotate(-1.4deg) scaleX(1)}}
+  }
+
+  /* ---------- grids & cards ---------- */
+  .grid{display:grid;gap:18px}
+  .cols-2{grid-template-columns:repeat(2,1fr)}
+  .cols-3{grid-template-columns:repeat(3,1fr)}
+  .cols-4{grid-template-columns:repeat(4,1fr)}
+  @media (max-width:860px){.cols-3,.cols-4{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.cols-2,.cols-3,.cols-4{grid-template-columns:1fr}}
+  .card{
+    background:var(--surface);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    padding:22px;
+    box-shadow:var(--shadow);
+  }
+  .card h3{font-family:var(--round);font-weight:800;font-size:17px;margin:0 0 8px;letter-spacing:-.005em}
+  .card p{margin:0;font-size:14.5px;color:var(--ink-soft)}
+  .card .eyebrow{display:block;margin-bottom:10px}
+
+  /* ---------- símbolo ---------- */
+  .sym-stage{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media (max-width:860px){.sym-stage{grid-template-columns:repeat(2,1fr)}}
+  .sym-tile{
+    border-radius:14px;border:1px solid var(--card-border);
+    display:flex;align-items:center;justify-content:center;
+    min-height:170px;position:relative;box-shadow:var(--shadow);
+  }
+  .sym-tile figcaption{
+    position:absolute;left:14px;bottom:10px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  }
+  .sym-tile svg{width:84px;height:auto}
+  .t-papel{background:#FBF8F0}.t-papel figcaption{color:#6B7691}
+  .t-tinta{background:#1B2B4B}.t-tinta figcaption{color:#9FA9C4}
+  .t-grifo{background:#FFD94A}.t-grifo figcaption{color:#6d5c14}
+  .t-planta{background:#0F1B33;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 21px,rgba(126,190,220,.12) 21px,rgba(126,190,220,.12) 22px),repeating-linear-gradient(to right,transparent 0,transparent 21px,rgba(126,190,220,.12) 21px,rgba(126,190,220,.12) 22px)}
+  .t-planta figcaption{color:#8E99B8}
+  .fav-row{display:flex;align-items:flex-end;gap:28px;flex-wrap:wrap;margin-top:26px}
+  .fav-row figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px}
+  .fav-row figcaption{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
+
+  /* ---------- cores ---------- */
+  .swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:860px){.swatches{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.swatches{grid-template-columns:1fr}}
+  .swatch{border-radius:14px;overflow:hidden;border:1px solid var(--card-border);box-shadow:var(--shadow);background:var(--surface)}
+  .swatch .chip{height:86px;display:flex;align-items:flex-end;padding:12px}
+  .swatch .chip span{font-family:var(--mono);font-size:11px;letter-spacing:.06em}
+  .swatch .meta{padding:14px 16px}
+  .swatch .meta h4{margin:0 0 4px;font-family:var(--round);font-weight:800;font-size:15.5px}
+  .swatch .meta p{margin:0;font-size:13px;color:var(--ink-soft)}
+  .swatch .meta .hex{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);display:block;margin-top:8px}
+
+  /* ---------- tipografia ---------- */
+  .type-spec{display:grid;grid-template-columns:200px 1fr;gap:10px 26px;align-items:baseline;border-top:1px dashed var(--rule);padding-top:18px;margin-top:18px}
+  @media (max-width:640px){.type-spec{grid-template-columns:1fr}}
+  .type-spec .role{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
+  .spec-display{font-family:var(--round);font-weight:800;font-size:34px;letter-spacing:-.015em;margin:0;text-wrap:balance}
+  .spec-body{margin:0;max-width:58ch}
+  .spec-mono{font-family:var(--mono);font-size:13.5px;margin:0;color:var(--ink-soft)}
+
+  /* ---------- elementos ---------- */
+  .stamp{
+    display:inline-block;
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink);
+    border:2px dashed currentColor;border-radius:10px;
+    padding:8px 14px;
+    transform:rotate(-2deg);
+    opacity:.85;
+  }
+  .bars{display:flex;flex-direction:column;gap:7px;width:150px}
+  .bars i{height:8px;border-radius:4px;background:var(--ink);display:block}
+  .bars i:nth-child(1){width:100%}
+  .bars i:nth-child(2){width:82%;margin-left:9%}
+  .bars i:nth-child(3){width:64%;margin-left:18%}
+  .bars i:nth-child(4){width:46%;margin-left:27%;background:var(--accent)}
+  .badges{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .el-row{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:860px){.el-row{grid-template-columns:1fr}}
+  .el-cell{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+
+  /* ---------- aplicações ---------- */
+  .social{
+    aspect-ratio:1200/630;
+    border-radius:16px;
+    background:#0F1B33;
+    background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,rgba(126,190,220,.10) 31px,rgba(126,190,220,.10) 32px),repeating-linear-gradient(to right,transparent 0,transparent 31px,rgba(126,190,220,.10) 31px,rgba(126,190,220,.10) 32px);
+    border:1px solid var(--card-border);
+    box-shadow:var(--shadow);
+    padding:clamp(20px,5%,52px);
+    display:flex;flex-direction:column;justify-content:space-between;
+    overflow:hidden;
+  }
+  .social .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .social .stamp{color:#8E99B8;font-size:10px;transform:rotate(2deg)}
+  .social .wm-s{width:min(430px,62%);height:auto;display:block}
+  .social .sym-s{width:clamp(44px,9%,84px);height:auto;display:block}
+  .social .tg{color:#EAE7DB;font-family:var(--round);font-weight:700;font-size:clamp(13px,2.4vw,22px);margin:14px 0 0}
+  .social .tg em{font-style:normal;background:#FFD94A;color:#14213D;padding:.05em .25em;border-radius:.3em}
+  .social .url{font-family:var(--mono);color:#8E99B8;font-size:clamp(10px,1.6vw,13px)}
+
+  .readme{
+    border-radius:14px;border:1px solid var(--card-border);background:var(--surface);box-shadow:var(--shadow);
+    padding:26px;
+  }
+  .readme h4{font-family:var(--round);font-weight:800;font-size:22px;margin:14px 0 8px;display:flex;align-items:center;gap:10px}
+  .readme p{margin:0;font-size:14px;color:var(--ink-soft);max-width:60ch}
+  .readme .mono{font-family:var(--mono);font-size:12px;color:var(--ink-faint)}
+
+  .docsmock{
+    border-radius:14px;border:1px solid var(--card-border);background:var(--surface);box-shadow:var(--shadow);
+    overflow:hidden;font-size:13px;
+  }
+  .docsmock .bar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--rule)}
+  .docsmock .bar svg{width:20px;height:auto}
+  .docsmock .bar b{font-family:var(--round);font-weight:800;font-size:14px}
+  .docsmock .bar span{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
+  .docsmock .cols{display:grid;grid-template-columns:190px 1fr;min-height:190px}
+  @media (max-width:640px){.docsmock .cols{grid-template-columns:1fr}}
+  .docsmock nav{border-right:1px solid var(--rule);padding:14px 16px;font-family:var(--mono);font-size:11px;line-height:2.1;color:var(--ink-soft)}
+  @media (max-width:640px){.docsmock nav{display:none}}
+  .docsmock nav .lvl1{padding-left:12px}
+  .docsmock nav .lvl2{padding-left:24px}
+  .docsmock nav .on{background:var(--accent);color:var(--on-accent);border-radius:5px;padding:1px 7px;margin-left:17px}
+  .docsmock article{padding:18px 22px}
+  .docsmock article h5{font-family:var(--round);font-weight:800;font-size:17px;margin:0 0 6px}
+  .docsmock article .id{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
+  .docsmock article p{color:var(--ink-soft);font-size:13px;max-width:52ch}
+
+  /* ---------- voz ---------- */
+  .voice{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:720px){.voice{grid-template-columns:1fr}}
+  .voice .card p.big{font-family:var(--round);font-weight:700;font-size:19px;color:var(--ink);margin:0 0 6px}
+
+  /* ---------- dos & don'ts ---------- */
+  ul.rules{list-style:none;margin:0;padding:0;display:grid;gap:10px;max-width:72ch}
+  ul.rules li{display:flex;gap:12px;align-items:baseline;font-size:14.5px;color:var(--ink-soft)}
+  ul.rules li::before{font-family:var(--mono);font-weight:700;flex:0 0 auto}
+  ul.rules.do li::before{content:"✓";color:var(--ok)}
+  ul.rules.dont li::before{content:"✕";color:var(--warn)}
+
+  ol.next{margin:0;padding-left:22px;max-width:64ch;color:var(--ink-soft)}
+  ol.next li{margin-bottom:10px}
+  ol.next b{color:var(--ink)}
+
+  footer{margin-top:96px;border-top:1px solid var(--rule);padding-top:20px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--ink-faint)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+</style>
+<style>
+  #themeToggle{position:fixed;top:16px;right:16px;z-index:60;font-family:var(--mono);
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);
+    background:var(--surface);border:1px solid var(--card-border);border-radius:999px;
+    padding:9px 16px;box-shadow:var(--shadow);cursor:pointer}
+  #themeToggle:hover{color:var(--on-accent);background:var(--accent);border-color:transparent}
+</style>
+</head>
+<body>
+<button id="themeToggle" aria-label="Alternar entre modo papel e modo planta">modo planta</button>
+<main>
+
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <p class="eyebrow">docqui · proposta de identidade visual · v1</p>
+
+    <div class="lockup" role="img" aria-label="Docqui — símbolo e logotipo">
+      <!-- símbolo: doc-pin -->
+      <svg class="sym-hero" viewBox="0 0 96 92" aria-hidden="true">
+        <path fill="var(--ink)" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/>
+        <rect x="28" y="16" width="34" height="6.5" rx="3.25" fill="var(--bg)"/>
+        <rect x="33" y="27" width="29" height="6.5" rx="3.25" fill="var(--bg)"/>
+        <rect x="38" y="38" width="24" height="6.5" rx="3.25" fill="var(--bg)"/>
+        <rect x="43" y="49" width="19" height="6.5" rx="3.25" fill="#FFD94A"/>
+      </svg>
+      <!-- logotipo monolinear: d o c q u i (q com agulha de pin) -->
+      <svg class="wm-hero" viewBox="0 0 356 128" aria-hidden="true">
+        <g stroke="var(--ink)" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="28" cy="50" r="21.5"/>
+          <line x1="49.5" y1="6.5" x2="49.5" y2="71.5"/>
+          <circle cx="97" cy="50" r="21.5"/>
+          <path d="M179.8 33.5 A21.5 21.5 0 1 0 179.8 66.5"/>
+          <circle cx="228" cy="50" r="21.5"/>
+          <path d="M275.5 28.5 V56.5 A21.5 21.5 0 0 0 318.5 56.5 V28.5"/>
+          <line x1="344.5" y1="28.5" x2="344.5" y2="71.5"/>
+        </g>
+        <path fill="var(--ink)" d="M243 28.5 A6.5 6.5 0 0 1 256 28.5 V84 L249.5 106 L243 84 Z"/>
+        <circle cx="344.5" cy="6.5" r="7.5" fill="var(--ink)"/>
+      </svg>
+    </div>
+
+    <div>
+      <p class="tagline">especificação <span class="swipe">tintim por tintim</span>, do produto ao campo.</p>
+      <p class="sub">Docqui é <strong>doc</strong>umentação que está a<strong>qui</strong>: quatro níveis de zoom (N0→N3), regras rastreáveis de ponta a ponta e a resposta pronta para toda discussão de requisito — <em>“tá no Docqui”</em>.</p>
+    </div>
+
+    <p class="theme-hint">padrão: modo papel (claro) · o modo planta (escuro) fica no botão do canto superior direito</p>
+  </div>
+
+  <!-- ============ CONCEITO ============ -->
+  <section>
+    <header><span class="eyebrow">01</span><h2>Conceito: preto no branco, com grifo</h2></header>
+    <p class="prose">A marca nasce do material de trabalho do próprio método: <strong>tinta sobre papel</strong> — pôr o combinado preto no branco — e o <strong>marca-texto</strong> que destaca o que importa. Três ideias sustentam tudo:</p>
+    <div class="grid cols-3" style="margin-top:26px">
+      <div class="card">
+        <span class="eyebrow">etimologia</span>
+        <h3>doc + aqui</h3>
+        <p>O nome ensina a grafia e o pitch de uma vez: a <b>doc</b>umentação está a<b>qui</b>, num lugar só, com dono e versão. O símbolo materializa isso: um documento que é um pin.</p>
+      </div>
+      <div class="card">
+        <span class="eyebrow">gesto</span>
+        <h3>o grifo</h3>
+        <p>Um traço de marca-texto amarelo sobre a palavra-chave. É o único elemento expressivo da marca — usado com a mesma economia de um grifo de verdade.</p>
+      </div>
+      <div class="card">
+        <span class="eyebrow">estrutura</span>
+        <h3>quatro níveis</h3>
+        <p>As barras em escada citam a hierarquia N0→N3: da visão de produto ao campo da funcionalidade. A última barra, grifada, é o nível fino — onde o dev trabalha.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SÍMBOLO ============ -->
+  <section>
+    <header><span class="eyebrow">02</span><h2>Símbolo: o doc-pin</h2></header>
+    <p class="prose">Um cartão de documento que afunila em ponta de pin — três leituras num desenho só: <strong>documento</strong> (o artefato), <strong>pin de mapa</strong> (o “aqui”) e <strong>balão de conversa</strong> (os prompts guiados que conduzem a especificação). Dentro, as quatro barras N0→N3.</p>
+    <div class="sym-stage" style="margin-top:26px">
+      <figure class="sym-tile t-papel" style="margin:0">
+        <svg viewBox="0 0 96 92"><path fill="#1B2B4B" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/><rect x="28" y="16" width="34" height="6.5" rx="3.25" fill="#FBF8F0"/><rect x="33" y="27" width="29" height="6.5" rx="3.25" fill="#FBF8F0"/><rect x="38" y="38" width="24" height="6.5" rx="3.25" fill="#FBF8F0"/><rect x="43" y="49" width="19" height="6.5" rx="3.25" fill="#FFD94A"/></svg>
+        <figcaption>positivo · papel</figcaption>
+      </figure>
+      <figure class="sym-tile t-tinta" style="margin:0">
+        <svg viewBox="0 0 96 92"><path fill="#FBF8F0" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/><rect x="28" y="16" width="34" height="6.5" rx="3.25" fill="#1B2B4B"/><rect x="33" y="27" width="29" height="6.5" rx="3.25" fill="#1B2B4B"/><rect x="38" y="38" width="24" height="6.5" rx="3.25" fill="#1B2B4B"/><rect x="43" y="49" width="19" height="6.5" rx="3.25" fill="#FFD94A"/></svg>
+        <figcaption>negativo · tinta</figcaption>
+      </figure>
+      <figure class="sym-tile t-grifo" style="margin:0">
+        <svg viewBox="0 0 96 92"><path fill="#1B2B4B" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/><rect x="28" y="16" width="34" height="6.5" rx="3.25" fill="#FFD94A"/><rect x="33" y="27" width="29" height="6.5" rx="3.25" fill="#FFD94A"/><rect x="38" y="38" width="24" height="6.5" rx="3.25" fill="#FFD94A"/><rect x="43" y="49" width="19" height="6.5" rx="3.25" fill="#FBF8F0"/></svg>
+        <figcaption>sobre grifo</figcaption>
+      </figure>
+      <figure class="sym-tile t-planta" style="margin:0">
+        <svg viewBox="0 0 96 92"><path fill="none" stroke="#EAE7DB" stroke-width="5" d="M30 6.5 H66 A13.5 13.5 0 0 1 79.5 20 V50 A13.5 13.5 0 0 1 66 63.5 H55.6 L48 74.5 L40.4 63.5 H30 A13.5 13.5 0 0 1 16.5 50 V20 A13.5 13.5 0 0 1 30 6.5 Z"/><rect x="28" y="17" width="34" height="6" rx="3" fill="#EAE7DB"/><rect x="33" y="28" width="29" height="6" rx="3" fill="#EAE7DB"/><rect x="38" y="39" width="24" height="6" rx="3" fill="#EAE7DB"/><rect x="43" y="50" width="19" height="6" rx="3" fill="#FFD94A"/></svg>
+        <figcaption>traço · planta</figcaption>
+      </figure>
+    </div>
+    <div class="fav-row">
+      <figure><svg width="64" height="61" viewBox="0 0 96 92"><path fill="var(--ink)" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/><rect x="28" y="16" width="34" height="6.5" rx="3.25" fill="var(--bg)"/><rect x="33" y="27" width="29" height="6.5" rx="3.25" fill="var(--bg)"/><rect x="38" y="38" width="24" height="6.5" rx="3.25" fill="var(--bg)"/><rect x="43" y="49" width="19" height="6.5" rx="3.25" fill="#FFD94A"/></svg><figcaption>64 px</figcaption></figure>
+      <figure><svg width="32" height="31" viewBox="0 0 96 92"><path fill="var(--ink)" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/><rect x="28" y="16" width="34" height="6.5" rx="3.25" fill="var(--bg)"/><rect x="33" y="27" width="29" height="6.5" rx="3.25" fill="var(--bg)"/><rect x="38" y="38" width="24" height="6.5" rx="3.25" fill="var(--bg)"/><rect x="43" y="49" width="19" height="6.5" rx="3.25" fill="#FFD94A"/></svg><figcaption>32 px</figcaption></figure>
+      <figure><svg width="16" height="15" viewBox="0 0 96 92"><path fill="var(--ink)" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/><rect x="26" y="18" width="40" height="10" rx="5" fill="var(--bg)"/><rect x="34" y="40" width="32" height="10" rx="5" fill="#FFD94A"/></svg><figcaption>16 px · simplificado</figcaption></figure>
+      <p class="note" style="align-self:center;max-width:34ch">Abaixo de 24 px, o símbolo reduz para duas barras — a de tinta e a de grifo — para manter a leitura.</p>
+    </div>
+  </section>
+
+  <!-- ============ LOGOTIPO ============ -->
+  <section>
+    <header><span class="eyebrow">03</span><h2>Logotipo: monolinear, com o q-pin</h2></header>
+    <p class="prose">O logotipo é <strong>geometria proprietária</strong> — círculos perfeitos e hastes de peso único, sem depender de fonte licenciada. A assinatura escondida está no <strong>“q”: o rabo desce e afunila numa agulha de pin</strong>, o mesmo “aqui” do símbolo. Caixa baixa sempre.</p>
+
+    <div class="grid cols-2" style="margin-top:26px">
+      <div class="card" style="display:flex;align-items:center;justify-content:center;padding:40px 26px">
+        <svg style="width:min(380px,100%)" viewBox="0 0 356 128" role="img" aria-label="docqui — logotipo">
+          <g stroke="var(--ink)" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="28" cy="50" r="21.5"/><line x1="49.5" y1="6.5" x2="49.5" y2="71.5"/>
+            <circle cx="97" cy="50" r="21.5"/>
+            <path d="M179.8 33.5 A21.5 21.5 0 1 0 179.8 66.5"/>
+            <circle cx="228" cy="50" r="21.5"/>
+            <path d="M275.5 28.5 V56.5 A21.5 21.5 0 0 0 318.5 56.5 V28.5"/>
+            <line x1="344.5" y1="28.5" x2="344.5" y2="71.5"/>
+          </g>
+          <path fill="var(--ink)" d="M243 28.5 A6.5 6.5 0 0 1 256 28.5 V84 L249.5 106 L243 84 Z"/>
+          <circle cx="344.5" cy="6.5" r="7.5" fill="var(--ink)"/>
+        </svg>
+      </div>
+      <div class="card" style="display:flex;align-items:center;justify-content:center;padding:40px 26px">
+        <svg style="width:min(390px,100%)" viewBox="0 0 372 128" role="img" aria-label="docqui — assinatura com grifo no qui">
+          <rect x="194" y="18" width="172" height="76" rx="15" fill="#FFD94A" transform="rotate(-1.5 280 56)"/>
+          <g stroke="var(--ink)" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="28" cy="50" r="21.5"/><line x1="49.5" y1="6.5" x2="49.5" y2="71.5"/>
+            <circle cx="97" cy="50" r="21.5"/>
+            <path d="M179.8 33.5 A21.5 21.5 0 1 0 179.8 66.5"/>
+          </g>
+          <g stroke="#14213D" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="228" cy="50" r="21.5"/>
+            <path d="M275.5 28.5 V56.5 A21.5 21.5 0 0 0 318.5 56.5 V28.5"/>
+            <line x1="344.5" y1="28.5" x2="344.5" y2="71.5"/>
+          </g>
+          <path fill="#14213D" d="M243 28.5 A6.5 6.5 0 0 1 256 28.5 V84 L249.5 106 L243 84 Z"/>
+          <circle cx="344.5" cy="6.5" r="7.5" fill="#14213D"/>
+        </svg>
+      </div>
+    </div>
+    <div class="grid cols-2" style="margin-top:18px">
+      <p class="note"><b style="color:var(--ink)">Versão principal.</b> Tinta sobre papel (ou papel sobre planta, no escuro). O q-pin é o detalhe que se descobre no segundo olhar.</p>
+      <p class="note"><b style="color:var(--ink)">Assinatura com grifo.</b> O marca-texto destaca o “qui” e conta a etimologia. Uso em capas, hero do site e social — não em contextos pequenos.</p>
+    </div>
+    <p class="note" style="margin-top:18px">Área de respiro: a altura do “o” em todo o perímetro. Tamanho mínimo do logotipo: 96 px de largura; abaixo disso, use só o símbolo.</p>
+  </section>
+
+  <!-- ============ CORES ============ -->
+  <section>
+    <header><span class="eyebrow">04</span><h2>Cores: papel, tinta, grifo</h2></header>
+    <p class="prose">Seis cores com nome e função — as três da esquerda são a marca; as três da direita são apoio. O amarelo é <strong>fundo de destaque, nunca cor de texto</strong>. Todos os pares indicados cumprem contraste AA.</p>
+    <div class="swatches" style="margin-top:26px">
+      <div class="swatch"><div class="chip" style="background:#1B2B4B"><span style="color:#FBF8F0">Aa ✓ AA</span></div><div class="meta"><h4>Tinta</h4><p>Cor primária. Texto, símbolo, traço. O “preto” do preto no branco — que sempre foi azul de caneta.</p><span class="hex">#1B2B4B</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#FBF8F0;border-bottom:1px solid rgba(27,43,75,.1)"><span style="color:#44506B">fundo claro</span></div><div class="meta"><h4>Papel</h4><p>Fundo do modo claro. Branco quente de papel, não branco de tela.</p><span class="hex">#FBF8F0</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#FFD94A"><span style="color:#14213D">Aa ✓ AA · só fundo</span></div><div class="meta"><h4>Grifo</h4><p>O acento único da marca. Atrás de palavras-chave, na barra N3, no cursor de navegação. Texto por cima: sempre Tinta.</p><span class="hex">#FFD94A</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#0F1B33;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 15px,rgba(126,190,220,.14) 15px,rgba(126,190,220,.14) 16px),repeating-linear-gradient(to right,transparent 0,transparent 15px,rgba(126,190,220,.14) 15px,rgba(126,190,220,.14) 16px)"><span style="color:#EAE7DB">fundo escuro</span></div><div class="meta"><h4>Planta</h4><p>Fundo do modo escuro: a cópia heliográfica da planta do sistema, com grade discreta.</p><span class="hex">#0F1B33</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#1E7F5C"><span style="color:#FBF8F0">Aa ✓ AA</span></div><div class="meta"><h4>Validado</h4><p>Semântica de gate aprovado: negócio validado, spec carimbada, CI verde.</p><span class="hex">#1E7F5C · escuro #4CC495</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#BE4B33"><span style="color:#FBF8F0">Aa ✓ AA</span></div><div class="meta"><h4>Pendência</h4><p>Semântica de lacuna: os ⚠️ do INDEX, elos de rastreabilidade quebrados.</p><span class="hex">#BE4B33 · escuro #E8836B</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ TIPOGRAFIA ============ -->
+  <section>
+    <header><span class="eyebrow">05</span><h2>Tipografia</h2></header>
+    <p class="prose">Três papéis. Títulos em <strong>Sora</strong> (peso 700–800), texto corrido em <strong>Inter</strong>, e <strong>JetBrains Mono</strong> para o vocabulário técnico do método — IDs, carimbos, Gherkin. <em>Nesta página, as três aparecem em aproximações do sistema; os arquivos finais usam as fontes oficiais (todas open source).</em></p>
+    <div class="type-spec">
+      <span class="role">display · sora 800</span>
+      <p class="spec-display">Cadastrar Cliente, campo a campo.</p>
+      <span class="role">texto · inter 400</span>
+      <p class="spec-body">O nível N3 descreve o que o usuário preenche e vê, as regras de negócio que valem só para ela e os cenários de uso — é o artefato que o time de desenvolvimento consome direto.</p>
+      <span class="role">mono · jetbrains</span>
+      <p class="spec-mono">USR-PRM-01 · PROMPT_3A · <b>Dado</b> que o CPF já existe, <b>Então</b> exibir E-004.</p>
+    </div>
+  </section>
+
+  <!-- ============ ELEMENTOS ============ -->
+  <section>
+    <header><span class="eyebrow">06</span><h2>Elementos de sistema</h2></header>
+    <div class="el-row">
+      <div class="card el-cell">
+        <span class="eyebrow">o carimbo</span>
+        <span class="stamp">docqui · v2.0.0 · prompt_3a · 2026-07-10</span>
+        <p>O carimbo invisível que o engine grava em cada artefato vira selo visível da marca — em capas de PDF, badges e no rodapé do site.</p>
+      </div>
+      <div class="card el-cell">
+        <span class="eyebrow">as barras n0→n3</span>
+        <div class="bars" role="img" aria-label="Quatro barras em escada representando os níveis N0 a N3"><i></i><i></i><i></i><i></i></div>
+        <p>Assinatura gráfica reutilizável: marcadores de seção, estados de carregamento, separadores. A última barra é sempre grifada.</p>
+      </div>
+      <div class="card el-cell">
+        <span class="eyebrow">badges</span>
+        <div class="badges">
+          <svg width="118" height="24" viewBox="0 0 118 24" role="img" aria-label="badge docqui v2.0.0"><rect width="66" height="24" rx="4" fill="#1B2B4B"/><rect x="66" width="52" height="24" rx="4" fill="#FFD94A"/><rect x="62" width="8" height="24" fill="#FFD94A"/><rect x="62" width="4" height="24" fill="#1B2B4B"/><text x="33" y="16" font-family="Consolas,monospace" font-size="11" fill="#FBF8F0" text-anchor="middle">docqui</text><text x="92" y="16" font-family="Consolas,monospace" font-size="11" fill="#14213D" text-anchor="middle" font-weight="bold">v2.0.0</text></svg>
+          <svg width="108" height="24" viewBox="0 0 108 24" role="img" aria-label="badge specado sim"><rect width="76" height="24" rx="4" fill="#1B2B4B"/><rect x="76" width="32" height="24" rx="4" fill="#1E7F5C"/><rect x="72" width="8" height="24" fill="#1E7F5C"/><rect x="72" width="4" height="24" fill="#1B2B4B"/><text x="38" y="16" font-family="Consolas,monospace" font-size="11" fill="#FBF8F0" text-anchor="middle">specado</text><text x="92" y="16" font-family="Consolas,monospace" font-size="11" fill="#FBF8F0" text-anchor="middle" font-weight="bold">✓</text></svg>
+        </div>
+        <p>Para READMEs de instâncias: versão do engine e estado da especificação, no vocabulário da casa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APLICAÇÕES ============ -->
+  <section>
+    <header><span class="eyebrow">07</span><h2>Aplicações</h2></header>
+    <div class="grid cols-2">
+      <div>
+        <p class="eyebrow" style="margin-bottom:12px">social card · github</p>
+        <div class="social">
+          <div class="top">
+            <svg class="sym-s" viewBox="0 0 96 92"><path fill="#EAE7DB" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/><rect x="28" y="16" width="34" height="6.5" rx="3.25" fill="#0F1B33"/><rect x="33" y="27" width="29" height="6.5" rx="3.25" fill="#0F1B33"/><rect x="38" y="38" width="24" height="6.5" rx="3.25" fill="#0F1B33"/><rect x="43" y="49" width="19" height="6.5" rx="3.25" fill="#FFD94A"/></svg>
+            <span class="stamp">v2.0.0</span>
+          </div>
+          <div>
+            <svg class="wm-s" viewBox="0 0 356 128">
+              <g stroke="#EAE7DB" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="28" cy="50" r="21.5"/><line x1="49.5" y1="6.5" x2="49.5" y2="71.5"/>
+                <circle cx="97" cy="50" r="21.5"/>
+                <path d="M179.8 33.5 A21.5 21.5 0 1 0 179.8 66.5"/>
+                <circle cx="228" cy="50" r="21.5"/>
+                <path d="M275.5 28.5 V56.5 A21.5 21.5 0 0 0 318.5 56.5 V28.5"/>
+                <line x1="344.5" y1="28.5" x2="344.5" y2="71.5"/>
+              </g>
+              <path fill="#EAE7DB" d="M243 28.5 A6.5 6.5 0 0 1 256 28.5 V84 L249.5 106 L243 84 Z"/>
+              <circle cx="344.5" cy="6.5" r="7.5" fill="#FFD94A"/>
+            </svg>
+            <p class="tg">especificação <em>tintim por tintim</em></p>
+          </div>
+          <span class="url">docqui.dev · github.com/caixa-efrs/docqui-engine</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div>
+          <p class="eyebrow" style="margin-bottom:12px">readme · cabeçalho</p>
+          <div class="readme">
+            <div class="badges">
+              <svg width="118" height="24" viewBox="0 0 118 24"><rect width="66" height="24" rx="4" fill="#1B2B4B"/><rect x="66" width="52" height="24" rx="4" fill="#FFD94A"/><rect x="62" width="8" height="24" fill="#FFD94A"/><rect x="62" width="4" height="24" fill="#1B2B4B"/><text x="33" y="16" font-family="Consolas,monospace" font-size="11" fill="#FBF8F0" text-anchor="middle">docqui</text><text x="92" y="16" font-family="Consolas,monospace" font-size="11" fill="#14213D" text-anchor="middle" font-weight="bold">v2.0.0</text></svg>
+              <span class="mono">pt-BR</span>
+            </div>
+            <h4><svg width="26" height="25" viewBox="0 0 96 92"><path fill="var(--ink)" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/><rect x="26" y="18" width="40" height="10" rx="5" fill="var(--surface)"/><rect x="34" y="40" width="32" height="10" rx="5" fill="#FFD94A"/></svg>docqui</h4>
+            <p>Motor de prompts e templates para especificar software em quatro níveis — da visão de produto à funcionalidade, com rastreabilidade de ponta a ponta.</p>
+          </div>
+        </div>
+        <div>
+          <p class="eyebrow" style="margin-bottom:12px">site de docs</p>
+          <div class="docsmock">
+            <div class="bar">
+              <svg viewBox="0 0 96 92"><path fill="var(--ink)" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/><rect x="26" y="18" width="40" height="10" rx="5" fill="var(--surface)"/><rect x="34" y="40" width="32" height="10" rx="5" fill="#FFD94A"/></svg>
+              <b>docqui</b><span>⌘K buscar</span>
+            </div>
+            <div class="cols">
+              <nav aria-label="árvore de exemplo">
+                <div>N0 · Visão de Produto</div>
+                <div class="lvl1">USR · Usuários</div>
+                <div class="lvl2"><span class="on">USR-PRM · Permissões</span></div>
+                <div class="lvl2">USR-CAD · Cadastro</div>
+                <div class="lvl1">VND · Vendas</div>
+              </nav>
+              <article>
+                <span class="id">USR-PRM-01 · N3 · <span style="color:var(--ok)">✓ validado</span></span>
+                <h5>Conceder <span class="swipe" style="font-size:inherit">permissão</span> a um perfil</h5>
+                <p>Campos, regras e cenários desta funcionalidade — com origem na história STRY0048112 e elo de volta no INDEX.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VOZ ============ -->
+  <section>
+    <header><span class="eyebrow">08</span><h2>Voz</h2></header>
+    <div class="voice">
+      <div class="card">
+        <span class="eyebrow">tagline</span>
+        <p class="big">especificação tintim por tintim</p>
+        <p>Expressão de dicionário — ninguém registra, todo mundo entende. Sempre por extenso, sempre minúscula, nunca abreviada para “TPT”.</p>
+      </div>
+      <div class="card">
+        <span class="eyebrow">bordão</span>
+        <p class="big">“Tá no Docqui.”</p>
+        <p>A resposta-padrão para qualquer “onde está definido?”. Em interfaces: frases curtas, voz ativa, vocabulário do método (specar, carimbar, validar, N3).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ USO ============ -->
+  <section>
+    <header><span class="eyebrow">09</span><h2>Uso correto</h2></header>
+    <div class="grid cols-2">
+      <ul class="rules do">
+        <li>Escrever sempre <b>docqui</b> em caixa baixa (Docqui apenas em início de frase).</li>
+        <li>Um grifo por tela, no máximo — como num texto bem marcado.</li>
+        <li>Texto sobre Grifo sempre em Tinta; sobre Planta, sempre em Papel.</li>
+        <li>Usar o carimbo como assinatura em PDFs e capas geradas pelo engine.</li>
+        <li>Símbolo sozinho abaixo de 96 px de largura de logotipo.</li>
+      </ul>
+      <ul class="rules dont">
+        <li>Nada de referências visuais ao personagem de Hergé — topete, cachorro branco, traço ligne claire. A tagline usa a expressão idiomática, e só.</li>
+        <li>Não imitar o pin do Google Maps (gota com furo). O nosso pin é o documento inteiro.</li>
+        <li>Não escrever “Doqui”, “Doki” ou “DocQui”.</li>
+        <li>Grifo nunca em texto corrido, ícones pequenos ou como cor de fonte.</li>
+        <li>Não recolorir as barras N0→N3 fora do sistema (a grifada é sempre a última).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ PRÓXIMOS PASSOS ============ -->
+  <section>
+    <header><span class="eyebrow">10</span><h2>Próximos passos</h2></header>
+    <ol class="next">
+      <li><b>Registrar docqui.com.br e docqui.dev</b> antes de qualquer anúncio (a varredura indicou ambos livres; confirmar no registro.br).</li>
+      <li><b>Aprovar esta direção</b> (ou pedir uma rodada de ajustes: outra cor de grifo, símbolo mais sóbrio, etc.).</li>
+      <li><b>Gerar os assets finais</b> — SVGs otimizados, favicons, social card 1200×630, badges — e versioná-los em <span style="font-family:var(--mono);font-size:13px">engine/brand/</span>.</li>
+      <li><b>Aplicar o rename</b> do framework para docqui no repositório, com bump para 2.0.0 (o carimbo muda de contrato) e tema do site de docs atualizado para esta paleta.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>docqui · proposta de identidade v1</span>
+    <span>aprovada e aplicada em 2026-07-10 · guia normativo: BRAND.md</span>
+  </footer>
+</main>
+<script>
+(function () {
+  var KEY = "docqui-theme";
+  var root = document.documentElement;
+  var btn = document.getElementById("themeToggle");
+  function apply(m) {
+    root.setAttribute("data-theme", m === "dark" ? "dark" : "light");
+    btn.textContent = m === "dark" ? "modo papel" : "modo planta";
+  }
+  var saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) {}
+  apply(saved === "dark" ? "dark" : "light"); /* padrão: claro (Papel) */
+  btn.addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+    apply(next);
+  });
+})();
+</script>
+</body>
+</html>

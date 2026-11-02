@@ -1,0 +1,88 @@
+name: Deploy GitHub Pages
+
+# Um único artefato: main na raiz + historia/* e sprint/* para revisão pelo PO.
+# pull_request_target lê a base do PR pelo workflow da base, sem dar escrita ao build.
+# Apenas PRs do próprio repositório são publicados; forks não ganham preview.
+# Settings > Pages > Source = GitHub Actions. No ambiente github-pages, permita
+# main, sprint/* e historia/* (para IDs com /, permita também o padrão correspondente).
+# O template pressupõe index.html na raiz; para um site em docs/, use --site-dir docs.
+
+on:
+  push:
+    branches: [main, "sprint/**", "historia/**"]
+  delete:
+  pull_request_target:
+    types: [opened, synchronize, reopened, closed, edited, ready_for_review, converted_to_draft]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  pages: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: >-
+      github.event_name != 'pull_request_target' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+      (startsWith(github.event.pull_request.head.ref, 'sprint/') ||
+      startsWith(github.event.pull_request.head.ref, 'historia/')))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Ler as bases dos PRs de entrega
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const pulls = await github.paginate(github.rest.pulls.list, {
+              ...context.repo, state: 'all', per_page: 100
+            });
+            const repo = `${context.repo.owner}/${context.repo.repo}`.toLowerCase();
+            const metadata = pulls.filter(p =>
+              p.head.repo?.full_name.toLowerCase() === repo &&
+              /^(sprint|historia)\//.test(p.head.ref)
+            ).map(p => ({
+              branch: p.head.ref, head: p.head.sha, base: p.base.ref,
+              number: p.number, url: p.html_url, state: p.state,
+              draft: p.draft, merged: Boolean(p.merged_at)
+            }));
+            fs.writeFileSync(path.join(process.env.RUNNER_TEMP, 'pages-prs.json'), JSON.stringify(metadata));
+
+      - name: Montar main e branches de entrega abertas
+        env:
+          PR_FILE: ${{ runner.temp }}/pages-prs.json
+        run: node scripts/monta-site-preview.mjs --out _site --pull-requests "$PR_FILE"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

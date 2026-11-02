@@ -1,0 +1,547 @@
+<!-- docqui: 6.4.10 | prompt: PROMPT_PROTOTYPE_FLOW_FULL | atualizado: 2026-10-18 -->
+<!DOCTYPE html>
+<!--
+  ⚠️ PROTÓTIPO NAVEGÁVEL — treino, não jogo.
+  Fonte de verdade de LAYOUT, COMPORTAMENTO e ESTADOS — NUNCA de implementação.
+  Não copie este HTML/CSS/JS para o código de produção: aqui tudo é autocontido
+  e procedural DE PROPÓSITO (simulação). A implementação real segue outra
+  estratégia: componentes do design system do projeto (mapa de equivalência no
+  README do tema), catálogo global/PATTERNS.md e convenções do global/MASTER.md.
+  Classes .dsc-* são EXCLUSIVAS de protótipo — proibidas em código de produção.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo: Faixas de Frete — Administração</title>
+  <link rel="stylesheet" href="../../_biblioteca-ds/ds.css">
+</head>
+<body>
+
+  <div class="dsc-proto-badge">🎨 PROTÓTIPO — não é o sistema real</div>
+
+  <div class="dsc-app">
+
+    <aside class="dsc-sidebar">
+      <div class="dsc-sidebar-backdrop" onclick="dscToggleMenu()"></div>
+      <div class="dsc-sidebar-brand"><span class="dsc-brand-mark">L</span> Loja ACME</div>
+      <ul class="dsc-menu">
+        <li class="dsc-menu-section" data-so-admin>Catálogo</li>
+        <li data-so-admin><a class="dsc-menu-item" href="../../catalogo/categorias/flow.html">Categorias</a></li>
+        <li class="dsc-menu-section" data-so-admin>Vitrine</li>
+        <li data-so-admin><a class="dsc-menu-item" href="../../vitrine/destaques/flow.html">Destaques</a></li>
+        <li class="dsc-menu-section">Vendas</li>
+        <li><a class="dsc-menu-item" href="../../vendas/gestao-pedidos/flow.html">Pedidos</a></li>
+        <li class="dsc-menu-section">Administração</li>
+        <li data-so-admin><a class="dsc-menu-item" href="../usuarios/flow.html">Usuários</a></li>
+        <li><a class="dsc-menu-item is-active" href="#" onclick="abrirPesquisa(); return false;">Faixas de frete</a></li>
+      </ul>
+    </aside>
+
+    <div class="dsc-shell-main">
+      <header class="dsc-header">
+        <div class="dsc-header-start">
+          <button class="dsc-menu-toggle" aria-label="Recolher/expandir menu" onclick="dscToggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <span class="dsc-header-logo">Loja ACME · <strong>CAIXA</strong></span>
+        </div>
+        <div class="dsc-header-actions">
+          <button class="dsc-header-item">
+            <span class="dsc-avatar dsc-avatar--sm" id="usuario-sigla">ER</span>
+            <span class="dsc-hi-body"><span class="dsc-hi-title" id="usuario-nome">Elisa Rocha</span><span class="dsc-hi-sub dsc-text-primary" id="usuario-perfil">Administrador</span></span>
+            <svg class="dsc-hi-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dsc-main">
+
+        <!-- Tela: Pesquisa de Faixas de Frete (/administracao/faixas-frete) — ADM-FRT-01 Pesquisar e ADM-FRT-04 Excluir -->
+        <div id="screen-pesquisa" class="dsc-screen is-active">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Administração</span><span class="dsc-sep">›</span><span class="is-current">Faixas de Frete</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Faixas de Frete</h1>
+            <p class="dsc-page-subtitle">Faixas de CEP atendidas pela loja e o valor do frete de cada uma.</p>
+          </div>
+
+          <div id="sem-acesso" style="display:none"></div>
+
+          <div id="area-pesquisa">
+            <section class="dsc-card">
+              <h2 class="dsc-card-title">Filtros</h2>
+              <div class="dsc-row">
+                <div class="dsc-col-6">
+                  <div class="dsc-field" id="f-filtro-regiao">
+                    <label class="dsc-field-label" for="filtro-regiao">Região</label>
+                    <input class="dsc-input" id="filtro-regiao" placeholder="Parte da região, ex.: São Paulo" onkeydown="if (event.key === 'Enter') pesquisar()">
+                  </div>
+                </div>
+                <div class="dsc-col-3">
+                  <div class="dsc-field" id="f-filtro-cep">
+                    <label class="dsc-field-label" for="filtro-cep">CEP atendido</label>
+                    <input class="dsc-input" id="filtro-cep" inputmode="numeric" maxlength="8" placeholder="00000000" aria-describedby="filtro-cep-hint" onkeydown="if (event.key === 'Enter') pesquisar()">
+                    <span class="dsc-field-hint" id="filtro-cep-hint">Somente números.</span>
+                  </div>
+                </div>
+                <div class="dsc-col-3" style="display:flex;align-items:flex-start;gap:8px;padding-top:26px">
+                  <button class="dsc-btn" id="btn-pesquisar" onclick="pesquisar()">Pesquisar</button>
+                  <button class="dsc-btn dsc-btn--chromeless" onclick="limpar()">Limpar</button>
+                </div>
+              </div>
+            </section>
+
+            <div class="dsc-card" style="padding:0;overflow:hidden;margin-top:16px">
+              <div class="dsc-table-toolbar">
+                <span class="dsc-text-muted"><strong style="color:var(--text-color)" id="contagem">5 registros</strong></span>
+                <button class="dsc-btn dsc-btn--sm" id="btn-cadastrar" onclick="abrirCadastro()">Cadastrar faixa de frete</button>
+              </div>
+              <div id="resultado"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tela: Cadastrar Faixa de Frete (/administracao/faixas-frete/novo) — ADM-FRT-02 -->
+        <div id="screen-cadastrar" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Administração</span><span class="dsc-sep">›</span><a href="#" onclick="abrirPesquisa(); return false;">Faixas de Frete</a><span class="dsc-sep">›</span><span class="is-current">Cadastrar</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Cadastrar Faixa de Frete</h1>
+            <p class="dsc-page-subtitle">Os CEPs do intervalo passam a ser atendidos no cálculo de frete, pelo valor da faixa.</p>
+          </div>
+          <section class="dsc-card">
+            <div id="cad-alerta" aria-live="polite"></div>
+            <div class="dsc-row">
+              <div class="dsc-col-12">
+                <div class="dsc-field" id="f-cad-regiao">
+                  <label class="dsc-field-label" for="cad-regiao">Região <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="cad-regiao" maxlength="80" placeholder="Ex.: Belo Horizonte — Centro">
+                  <span class="dsc-field-hint">Até 60 caracteres; não pode repetir a região de outra faixa.</span>
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="f-cad-ini">
+                  <label class="dsc-field-label" for="cad-ini">CEP inicial <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="cad-ini" inputmode="numeric" maxlength="8" placeholder="00000000">
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="f-cad-fim">
+                  <label class="dsc-field-label" for="cad-fim">CEP final <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="cad-fim" inputmode="numeric" maxlength="8" placeholder="00000000">
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="f-cad-valor">
+                  <label class="dsc-field-label" for="cad-valor">Valor do frete <span class="dsc-req">*</span></label>
+                  <span class="dsc-money"><input class="dsc-input" id="cad-valor" inputmode="decimal" placeholder="0,00"></span>
+                </div>
+              </div>
+            </div>
+            <div class="dsc-flex dsc-gap-1" style="justify-content:flex-end;margin-top:8px">
+              <button class="dsc-btn dsc-btn--chromeless" onclick="abrirPesquisa()">Cancelar</button>
+              <button class="dsc-btn" id="btn-cad-salvar" onclick="salvarCadastro()">Salvar</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tela: Editar Faixa de Frete (/administracao/faixas-frete/:id/editar) — ADM-FRT-03 -->
+        <div id="screen-editar" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Administração</span><span class="dsc-sep">›</span><a href="#" onclick="abrirPesquisa(); return false;">Faixas de Frete</a><span class="dsc-sep">›</span><span class="is-current">Editar</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Editar Faixa de Frete</h1>
+            <p class="dsc-page-subtitle">Altere o intervalo de CEP ou o valor do frete; a região não muda.</p>
+          </div>
+          <section class="dsc-card">
+            <div class="dsc-alert dsc-alert--warning" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>A alteração vale para os próximos cálculos de frete; os pedidos já feitos mantêm o valor cobrado.</span></div>
+            <div id="edt-alerta" aria-live="polite"></div>
+            <div class="dsc-row" style="margin-top:8px">
+              <div class="dsc-col-12">
+                <div class="dsc-lv"><span class="dsc-lv-label">Região</span><span class="dsc-lv-value" id="edt-regiao">—</span></div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="f-edt-ini">
+                  <label class="dsc-field-label" for="edt-ini">CEP inicial <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="edt-ini" inputmode="numeric" maxlength="8" placeholder="00000000">
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="f-edt-fim">
+                  <label class="dsc-field-label" for="edt-fim">CEP final <span class="dsc-req">*</span></label>
+                  <input class="dsc-input" id="edt-fim" inputmode="numeric" maxlength="8" placeholder="00000000">
+                </div>
+              </div>
+              <div class="dsc-col-4">
+                <div class="dsc-field" id="f-edt-valor">
+                  <label class="dsc-field-label" for="edt-valor">Valor do frete <span class="dsc-req">*</span></label>
+                  <span class="dsc-money"><input class="dsc-input" id="edt-valor" inputmode="decimal" placeholder="0,00"></span>
+                </div>
+              </div>
+            </div>
+            <div class="dsc-flex dsc-gap-1" style="justify-content:flex-end;margin-top:8px">
+              <button class="dsc-btn dsc-btn--chromeless" onclick="abrirPesquisa()">Cancelar</button>
+              <button class="dsc-btn" id="btn-edt-salvar" onclick="salvarEdicao()">Salvar</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tela: Visualizar Faixa de Frete (/administracao/faixas-frete/:id) — ADM-FRT-05 -->
+        <div id="screen-visualizar" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Administração</span><span class="dsc-sep">›</span><a href="#" onclick="abrirPesquisa(); return false;">Faixas de Frete</a><span class="dsc-sep">›</span><span class="is-current">Visualizar</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title" id="vis-titulo">Faixa de Frete</h1>
+            <p class="dsc-page-subtitle">Dados da faixa, somente leitura.</p>
+          </div>
+          <section class="dsc-card">
+            <div class="dsc-row">
+              <div class="dsc-col-12"><div class="dsc-lv"><span class="dsc-lv-label">Região</span><span class="dsc-lv-value" id="vis-regiao">—</span></div></div>
+              <div class="dsc-col-3"><div class="dsc-lv"><span class="dsc-lv-label">CEP inicial</span><span class="dsc-lv-value" id="vis-ini">—</span></div></div>
+              <div class="dsc-col-3"><div class="dsc-lv"><span class="dsc-lv-label">CEP final</span><span class="dsc-lv-value" id="vis-fim">—</span></div></div>
+              <div class="dsc-col-3"><div class="dsc-lv"><span class="dsc-lv-label">Valor do frete</span><span class="dsc-lv-value" id="vis-valor">—</span></div></div>
+              <div class="dsc-col-3"><div class="dsc-lv"><span class="dsc-lv-label">Quantidade de pedidos</span><span class="dsc-lv-value" id="vis-pedidos">—</span></div></div>
+            </div>
+            <div class="dsc-flex" style="justify-content:flex-end;margin-top:16px">
+              <button class="dsc-btn dsc-btn--outline" onclick="abrirPesquisa()">Voltar</button>
+            </div>
+          </section>
+        </div>
+
+        <div class="dsc-proto-notes">
+          <strong>📋 Notas do protótipo:</strong>
+          <ul>
+            <li>Massa da demonstração: cinco faixas da Tabela de Frete. Pedidos por faixa: Centro — São Paulo atende 1001 e 1003; Mooca — São Paulo, 1002; Pinheiros — São Paulo, 1006; Campinas, 1005; Rio de Janeiro — Centro não atende nenhum pedido e é a única que pode ser excluída.</li>
+            <li>Experimente: CEP atendido 01310100 (Centro — São Paulo) e 69900000 (nenhuma faixa); cadastro de 01310500 a 01311500 (CEPs em comum com Centro — São Paulo) ou com a região "campinas" (repetida).</li>
+            <li>Não aparecem na tela: o efeito no cálculo de frete do checkout (VND-CHK-01 — Calcular Frete), que passa a usar a faixa cadastrada ou alterada, e os pedidos já feitos, que mantêm o frete cobrado.</li>
+            <li>As ações seguem a matriz do N2: o Atendente só pesquisa e visualiza; simule com o seletor abaixo.</li>
+          </ul>
+          <div class="dsc-field" style="margin-top:12px;max-width:340px">
+            <label class="dsc-field-label" for="simulacao">Simular estado <span class="dsc-text-muted" style="font-weight:400">(controle do protótipo, não faz parte da tela)</span></label>
+            <select class="dsc-select" id="simulacao" onchange="simular(this.value)">
+              <option value="normal">Administrador, com faixas</option>
+              <option value="atendente">Atendente (só consulta)</option>
+              <option value="vazio">Nenhuma faixa cadastrada</option>
+              <option value="sem-acesso">Sem acesso</option>
+              <option value="falha">Falha inesperada</option>
+            </select>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Exclusão — confirmação (ADM-FRT-04, caminho feliz) -->
+  <div id="modal-delete" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="dialog" aria-modal="true" aria-labelledby="modal-delete-titulo">
+      <div class="dsc-modal-header"><strong id="modal-delete-titulo">Excluir faixa de frete</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-delete', false)">✕</button></div>
+      <div class="dsc-modal-body"><p>Deseja realmente excluir este registro?</p><p class="dsc-text-muted" id="modal-delete-regiao"></p></div>
+      <div class="dsc-modal-footer">
+        <button class="dsc-btn dsc-btn--chromeless" onclick="toggleModal('modal-delete', false)">Cancelar</button>
+        <button class="dsc-btn dsc-btn--danger" id="btn-excluir" onclick="confirmarExclusao()">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exclusão — bloqueio por vínculo (ADM-FRT-04, RC-09), sem botão Excluir -->
+  <div id="modal-delete-blocked" class="dsc-modal-mask" style="display:none">
+    <div class="dsc-modal" role="dialog" aria-modal="true" aria-labelledby="modal-blocked-titulo">
+      <div class="dsc-modal-header"><strong id="modal-blocked-titulo">Não é possível excluir</strong>
+        <button class="dsc-modal-close" aria-label="Fechar" onclick="toggleModal('modal-delete-blocked', false)">✕</button></div>
+      <div class="dsc-modal-body">
+        <div class="dsc-alert dsc-alert--danger" role="alert" style="margin:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>Não é possível excluir: existem pedidos vinculados a este registro.</span></div>
+        <p class="dsc-text-muted" id="modal-blocked-regiao" style="margin-top:12px"></p>
+      </div>
+      <div class="dsc-modal-footer"><button class="dsc-btn dsc-btn--outline" onclick="toggleModal('modal-delete-blocked', false)">Ok, entendi</button></div>
+    </div>
+  </div>
+
+  <div id="toast-save" class="dsc-toast dsc-toast--positive" role="status" style="display:none;position:fixed;top:24px;right:24px;z-index:200">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Registro salvo com sucesso.</span>
+  </div>
+  <div id="toast-delete" class="dsc-toast dsc-toast--positive" role="status" style="display:none;position:fixed;top:24px;right:24px;z-index:200">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Registro excluído com sucesso.</span>
+  </div>
+
+  <script>
+    // ☰: abre/fecha o drawer do menu (sidebar oculta por padrão); ESC também fecha
+    function dscToggleMenu() {
+      document.querySelector('.dsc-app').classList.toggle('is-menu-open');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.querySelector('.dsc-app').classList.remove('is-menu-open');
+        toggleModal('modal-delete', false);
+        toggleModal('modal-delete-blocked', false);
+      }
+    });
+    function showScreen(id) {
+      document.querySelectorAll('.dsc-screen').forEach(function (s) { s.classList.remove('is-active'); });
+      document.getElementById(id).classList.add('is-active');
+      document.querySelector('.dsc-app').classList.remove('is-menu-open');
+      window.scrollTo(0, 0);
+    }
+    function toggleModal(id, aberto) { document.getElementById(id).style.display = aberto ? 'flex' : 'none'; }
+    function showToast(id) {
+      var t = document.getElementById(id);
+      t.style.display = 'flex';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function () { t.style.display = 'none'; }, 4000);
+    }
+
+    // Massa da demonstração (global/data-models/vendas.md › TabelaFrete) e pedidos por faixa
+    var FAIXAS_INICIAIS = [
+      { id: 1, regiao: 'Centro — São Paulo', ini: '01310000', fim: '01310999', valor: 18.90, pedidos: 2 },
+      { id: 2, regiao: 'Mooca — São Paulo', ini: '03100000', fim: '03199999', valor: 22.50, pedidos: 1 },
+      { id: 3, regiao: 'Pinheiros — São Paulo', ini: '05400000', fim: '05499999', valor: 21.00, pedidos: 1 },
+      { id: 4, regiao: 'Campinas', ini: '13000000', fim: '13139999', valor: 32.90, pedidos: 1 },
+      { id: 5, regiao: 'Rio de Janeiro — Centro', ini: '20000000', fim: '20099999', valor: 39.90, pedidos: 0 }
+    ];
+    var faixas = FAIXAS_INICIAIS.map(function (f) { return Object.assign({}, f); });
+    var proximoId = 6;
+    var estado = 'normal';
+    var emEdicao = null;
+    var aExcluir = null;
+    var ocupado = false;
+
+    var ICONE_ERRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    var ICONE_FALHA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    var ICONE_VER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    var ICONE_EDITAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+    var ICONE_EXCLUIR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+
+    function normaliza(t) { return t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim(); }
+    function moeda(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+    function alerta(variante, texto) {
+      return '<div class="dsc-alert dsc-alert--' + variante + '" role="alert">' + ICONE_FALHA + '<span>' + texto + '</span></div>';
+    }
+    function estadoVazio(icone, titulo, texto) {
+      return '<div class="dsc-state"><span class="dsc-state-icon">' + icone + '</span><span class="dsc-state-title">' + titulo + '</span><span class="dsc-state-text">' + texto + '</span></div>';
+    }
+    function erroNoCampo(campoId, texto) {
+      var f = document.getElementById(campoId);
+      var e = f.querySelector('.dsc-field-error');
+      var input = f.querySelector('input');
+      if (!texto) { f.classList.remove('is-invalid'); if (e) e.remove(); input.removeAttribute('aria-invalid'); return; }
+      f.classList.add('is-invalid');
+      if (!e) { e = document.createElement('span'); e.className = 'dsc-field-error'; e.id = campoId + '-erro'; f.appendChild(e); }
+      e.innerHTML = ICONE_ERRO + ' ' + texto;
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', campoId + '-erro');
+    }
+    function limpaErros(ids) { ids.forEach(function (id) { erroNoCampo(id, ''); }); }
+    function cepValido(c) { return /^\d{8}$/.test(c); }
+    function lerValor(t) {
+      t = t.trim().replace(/\./g, '').replace(',', '.');
+      if (!/^\d+(\.\d{1,2})?$/.test(t)) return NaN;
+      return Number(t);
+    }
+
+    // ── ADM-FRT-01 Pesquisar Faixas de Frete ─────────────────────────
+    function render(lista, filtrado) {
+      var area = document.getElementById('resultado');
+      var admin = estado !== 'atendente';
+      document.getElementById('contagem').textContent = lista.length + (lista.length === 1 ? ' registro' : ' registros');
+      if (!faixas.length) { area.innerHTML = estadoVazio('🗂️', 'Nenhuma faixa', 'Nenhum registro encontrado.'); return; }
+      if (!lista.length) { area.innerHTML = estadoVazio('🔎', 'Sem resultados', 'Nenhum resultado para a busca.'); return; }
+      var linhas = lista.slice().sort(function (a, b) { return a.ini.localeCompare(b.ini); }).map(function (f) {
+        var acoes = '<button class="dsc-icon-action" aria-label="Visualizar ' + f.regiao + '" title="Visualizar" onclick="abrirVisualizacao(' + f.id + ')">' + ICONE_VER + '</button>';
+        if (admin) {
+          acoes += '<button class="dsc-icon-action" aria-label="Editar ' + f.regiao + '" title="Editar" onclick="abrirEdicao(' + f.id + ')">' + ICONE_EDITAR + '</button>' +
+                   '<button class="dsc-icon-action" aria-label="Excluir ' + f.regiao + '" title="Excluir" onclick="pedirExclusao(' + f.id + ')">' + ICONE_EXCLUIR + '</button>';
+        }
+        return '<tr><td>' + f.regiao + '</td><td>' + f.ini + '</td><td>' + f.fim + '</td><td class="dsc-num">' + moeda(f.valor) + '</td><td class="dsc-col-actions">' + acoes + '</td></tr>';
+      }).join('');
+      area.innerHTML = '<div class="dsc-table-wrap"><table class="dsc-table"><thead><tr>' +
+        '<th class="dsc-sortable">Região</th><th class="dsc-sortable is-sorted">CEP inicial</th><th>CEP final</th><th class="dsc-num dsc-sortable">Valor do frete</th><th class="dsc-col-actions">Ações</th>' +
+        '</tr></thead><tbody>' + linhas + '</tbody></table></div>';
+    }
+
+    function pesquisar() {
+      if (ocupado) return;
+      erroNoCampo('f-filtro-cep', '');
+      var regiao = normaliza(document.getElementById('filtro-regiao').value);
+      var cep = document.getElementById('filtro-cep').value.trim();
+      if (cep && !cepValido(cep)) { erroNoCampo('f-filtro-cep', 'CEP inválido.'); return; }
+      ocupado = true;
+      var btn = document.getElementById('btn-pesquisar');
+      btn.classList.add('is-loading'); btn.disabled = true;
+      document.getElementById('resultado').innerHTML = '<div style="padding:16px"><p class="dsc-caption" style="margin-bottom:8px">Carregando…</p><span class="dsc-skeleton" style="height:20px;width:60%"></span></div>';
+      setTimeout(function () {
+        ocupado = false;
+        btn.classList.remove('is-loading'); btn.disabled = false;
+        if (estado === 'falha') {
+          document.getElementById('contagem').textContent = '';
+          document.getElementById('resultado').innerHTML = estadoVazio('⚠️', 'Falha ao carregar', 'Não foi possível carregar os dados.');
+          return;
+        }
+        var lista = faixas.filter(function (f) {
+          if (regiao && normaliza(f.regiao).indexOf(regiao) < 0) return false;
+          if (cep && !(f.ini <= cep && cep <= f.fim)) return false;
+          return true;
+        });
+        render(lista, Boolean(regiao || cep));
+      }, 600);
+    }
+    function limpar() {
+      document.getElementById('filtro-regiao').value = '';
+      document.getElementById('filtro-cep').value = '';
+      erroNoCampo('f-filtro-cep', '');
+      render(faixas, false);
+    }
+    function abrirPesquisa() {
+      showScreen('screen-pesquisa');
+    }
+
+    // Validação comum de cadastro e edição (ADM-FRT-02 e ADM-FRT-03)
+    function validaIntervaloEValor(prefixo) {
+      var ok = true;
+      var ini = document.getElementById(prefixo + '-ini').value.trim();
+      var fim = document.getElementById(prefixo + '-fim').value.trim();
+      var valorTxt = document.getElementById(prefixo + '-valor').value.trim();
+      if (!ini) { erroNoCampo('f-' + prefixo + '-ini', 'Campo obrigatório.'); ok = false; }
+      else if (!cepValido(ini)) { erroNoCampo('f-' + prefixo + '-ini', 'CEP inválido.'); ok = false; }
+      if (!fim) { erroNoCampo('f-' + prefixo + '-fim', 'Campo obrigatório.'); ok = false; }
+      else if (!cepValido(fim)) { erroNoCampo('f-' + prefixo + '-fim', 'CEP inválido.'); ok = false; }
+      var valor = lerValor(valorTxt);
+      if (!valorTxt) { erroNoCampo('f-' + prefixo + '-valor', 'Campo obrigatório.'); ok = false; }
+      else if (isNaN(valor) || valor <= 0) { erroNoCampo('f-' + prefixo + '-valor', 'Informe um valor válido.'); ok = false; }
+      return ok ? { ini: ini, fim: fim, valor: valor } : null;
+    }
+    function conflitoDeIntervalo(ini, fim, idProprio) {
+      if (ini > fim) return 'O CEP final deve ser igual ou maior que o CEP inicial.';
+      var outra = faixas.filter(function (f) { return f.id !== idProprio && ini <= f.fim && f.ini <= fim; })[0];
+      if (outra) return 'Esta faixa tem CEPs em comum com a faixa ' + outra.regiao + '.';
+      return '';
+    }
+    function salvando(btnId, depois) {
+      ocupado = true;
+      var btn = document.getElementById(btnId);
+      btn.classList.add('is-loading'); btn.disabled = true;
+      setTimeout(function () { ocupado = false; btn.classList.remove('is-loading'); btn.disabled = false; depois(); }, 700);
+    }
+
+    // ── ADM-FRT-02 Cadastrar Faixa de Frete ──────────────────────────
+    function abrirCadastro() {
+      ['cad-regiao', 'cad-ini', 'cad-fim', 'cad-valor'].forEach(function (id) { document.getElementById(id).value = ''; });
+      limpaErros(['f-cad-regiao', 'f-cad-ini', 'f-cad-fim', 'f-cad-valor']);
+      document.getElementById('cad-alerta').innerHTML = '';
+      showScreen('screen-cadastrar');
+    }
+    function salvarCadastro() {
+      if (ocupado) return;
+      limpaErros(['f-cad-regiao', 'f-cad-ini', 'f-cad-fim', 'f-cad-valor']);
+      document.getElementById('cad-alerta').innerHTML = '';
+      var regiao = document.getElementById('cad-regiao').value.trim();
+      var ok = true;
+      if (!regiao) { erroNoCampo('f-cad-regiao', 'Campo obrigatório.'); ok = false; }
+      else if (regiao.length > 60) { erroNoCampo('f-cad-regiao', 'Máximo de 60 caracteres.'); ok = false; }
+      var dados = validaIntervaloEValor('cad');
+      if (!ok || !dados) return;
+      var conflito = '';
+      if (dados.ini > dados.fim) conflito = 'O CEP final deve ser igual ou maior que o CEP inicial.';
+      else if (faixas.some(function (f) { return normaliza(f.regiao) === normaliza(regiao); })) conflito = 'Já existe uma faixa com esta região.';
+      else conflito = conflitoDeIntervalo(dados.ini, dados.fim, null);
+      if (conflito) { document.getElementById('cad-alerta').innerHTML = alerta('danger', conflito); return; }
+      salvando('btn-cad-salvar', function () {
+        if (estado === 'falha') { document.getElementById('cad-alerta').innerHTML = alerta('danger', 'Ocorreu um erro. Tente novamente.'); return; }
+        faixas.push({ id: proximoId++, regiao: regiao, ini: dados.ini, fim: dados.fim, valor: dados.valor, pedidos: 0 });
+        limpar();
+        abrirPesquisa();
+        showToast('toast-save');
+      });
+    }
+
+    // ── ADM-FRT-03 Editar Faixa de Frete ─────────────────────────────
+    function abrirEdicao(id) {
+      var f = faixas.filter(function (x) { return x.id === id; })[0];
+      if (!f) return;
+      emEdicao = id;
+      document.getElementById('edt-regiao').textContent = f.regiao;
+      document.getElementById('edt-ini').value = f.ini;
+      document.getElementById('edt-fim').value = f.fim;
+      document.getElementById('edt-valor').value = f.valor.toFixed(2).replace('.', ',');
+      limpaErros(['f-edt-ini', 'f-edt-fim', 'f-edt-valor']);
+      document.getElementById('edt-alerta').innerHTML = '';
+      showScreen('screen-editar');
+    }
+    function salvarEdicao() {
+      if (ocupado) return;
+      limpaErros(['f-edt-ini', 'f-edt-fim', 'f-edt-valor']);
+      document.getElementById('edt-alerta').innerHTML = '';
+      var dados = validaIntervaloEValor('edt');
+      if (!dados) return;
+      var conflito = conflitoDeIntervalo(dados.ini, dados.fim, emEdicao);
+      if (conflito) { document.getElementById('edt-alerta').innerHTML = alerta('danger', conflito); return; }
+      salvando('btn-edt-salvar', function () {
+        if (estado === 'falha') { document.getElementById('edt-alerta').innerHTML = alerta('danger', 'Ocorreu um erro. Tente novamente.'); return; }
+        var f = faixas.filter(function (x) { return x.id === emEdicao; })[0];
+        if (!f) { document.getElementById('edt-alerta').innerHTML = alerta('danger', 'Registro não encontrado.'); return; }
+        f.ini = dados.ini; f.fim = dados.fim; f.valor = dados.valor;
+        limpar();
+        abrirPesquisa();
+        showToast('toast-save');
+      });
+    }
+
+    // ── ADM-FRT-04 Excluir Faixa de Frete ────────────────────────────
+    function pedirExclusao(id) {
+      var f = faixas.filter(function (x) { return x.id === id; })[0];
+      if (!f) return;
+      aExcluir = id;
+      if (f.pedidos > 0) {
+        document.getElementById('modal-blocked-regiao').textContent = f.regiao + ' atende ' + f.pedidos + (f.pedidos === 1 ? ' pedido' : ' pedidos') + '. Para mudar o intervalo ou o valor, use a edição da faixa.';
+        toggleModal('modal-delete-blocked', true);
+        return;
+      }
+      document.getElementById('modal-delete-regiao').textContent = f.regiao + ' — ' + f.ini + ' a ' + f.fim;
+      toggleModal('modal-delete', true);
+    }
+    function confirmarExclusao() {
+      if (ocupado) return;
+      salvando('btn-excluir', function () {
+        toggleModal('modal-delete', false);
+        if (estado === 'falha') { document.getElementById('resultado').insertAdjacentHTML('afterbegin', '<div style="padding:16px 16px 0">' + alerta('danger', 'Ocorreu um erro. Tente novamente.') + '</div>'); return; }
+        faixas = faixas.filter(function (x) { return x.id !== aExcluir; });
+        limpar();
+        showToast('toast-delete');
+      });
+    }
+
+    // ── ADM-FRT-05 Visualizar Faixa de Frete ─────────────────────────
+    function abrirVisualizacao(id) {
+      var f = faixas.filter(function (x) { return x.id === id; })[0];
+      if (!f) return;
+      document.getElementById('vis-titulo').textContent = f.regiao;
+      document.getElementById('vis-regiao').textContent = f.regiao;
+      document.getElementById('vis-ini').textContent = f.ini;
+      document.getElementById('vis-fim').textContent = f.fim;
+      document.getElementById('vis-valor').textContent = moeda(f.valor);
+      document.getElementById('vis-pedidos').textContent = String(f.pedidos);
+      showScreen('screen-visualizar');
+    }
+
+    // ── Controle do protótipo: estados que nenhum clique produz ──────
+    function simular(valor) {
+      estado = valor;
+      var atendente = estado === 'atendente';
+      document.getElementById('usuario-sigla').textContent = atendente ? 'CS' : 'ER';
+      document.getElementById('usuario-nome').textContent = atendente ? 'Carla Souza' : 'Elisa Rocha';
+      document.getElementById('usuario-perfil').textContent = atendente ? 'Atendente' : 'Administrador';
+      document.querySelectorAll('[data-so-admin]').forEach(function (el) { el.style.display = atendente ? 'none' : ''; });
+      document.getElementById('btn-cadastrar').style.display = atendente ? 'none' : '';
+      var semAcesso = estado === 'sem-acesso';
+      document.getElementById('area-pesquisa').style.display = semAcesso ? 'none' : '';
+      document.getElementById('sem-acesso').style.display = semAcesso ? '' : 'none';
+      document.getElementById('sem-acesso').innerHTML = semAcesso ? alerta('danger', 'Você não tem permissão para esta ação.') : '';
+      faixas = estado === 'vazio' ? [] : FAIXAS_INICIAIS.map(function (f) { return Object.assign({}, f); });
+      abrirPesquisa();
+      if (estado === 'falha') {
+        document.getElementById('contagem').textContent = '';
+        document.getElementById('resultado').innerHTML = estadoVazio('⚠️', 'Falha ao carregar', 'Não foi possível carregar os dados.');
+        return;
+      }
+      limpar();
+    }
+
+    render(faixas, false);
+  </script>
+</body>
+</html>

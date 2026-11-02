@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docqui no Copilot Studio</title>
+<style>
+:root{
+  --tinta:#1B2B4B; --tinta-2:#4A5873; --papel:#FBF8F0; --cartao:#FFFFFF; --linha:#E4DED0;
+  --azul:#005CA9; --azul-claro:#E6F0F9; --laranja:#F39200; --grifo:#FFD94A;
+  --verde:#1E7F5C; --verde-claro:#E5F3EC; --vermelho:#BE4B33; --vermelho-claro:#FBEAE5;
+  --codigo:#F4F1E8; --raio:10px;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --texto:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--papel);color:var(--tinta);font:16px/1.6 var(--texto)}
+a{color:var(--azul)}
+code{font-family:var(--mono);font-size:.88em;background:var(--codigo);padding:.1em .35em;border-radius:4px;overflow-wrap:anywhere}
+header.topo{background:var(--azul);color:#fff;padding:28px 16px 24px}
+header.topo .miolo{max-width:1180px;margin:0 auto}
+header.topo h1{margin:0 0 6px;font-size:1.9rem;line-height:1.2}
+header.topo p{margin:0;max-width:760px;color:#DCE9F6}
+.selo{display:inline-block;background:var(--grifo);color:var(--tinta);font-weight:600;font-size:.8rem;padding:2px 10px;border-radius:999px;margin-bottom:10px}
+.layout{max-width:1180px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:240px minmax(0,1fr);gap:32px}
+nav.sumario{position:sticky;top:0;align-self:start;padding:24px 0;max-height:100vh;overflow:auto}
+nav.sumario h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--tinta-2);margin:0 0 8px}
+nav.sumario ol{list-style:none;margin:0;padding:0}
+nav.sumario a{display:block;text-decoration:none;color:var(--tinta);padding:5px 10px;border-radius:6px;font-size:.92rem}
+nav.sumario a:hover{background:var(--azul-claro)}
+.progresso{margin:0 0 18px;background:var(--cartao);border:1px solid var(--linha);border-radius:var(--raio);padding:12px}
+.progresso .barra{height:8px;background:var(--linha);border-radius:999px;overflow:hidden;margin-top:6px}
+.progresso .barra span{display:block;height:100%;width:0;background:var(--verde);transition:width .2s}
+.progresso small{color:var(--tinta-2)}
+main{padding:24px 0 80px;min-width:0}
+section{margin-bottom:44px}
+h2{font-size:1.5rem;margin:0 0 4px;scroll-margin-top:16px}
+h2 .num{color:var(--laranja)}
+.sub{color:var(--tinta-2);margin:0 0 18px}
+h3{font-size:1.1rem;margin:0}
+.cartoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:16px 0}
+.cartao{background:var(--cartao);border:1px solid var(--linha);border-radius:var(--raio);padding:16px}
+.cartao h3{margin-bottom:6px;font-size:1rem}
+.cartao p,.cartao ul{margin:0;font-size:.95rem}
+.cartao ul{padding-left:18px}
+.aviso{border-left:4px solid var(--laranja);background:#FFF6E6;padding:12px 16px;border-radius:0 var(--raio) var(--raio) 0;margin:16px 0}
+.aviso.info{border-color:var(--azul);background:var(--azul-claro)}
+.aviso.ok{border-color:var(--verde);background:var(--verde-claro)}
+.aviso.perigo{border-color:var(--vermelho);background:var(--vermelho-claro)}
+.aviso strong:first-child{display:block;margin-bottom:2px}
+ol.passos{list-style:none;margin:0;padding:0;counter-reset:passo}
+ol.passos>li{background:var(--cartao);border:1px solid var(--linha);border-radius:var(--raio);padding:16px 18px;margin-bottom:12px}
+ol.passos>li.feito{border-color:var(--verde);background:#FAFDFB}
+.passo-titulo{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.passo-titulo input{width:20px;height:20px;margin:3px 0 0;flex:none;accent-color:var(--verde);cursor:pointer}
+.passo-titulo .id{font-family:var(--mono);font-size:.85rem;color:var(--azul);font-weight:700;margin-right:6px}
+.passo-corpo{margin:10px 0 0 32px}
+.passo-corpo>*:first-child{margin-top:0}
+.passo-corpo ol,.passo-corpo ul{padding-left:20px}
+.passo-corpo li{margin:4px 0}
+.quem{display:inline-block;font-size:.78rem;background:var(--azul-claro);color:var(--azul);border-radius:999px;padding:1px 9px;margin-left:6px;font-weight:600;vertical-align:2px}
+.ui{font-weight:600;background:#EEF1F6;border:1px solid #D5DBE6;border-radius:4px;padding:0 5px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.bloco{position:relative;margin:12px 0}
+.bloco .rotulo{font-size:.8rem;color:var(--tinta-2);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bloco pre{margin:0;background:var(--codigo);border:1px solid var(--linha);border-radius:8px;padding:12px 14px;overflow:auto;max-height:360px;font:13px/1.5 var(--mono);white-space:pre-wrap;word-break:break-word}
+button.copiar{font:600 .8rem var(--texto);background:var(--azul);color:#fff;border:0;border-radius:6px;padding:5px 12px;cursor:pointer}
+button.copiar:hover{background:#004B8A}
+button.copiar.ok{background:var(--verde)}
+table{border-collapse:collapse;width:100%;background:var(--cartao);font-size:.93rem}
+.tabela{overflow-x:auto;border:1px solid var(--linha);border-radius:var(--raio);margin:12px 0}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--linha);vertical-align:top}
+th{background:#F3EFE4;font-weight:600}
+tr:last-child td{border-bottom:0}
+.arvore{background:var(--cartao);border:1px solid var(--linha);border-radius:var(--raio);padding:14px 16px;font:13px/1.65 var(--mono);overflow-x:auto;white-space:pre}
+.arvore .novo{background:var(--grifo);padding:0 4px;border-radius:3px}
+.arvore .so-leitura{color:var(--tinta-2)}
+.diagrama{background:var(--cartao);border:1px solid var(--linha);border-radius:var(--raio);padding:12px;overflow-x:auto}
+.diagrama svg{display:block;min-width:760px;width:100%;height:auto}
+.legenda{display:flex;flex-wrap:wrap;gap:14px;font-size:.85rem;color:var(--tinta-2);margin-top:8px}
+.legenda span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c);border:1.5px solid var(--b)}
+details{background:var(--cartao);border:1px solid var(--linha);border-radius:var(--raio);padding:10px 16px;margin:10px 0}
+details summary{cursor:pointer;font-weight:600}
+dl.glossario{display:grid;grid-template-columns:minmax(120px,200px) 1fr;gap:6px 18px;margin:0}
+dl.glossario dt{font-weight:600}
+dl.glossario dd{margin:0}
+footer{color:var(--tinta-2);font-size:.85rem;border-top:1px solid var(--linha);padding-top:16px}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;gap:0}
+  nav.sumario{position:static;max-height:none;padding:16px 0 0}
+  nav.sumario ol{display:flex;flex-wrap:wrap;gap:4px}
+  nav.sumario a{background:var(--cartao);border:1px solid var(--linha)}
+  .passo-corpo{margin-left:0}
+  dl.glossario{grid-template-columns:1fr}
+  dl.glossario dd{margin-bottom:8px}
+}
+@media print{nav.sumario,button.copiar{display:none}.layout{display:block}.bloco pre{max-height:none}}
+</style>
+</head>
+<body>
+<header class="topo"><div class="miolo">
+  <span class="selo">Guia de configuração · Docqui Caixa</span>
+  <h1>Docqui Caixa no Copilot Studio</h1>
+  <p>O que configurar no GitHub, em cada repositório de documentação e no Copilot Studio para que o analista especifique tickets conversando com um agente. Siga as partes na ordem e marque cada passo ao concluir: a marcação fica salva neste navegador.</p>
+</div></header>
+
+<div class="layout">
+<nav class="sumario" aria-label="Sumário">
+  <div class="progresso" aria-live="polite"><strong id="prog-texto">0 de 0 passos</strong><div class="barra"><span id="prog-barra"></span></div><small>Marque cada passo ao concluir.</small></div>
+  <h2>Sumário</h2>
+  <ol>
+    <li><a href="#visao">Visão geral</a></li>
+    <li><a href="#antes">Antes de começar</a></li>
+    <li><a href="#github">1. GitHub: organização</a></li>
+    <li><a href="#repositorio">2. Cada repositório</a></li>
+    <li><a href="#copilot">3. Copilot Studio</a></li>
+    <li><a href="#conferencia">4. Conferência final</a></li>
+    <li><a href="#problemas">Problemas comuns</a></li>
+    <li><a href="#decisoes">Por que é assim</a></li>
+    <li><a href="#glossario">Glossário</a></li>
+    <li><a href="#pacote">Arquivos do pacote</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<div class="aviso">
+  <strong>Estudo, ainda não testado num Copilot Studio real.</strong>
+  O workflow de regeneração foi testado com os scripts do engine num repositório simulado; as instruções dos agentes e os passos do Copilot Studio ainda não. Os nomes de botões do Copilot Studio mudam com frequência: se um nome não bater, procure o equivalente. Antes de configurar para valer, faça o piloto do <code>roteiro-piloto.md</code>.
+</div>
+
+<section id="visao">
+  <h2>Visão geral</h2>
+  <p class="sub">Como as peças se ligam. O analista e o revisor só conversam com o agente: o GitHub fica nos bastidores. O que eles precisam saber está na página <strong>Especificar com o agente</strong> do site do Docqui, no menu <strong>Comece aqui</strong>; este guia é para quem monta.</p>
+  <div class="diagrama" role="img" aria-label="Diagrama: o analista conversa com o agente Docqui Caixa no Copilot Studio, que usa a ferramenta MCP do GitHub para ler o método na main do repositório do engine e gravar a especificação na branch do repositório do sistema; o push dispara o workflow regenera-gerados, que grava os arquivos gerados com o token do GitHub App; os checks do PR conferem tudo e o revisor aprova e faz o merge; o agente Retro registra aprendizados como issue no repositório do engine.">
+{{SVG}}
+  </div>
+  <p class="sub" style="margin-top:8px">Versão interativa, com busca, caminho entre nós e exportação: <code>diagrama/docqui-copilot.html</code>, no pacote.</p>
+  <div class="legenda">
+    <span style="--c:#E6F0F9;--b:#005CA9">Pessoa</span><span style="--c:#EDE7F6;--b:#5B3FA6">Copilot Studio</span><span style="--c:#FFF1D6;--b:#8F5600">Serviço ou credencial do GitHub</span><span style="--c:#E5F3EC;--b:#1E7F5C">Arquivos do repositório</span><span style="--c:#FBEAE5;--b:#BE4B33">Checks</span>
+  </div>
+  <div class="cartoes">
+    <div class="cartao"><h3>O analista faz</h3><ul><li>Conversa com o agente; ao fim de cada artefato, revisa e aprova quando puder (Validado).</li><li>Acompanha o PR no navegador e pede a revisão.</li></ul></div>
+    <div class="cartao"><h3>Roda sozinho</h3><ul><li>O workflow <code>regenera-gerados</code> grava o espelho do INDEX, o diagrama ER, os dicionários e o HTML da AIMM.</li><li>O <code>spec-guard</code> e o <code>gate-check</code> conferem cada push.</li><li>O Pages publica a prévia da branch.</li></ul></div>
+    <div class="cartao"><h3>Credenciais</h3><ul><li>O agente grava com a conta do próprio analista (OAuth).</li><li>O workflow grava com o GitHub App <code>docqui-bot</code>.</li><li>A <code>main</code> só recebe PR aprovado.</li></ul></div>
+  </div>
+</section>
+
+<section id="antes">
+  <h2>Antes de começar</h2>
+  <p class="sub">Quem precisa participar e o que confirmar antes de mexer em qualquer coisa.</p>
+  <div class="tabela"><table>
+    <tr><th>Papel</th><th>O que faz neste guia</th><th>Partes</th></tr>
+    <tr><td>Dono (owner) da organização no GitHub</td><td>Cria o GitHub App e o OAuth App, os segredos e o rótulo <code>retro</code></td><td>1</td></tr>
+    <tr><td>Administrador de cada repositório de documentação</td><td>Adiciona o workflow, protege a <code>main</code>, liga o Pages</td><td>2</td></tr>
+    <tr><td>Quem cria agentes no Copilot Studio (maker)</td><td>Cria o agente, a ferramenta, o tópico e o agente Retro, e publica</td><td>3</td></tr>
+    <tr><td>Administrador do Power Platform</td><td>Libera, se as políticas de dados (DLP) bloquearem, a ferramenta MCP</td><td>3</td></tr>
+    <tr><td>Quem mantém o engine (no Claude Code)</td><td>Cria a instância e a mantém sincronizada (<code>init-instance</code>, <code>sync-instance</code>)</td><td>2</td></tr>
+  </table></div>
+  <ol class="passos">
+    <li data-passo="0.1"><label class="passo-titulo"><input type="checkbox"><span><span class="id">0.1</span><strong>Confirme três coisas antes de seguir</strong></span></label>
+      <div class="passo-corpo">
+        <ol>
+          <li><strong>Qual GitHub a CAIXA usa.</strong> Se o endereço é <code>github.com</code> (inclusive GitHub Enterprise Cloud), este guia vale como está. Se é um servidor próprio (GitHub Enterprise Server), o passo 3.3 muda: é preciso hospedar o <code>github-mcp-server</code> e usar o endereço dele.</li>
+          <li><strong>Se o Copilot Studio do ambiente aceita ferramenta MCP.</strong> Pergunte ao administrador do Power Platform se as políticas de dados permitem conectores personalizados e MCP.</li>
+          <li><strong>Se a organização do GitHub aceita apps de terceiros.</strong> O passo 1.4 cria um OAuth App; se a organização restringe o acesso de aplicativos, o dono precisa aprovar esse app.</li>
+        </ol>
+        <p>Se alguma resposta for "não", pare aqui: a arquitetura muda, e o <code>roteiro-piloto.md</code> diz o que fazer em cada caso.</p>
+      </div></li>
+  </ol>
+</section>
+
+<section id="github">
+  <h2><span class="num">1.</span> GitHub: organização</h2>
+  <p class="sub">Feito uma vez, pelo dono da organização. A interface do GitHub é em inglês; os nomes de botão aparecem como estão na tela.</p>
+  <ol class="passos">
+    <li data-passo="1.1"><label class="passo-titulo"><input type="checkbox"><span><span class="id">1.1</span><strong>Criar o GitHub App <code>docqui-bot</code></strong><span class="quem">owner da org</span></span></label>
+      <div class="passo-corpo">
+        <p>É a "conta" que o workflow usa para gravar os arquivos gerados. Precisa ser um App, e não o token padrão do Actions: o commit feito com o token padrão não dispara os checks, e o PR ficaria esperando para sempre.</p>
+        <ol>
+          <li>Na página da organização, clique em <span class="ui">Settings</span>. No fim do menu da esquerda, abra <span class="ui">Developer settings</span> → <span class="ui">GitHub Apps</span> → <span class="ui">New GitHub App</span>. Numa conta pessoal, o caminho começa pelo seu avatar → <span class="ui">Settings</span>.</li>
+          <li><span class="ui">GitHub App name</span>: <code>docqui-bot-&lt;org&gt;</code> (o nome precisa ser único em todo o GitHub).</li>
+          <li><span class="ui">Homepage URL</span>: o endereço da organização, por exemplo <code>https://github.com/&lt;org&gt;</code>.</li>
+          <li>Em <span class="ui">Webhook</span>, <strong>desmarque</strong> <span class="ui">Active</span>.</li>
+          <li>Em <span class="ui">Permissions</span> → <span class="ui">Repository permissions</span>, ponha <span class="ui">Contents</span> em <span class="ui">Read and write</span>. Não mexa nas outras.</li>
+          <li>Em <span class="ui">Where can this GitHub App be installed?</span>, escolha <span class="ui">Only on this account</span>.</li>
+          <li>Clique em <span class="ui">Create GitHub App</span>. Na página que abre, em <span class="ui">About</span>, anote o <span class="ui">App ID</span>: só números. Não confunda com o <span class="ui">Client ID</span>, logo abaixo, que começa com <code>Iv</code>.</li>
+          <li>No menu da esquerda do App, abra <span class="ui">Credentials</span> → aba <span class="ui">Key pairs</span> e clique em <span class="ui">Generate a private key</span>. Um arquivo <code>.pem</code> é baixado. Guarde-o com cuidado: é uma senha. A aba <span class="ui">Client secrets</span> é de login por OAuth e não entra aqui. Em telas mais antigas do GitHub, as chaves ficam no fim da página principal do App, em <span class="ui">Private keys</span>.</li>
+        </ol>
+      </div></li>
+    <li data-passo="1.2"><label class="passo-titulo"><input type="checkbox"><span><span class="id">1.2</span><strong>Instalar o App nos repositórios de documentação</strong><span class="quem">owner da org</span></span></label>
+      <div class="passo-corpo">
+        <ol>
+          <li>Na página do App, menu da esquerda, clique em <span class="ui">Install App</span> → <span class="ui">Install</span> ao lado da organização.</li>
+          <li>Escolha <span class="ui">Only select repositories</span> e marque os repositórios de documentação (os <code>&lt;sistema&gt;-doc</code>). Clique em <span class="ui">Install</span>.</li>
+        </ol>
+        <p>Repositório novo de documentação? Volte aqui e acrescente-o à lista.</p>
+      </div></li>
+    <li data-passo="1.3"><label class="passo-titulo"><input type="checkbox"><span><span class="id">1.3</span><strong>Guardar o App ID e a chave como segredos</strong><span class="quem">owner da org</span></span></label>
+      <div class="passo-corpo">
+        <ol>
+          <li>Em <span class="ui">Settings</span> da organização → <span class="ui">Secrets and variables</span> → <span class="ui">Actions</span> → <span class="ui">New organization secret</span>.</li>
+          <li><span class="ui">Name</span>: <code>DOCQUI_APP_ID</code>. <span class="ui">Secret</span>: o número do App ID. Em <span class="ui">Repository access</span>, escolha <span class="ui">Selected repositories</span> e marque os repositórios de documentação. Salve.</li>
+          <li>Repita com <span class="ui">Name</span> <code>DOCQUI_APP_PRIVATE_KEY</code>. Em <span class="ui">Secret</span>, abra o arquivo <code>.pem</code> num editor de texto e cole o conteúdo <strong>inteiro</strong>, inclusive as linhas <code>-----BEGIN</code> e <code>-----END</code>.</li>
+        </ol>
+        <div class="aviso info"><strong>Sem acesso aos segredos da organização?</strong>Crie os mesmos dois segredos em cada repositório: <span class="ui">Settings</span> do repositório → <span class="ui">Secrets and variables</span> → <span class="ui">Actions</span> → <span class="ui">New repository secret</span>.</div>
+      </div></li>
+    <li data-passo="1.4"><label class="passo-titulo"><input type="checkbox"><span><span class="id">1.4</span><strong>Criar o OAuth App para o login do agente</strong><span class="quem">owner da org</span></span></label>
+      <div class="passo-corpo">
+        <p>É o que permite que cada analista entre no GitHub com a própria conta quando o agente for gravar. Assim, cada commit sai no nome de quem trabalhou, e ninguém consegue aprovar o próprio PR.</p>
+        <ol>
+          <li>Em <span class="ui">Settings</span> da organização → <span class="ui">Developer settings</span> → <span class="ui">OAuth Apps</span> → <span class="ui">New OAuth App</span>.</li>
+          <li><span class="ui">Application name</span>: <code>Docqui Caixa no Copilot Studio</code>. <span class="ui">Homepage URL</span>: o endereço da organização.</li>
+          <li><span class="ui">Authorization callback URL</span>: por enquanto, <code>https://localhost</code>. No passo 3.3, o Copilot Studio mostra o endereço certo, e você volta aqui para trocar.</li>
+          <li>Clique em <span class="ui">Register application</span>. Anote o <span class="ui">Client ID</span>, clique em <span class="ui">Generate a new client secret</span> e anote o segredo: ele só aparece uma vez.</li>
+        </ol>
+        <div class="aviso"><strong>Organização com acesso de apps restrito</strong>Em <span class="ui">Settings</span> → <span class="ui">Third-party access</span> → <span class="ui">OAuth app policy</span>, aprove este app. Sem isso, o agente não enxerga os repositórios da organização.</div>
+      </div></li>
+    <li data-passo="1.5"><label class="passo-titulo"><input type="checkbox"><span><span class="id">1.5</span><strong>Preparar o repositório do engine</strong><span class="quem">mantenedor do engine</span></span></label>
+      <div class="passo-corpo">
+        <p>O agente lê o método — prompts, skills e templates — do repositório do engine, na branch <code>main</code>, e não de cada repositório de documentação. Um só lugar para atualizar.</p>
+        <ol>
+          <li>Dê aos analistas, pelo grupo ou time deles, ao menos acesso de <strong>leitura</strong> ao repositório do engine. É o que o agente usa para ler o método e, na retro, para abrir issue.</li>
+          <li>No repositório do engine, abra <span class="ui">Issues</span> → <span class="ui">Labels</span> → <span class="ui">New label</span>, crie o rótulo <code>retro</code> e salve.</li>
+        </ol>
+        <div class="aviso"><strong>A <code>main</code> do engine vale para todas as instâncias na hora</strong>O que entra na <code>main</code> passa a ser o método de todo agente, em todos os sistemas, na próxima conversa. Release que pede migração nas instâncias (como a 7.0.0, que trocou os nomes dos níveis) só entra na <code>main</code> com as instâncias migradas.</div>
+      </div></li>
+  </ol>
+</section>
+
+<section id="repositorio">
+  <h2><span class="num">2.</span> Cada repositório de documentação</h2>
+  <p class="sub">Repita esta parte em cada repositório <code>&lt;sistema&gt;-doc</code> que o agente vai atender.</p>
+  <ol class="passos">
+    <li data-passo="2.1"><label class="passo-titulo"><input type="checkbox"><span><span class="id">2.1</span><strong>Conferir a estrutura do repositório</strong><span class="quem">admin do repositório</span></span></label>
+      <div class="passo-corpo">
+        <p>Abra o repositório no navegador e confira que tudo abaixo existe. Quase tudo já vem da criação da instância (<code>init-instance</code>) e da sincronização com o engine (<code>sync-instance</code>), feitas por quem mantém o engine. O que está em <span style="background:var(--grifo);padding:0 4px;border-radius:3px">amarelo</span> você adiciona com este pacote.</p>
+<div class="arvore">&lt;sistema&gt;-doc/
+├── CLAUDE.md                    regras da instância (o agente lê; a retro propõe mudanças)
+├── VERSION                      versão dos scripts, gravada pelo sync-instance
+├── index.html  assets/          site do Pages (precisa de assets/vendor/marked.min.js)
+├── <span class="so-leitura">engine/                      não usado pelo agente (ele lê o método do engine); fica se a instância também usa o Claude Code</span>
+├── <span class="so-leitura">scripts/                     validadores e geradores da CI (sync-instance) — o agente só lê</span>
+├── <span class="so-leitura">.claude/skills/              como engine/: só para o Claude Code</span>
+├── .github/
+│   ├── CODEOWNERS               com os times reais
+│   ├── pull_request_template.md
+│   └── workflows/
+│       ├── spec-guard.yml       checks da especificação
+│       ├── gate-check.yml       check da esteira de gates
+│       ├── promote-estado.yml   espelho do INDEX depois do merge
+│       ├── pages.yml            site com as prévias das branches
+│       └── <span class="novo">regenera-gerados.yml</span>     deste pacote
+├── global/
+│   ├── MASTER.md                Sigla, Nome, Perfil e Cadência preenchidos
+│   ├── N0_PRODUCT_VISION.md
+│   ├── *-DICTIONARY.md          campos, regras, mensagens, erros
+│   ├── DATA-MODEL.md
+│   └── data-models/
+├── modules/
+│   └── INDEX.md                 domínios, agrupamentos e funcionalidades
+├── analise-impacto/
+│   ├── _TEMPLATE_AIMM.md
+│   └── _TEMPLATE_AIMM_SPRINT.md
+└── prototypes/  qa/  repos/</div>
+        <div class="aviso info"><strong>Falta alguma coisa?</strong>Peça a quem mantém o engine. Faltando <code>scripts/</code> ou <code>VERSION</code>, a instância precisa do <code>sync-instance</code>: os workflows da CI rodam os scripts dela. <code>engine/</code> e <code>.claude/skills/</code> só fazem falta para quem usa o Claude Code; o agente do Copilot Studio lê o método do repositório do engine. Faltando o site (<code>index.html</code> e <code>assets/</code>), o workflow para no passo do HTML da AIMM, e o Pages não publica. O site não vem do <code>init-instance</code>.</div>
+      </div></li>
+    <li data-passo="2.2"><label class="passo-titulo"><input type="checkbox"><span><span class="id">2.2</span><strong>Adicionar o workflow <code>regenera-gerados.yml</code></strong><span class="quem">admin do repositório</span></span></label>
+      <div class="passo-corpo">
+        <p>A cada gravação do agente numa branch de ticket ou de sprint, ele regenera os arquivos derivados e os grava na mesma branch. Sem ele, todo push fica vermelho no <code>spec-guard</code>.</p>
+        <ol>
+          <li>Na página do repositório, clique em <span class="ui">Add file</span> → <span class="ui">Create new file</span>.</li>
+          <li>No campo do nome, digite <code>.github/workflows/regenera-gerados.yml</code> (as barras criam as pastas).</li>
+          <li>Copie o conteúdo abaixo e cole na área de texto.</li>
+          <li>Clique em <span class="ui">Commit changes…</span>, mantenha <span class="ui">Commit directly to the main branch</span> e confirme. Se a <code>main</code> já estiver protegida, escolha criar uma branch e abra o PR.</li>
+        </ol>
+        <div class="bloco"><div class="rotulo"><span>.github/workflows/regenera-gerados.yml</span><button class="copiar" type="button">Copiar</button></div><pre>{{WORKFLOW}}</pre></div>
+      </div></li>
+    <li data-passo="2.3"><label class="passo-titulo"><input type="checkbox"><span><span class="id">2.3</span><strong>Ajustar o CODEOWNERS</strong><span class="quem">admin do repositório</span></span></label>
+      <div class="passo-corpo">
+        <p>Abra <code>.github/CODEOWNERS</code>, clique no lápis (<span class="ui">Edit this file</span>) e troque cada <code>@org/…</code> pelo time real: PO para <code>/modules/</code>, DBA para o modelo de dados, e assim por diante. É o que faz o GitHub chamar a pessoa certa para revisar.</p>
+      </div></li>
+    <li data-passo="2.4"><label class="passo-titulo"><input type="checkbox"><span><span class="id">2.4</span><strong>Testar o workflow</strong><span class="quem">admin do repositório</span></span></label>
+      <div class="passo-corpo">
+        <ol>
+          <li>Crie uma branch de teste: no seletor de branch (o botão com <code>main</code>, acima da lista de arquivos), digite <code>historia/STRY0000000</code> e clique em <span class="ui">Create branch</span>.</li>
+          <li>Nessa branch, edite um arquivo de <code>global/data-models/</code>, por exemplo acrescentando uma linha de atributo numa entidade, com a mensagem de commit <code>STRY0000000: teste do workflow</code>.</li>
+          <li>Abra a aba <span class="ui">Actions</span>. O workflow <span class="ui">Regenera arquivos gerados</span> tem de rodar e terminar com ✓ verde.</li>
+          <li>Volte à branch e abra <span class="ui">commits</span>: tem de aparecer um commit do <code>docqui-bot</code> com <code>[gerado]</code> na mensagem.</li>
+          <li>Abra um PR da branch para a <code>main</code> e confira que os checks rodam sobre o commit do <code>docqui-bot</code>. Depois, feche o PR sem merge e apague a branch.</li>
+        </ol>
+        <p>O teste também faz os checks aparecerem na lista do passo seguinte: o GitHub só oferece um check para exigir depois que ele rodou ao menos uma vez.</p>
+      </div></li>
+    <li data-passo="2.5"><label class="passo-titulo"><input type="checkbox"><span><span class="id">2.5</span><strong>Proteger a <code>main</code></strong><span class="quem">admin do repositório</span></span></label>
+      <div class="passo-corpo">
+        <ol>
+          <li><span class="ui">Settings</span> do repositório → <span class="ui">Branches</span> → <span class="ui">Add classic branch protection rule</span>.</li>
+          <li><span class="ui">Branch name pattern</span>: <code>main</code>.</li>
+          <li>Marque <span class="ui">Require a pull request before merging</span>, <span class="ui">Require approvals</span> (1) e <span class="ui">Require review from Code Owners</span>.</li>
+          <li>Marque <span class="ui">Require status checks to pass before merging</span> e <span class="ui">Require branches to be up to date before merging</span>. Na busca de checks, adicione <code>Esteira de gates — check</code>, <code>estrutura</code>, <code>rastreabilidade</code> e <code>entrega</code>. Os três últimos são do <code>spec-guard</code>; o <code>entrega</code> é o que barra na <code>main</code> uma história sem AIMM concluída.</li>
+          <li>Marque <span class="ui">Do not allow bypassing the above settings</span> e clique em <span class="ui">Create</span>.</li>
+        </ol>
+        <div class="aviso info"><strong>Por que dá para exigir os checks do <code>spec-guard</code></strong>Desde a 8.2.2, o <code>spec-guard</code> roda em todo PR, inclusive nos que não mexem na especificação, como o da retro. Num PR que não é de uma branch <code>historia/</code> ou <code>sprint/</code>, o <code>entrega</code> é pulado, e o GitHub conta check pulado como aprovado. Repositório com um <code>spec-guard.yml</code> anterior à 8.2.2: apague dele a linha <code>paths:</code> logo abaixo de <code>pull_request:</code>, senão os PRs que não mexem na especificação ficam esperando para sempre esses checks.</div>
+      </div></li>
+    <li data-passo="2.6"><label class="passo-titulo"><input type="checkbox"><span><span class="id">2.6</span><strong>Ligar o site (Pages)</strong><span class="quem">admin do repositório</span></span></label>
+      <div class="passo-corpo">
+        <ol>
+          <li><span class="ui">Settings</span> → <span class="ui">Pages</span> → em <span class="ui">Source</span>, escolha <span class="ui">GitHub Actions</span>.</li>
+          <li><span class="ui">Settings</span> → <span class="ui">Environments</span> → <span class="ui">github-pages</span> → <span class="ui">Deployment branches and tags</span> → <span class="ui">Selected branches and tags</span>. Adicione <code>main</code>, <code>historia/*</code> e <code>sprint/*</code>.</li>
+        </ol>
+        <p>Cada branch de ticket ganha uma prévia do site, com o HTML da AIMM, para o PO e o revisor lerem sem abrir o código.</p>
+      </div></li>
+  </ol>
+</section>
+
+<section id="copilot">
+  <h2><span class="num">3.</span> Copilot Studio</h2>
+  <p class="sub">Feito uma vez, em <a href="https://copilotstudio.microsoft.com" target="_blank" rel="noopener">copilotstudio.microsoft.com</a>, no ambiente certo (seletor no canto superior direito). Os textos para colar vêm prontos abaixo.</p>
+  <ol class="passos">
+    <li data-passo="3.1"><label class="passo-titulo"><input type="checkbox"><span><span class="id">3.1</span><strong>Criar o agente Docqui Caixa</strong><span class="quem">maker</span></span></label>
+      <div class="passo-corpo">
+        <ol>
+          <li>Abra <span class="ui">Agentes</span> → <span class="ui">+ Criar</span> (ou <span class="ui">Novo agente</span>). Se aparecer a conversa para descrever o agente, escolha <span class="ui">Configurar</span> para preencher os campos direto.</li>
+          <li>Idioma: <span class="ui">Português (Brasil)</span>.</li>
+          <li>Preencha <span class="ui">Nome</span>, <span class="ui">Descrição</span> e <span class="ui">Instruções</span> com os textos abaixo. Nas instruções, troque <code>&lt;ORG&gt;</code> pela organização do GitHub e <code>&lt;REPO_ENGINE&gt;</code> pelo repositório do engine (por exemplo, <code>caixa-efrs/docqui-engine</code>) antes de salvar.</li>
+          <li>Clique em <span class="ui">Criar</span>.</li>
+        </ol>
+        <div class="bloco"><div class="rotulo"><span>Nome</span><button class="copiar" type="button">Copiar</button></div><pre>{{NOME_AGENTE}}</pre></div>
+        <div class="bloco"><div class="rotulo"><span>Descrição</span><button class="copiar" type="button">Copiar</button></div><pre>{{DESC_AGENTE}}</pre></div>
+        <div class="bloco"><div class="rotulo"><span>Instruções ({{TAM_AGENTE}} caracteres; o limite é 8.000)</span><button class="copiar" type="button">Copiar</button></div><pre>{{INSTR_AGENTE}}</pre></div>
+      </div></li>
+    <li data-passo="3.2"><label class="passo-titulo"><input type="checkbox"><span><span class="id">3.2</span><strong>Ajustar as configurações do agente</strong><span class="quem">maker</span></span></label>
+      <div class="passo-corpo">
+        <ol>
+          <li>Em <span class="ui">Configurações</span> → <span class="ui">IA generativa</span>, deixe a orquestração <strong>generativa</strong> ligada. É ela que deixa o agente escolher sozinho quando usar a ferramenta, o tópico e o agente Retro.</li>
+          <li>Na mesma área (ou em <span class="ui">Conhecimento</span>), <strong>desligue</strong> o uso do conhecimento geral do modelo. O método está nos arquivos do repositório; o agente não deve responder sobre ele de memória.</li>
+          <li>Não adicione fontes de conhecimento. Os prompts do método são lidos inteiros, pelo GitHub, e não em pedaços.</li>
+          <li>Se o ambiente oferecer escolha de modelo, prefira um modelo Claude, da Anthropic: os prompts foram escritos e calibrados para ele. Anote o modelo usado no piloto.</li>
+          <li>Clique em <span class="ui">Salvar</span>.</li>
+        </ol>
+      </div></li>
+    <li data-passo="3.3"><label class="passo-titulo"><input type="checkbox"><span><span class="id">3.3</span><strong>Ligar a ferramenta do GitHub (MCP)</strong><span class="quem">maker</span></span></label>
+      <div class="passo-corpo">
+        <p>É por ela que o agente lê o método e grava a especificação. Se o catálogo de ferramentas já trouxer um conector MCP do GitHub pronto, prefira-o: a autenticação vem configurada.</p>
+        <ol>
+          <li>No agente, abra <span class="ui">Ferramentas</span> → <span class="ui">+ Adicionar uma ferramenta</span> → <span class="ui">+ Nova ferramenta</span> → <span class="ui">Model Context Protocol</span>.</li>
+          <li><span class="ui">Nome do servidor</span>: <code>GitHub</code>. <span class="ui">Descrição</span>: <code>Lê e grava arquivos, branches, pull requests e issues no GitHub.</code></li>
+          <li><span class="ui">URL do servidor</span>: <code>https://api.githubcopilot.com/mcp/</code> (GitHub Enterprise Server: o endereço do seu <code>github-mcp-server</code>).</li>
+          <li><span class="ui">Autenticação</span>: <span class="ui">OAuth 2.0</span>, configuração manual, com os dados do OAuth App do passo 1.4:
+            <div class="tabela"><table>
+              <tr><th>Campo</th><th>Valor</th></tr>
+              <tr><td>ID do cliente</td><td>o <span class="ui">Client ID</span> do passo 1.4</td></tr>
+              <tr><td>Segredo do cliente</td><td>o <span class="ui">client secret</span> do passo 1.4</td></tr>
+              <tr><td>URL de autorização</td><td><code>https://github.com/login/oauth/authorize</code></td></tr>
+              <tr><td>URL do token</td><td><code>https://github.com/login/oauth/access_token</code></td></tr>
+              <tr><td>URL de atualização</td><td><code>https://github.com/login/oauth/access_token</code></td></tr>
+              <tr><td>Escopos</td><td><code>repo</code></td></tr>
+            </table></div></li>
+          <li>Clique em <span class="ui">Criar</span>. O Copilot Studio mostra uma <strong>URL de redirecionamento</strong>: copie-a, volte ao OAuth App do passo 1.4 e cole-a em <span class="ui">Authorization callback URL</span>, no lugar de <code>https://localhost</code>. Salve com <span class="ui">Update application</span>.</li>
+          <li>De volta ao Copilot Studio, crie a conexão (o seu próprio login no GitHub) e clique em <span class="ui">Adicionar ao agente</span>.</li>
+          <li>Na lista de ferramentas que o servidor oferece, se der para ligar e desligar uma a uma, <strong>desligue</strong> as que o agente nunca deve usar: merge de pull request, exclusão de arquivo, criação e fork de repositório, e as de Gist, segurança e Dependabot. Os nomes exatos variam com a versão do servidor.</li>
+        </ol>
+      </div></li>
+    <li data-passo="3.4"><label class="passo-titulo"><input type="checkbox"><span><span class="id">3.4</span><strong>Criar o tópico "Data de hoje"</strong><span class="quem">maker</span></span></label>
+      <div class="passo-corpo">
+        <p>Todo artefato leva a data do dia na primeira linha. O modelo não sabe a data sozinho, e este tópico a fornece.</p>
+        <ol>
+          <li>No agente, abra <span class="ui">Tópicos</span> → <span class="ui">+ Adicionar um tópico</span> → <span class="ui">Do zero</span>. Nome: <code>Data de hoje</code>.</li>
+          <li>No gatilho, escolha <span class="ui">O agente escolhe</span> e cole a descrição abaixo.</li>
+          <li>Abaixo do gatilho, <span class="ui">+</span> → <span class="ui">Gerenciamento de variáveis</span> → <span class="ui">Definir valor da variável</span>. Crie a variável <code>DataHoje</code> e, em <span class="ui">Para o valor</span>, aba <span class="ui">Fórmula</span>, cole a fórmula abaixo. O <code>-3</code> converte para o horário de Brasília.</li>
+          <li>Em <span class="ui">Detalhes</span> do tópico → <span class="ui">Entrada e saída</span>, crie uma variável de <strong>saída</strong> com <code>DataHoje</code>, descrição <code>Data de hoje, AAAA-MM-DD</code>.</li>
+          <li><span class="ui">Salvar</span>.</li>
+        </ol>
+        <div class="bloco"><div class="rotulo"><span>Descrição do gatilho</span><button class="copiar" type="button">Copiar</button></div><pre>{{DESC_TOPICO}}</pre></div>
+        <div class="bloco"><div class="rotulo"><span>Fórmula</span><button class="copiar" type="button">Copiar</button></div><pre>{{FORMULA}}</pre></div>
+      </div></li>
+    <li data-passo="3.5"><label class="passo-titulo"><input type="checkbox"><span><span class="id">3.5</span><strong>Criar o agente filho "Retro"</strong><span class="quem">maker</span></span></label>
+      <div class="passo-corpo">
+        <p>No fim de uma conversa em que houve correção de rumo, o agente propõe registrar o aprendizado. O Retro grava a regra no <code>CLAUDE.md</code> do sistema, por PR, ou abre uma issue no repositório do engine, para valer em todas as instâncias.</p>
+        <ol>
+          <li>No agente Docqui Caixa, abra <span class="ui">Agentes</span> → <span class="ui">+ Adicionar um agente</span> → crie um agente filho (<span class="ui">Criar um agente</span>).</li>
+          <li>Preencha o nome, a descrição (o campo que diz quando o agente é usado) e as instruções com os textos abaixo. Nas instruções, troque <code>&lt;REPO_ENGINE&gt;</code> pelo repositório do engine.</li>
+          <li>Dê ao Retro a ferramenta <code>GitHub</code> e o tópico <code>Data de hoje</code>, se ele não os herdar do agente principal. Salve.</li>
+        </ol>
+        <div class="bloco"><div class="rotulo"><span>Nome</span><button class="copiar" type="button">Copiar</button></div><pre>{{NOME_RETRO}}</pre></div>
+        <div class="bloco"><div class="rotulo"><span>Descrição</span><button class="copiar" type="button">Copiar</button></div><pre>{{DESC_RETRO}}</pre></div>
+        <div class="bloco"><div class="rotulo"><span>Instruções ({{TAM_RETRO}} caracteres)</span><button class="copiar" type="button">Copiar</button></div><pre>{{INSTR_RETRO}}</pre></div>
+      </div></li>
+    <li data-passo="3.6"><label class="passo-titulo"><input type="checkbox"><span><span class="id">3.6</span><strong>Criar o agente filho "Revisão"</strong><span class="quem">maker</span></span></label>
+      <div class="passo-corpo">
+        <p>Para quem revisa o ticket de outra pessoa — a PO, o DBA. O Revisão mostra o que mudou em linguagem de negócio e registra a aprovação, o pedido de ajuste ou o comentário com a conta de quem conversa. Ele precisa que a ferramenta do GitHub saiba ler as mudanças de um pull request e registrar uma revisão; confira com quem administra o MCP.</p>
+        <ol>
+          <li>No agente Docqui Caixa, abra <span class="ui">Agentes</span> → <span class="ui">+ Adicionar um agente</span> → crie um agente filho (<span class="ui">Criar um agente</span>).</li>
+          <li>Preencha o nome, a descrição e as instruções com os textos abaixo.</li>
+          <li>Dê ao Revisão a ferramenta <code>GitHub</code>, se ele não a herdar do agente principal. Salve.</li>
+        </ol>
+        <div class="bloco"><div class="rotulo"><span>Nome</span><button class="copiar" type="button">Copiar</button></div><pre>{{NOME_REVISAO}}</pre></div>
+        <div class="bloco"><div class="rotulo"><span>Descrição</span><button class="copiar" type="button">Copiar</button></div><pre>{{DESC_REVISAO}}</pre></div>
+        <div class="bloco"><div class="rotulo"><span>Instruções ({{TAM_REVISAO}} caracteres)</span><button class="copiar" type="button">Copiar</button></div><pre>{{INSTR_REVISAO}}</pre></div>
+      </div></li>
+    <li data-passo="3.7"><label class="passo-titulo"><input type="checkbox"><span><span class="id">3.7</span><strong>Testar no painel de teste</strong><span class="quem">maker</span></span></label>
+      <div class="passo-corpo">
+        <p>Use o painel <span class="ui">Testar</span> à direita, com um repositório de exercício (por exemplo, a <code>loja-acme-doc</code>). Escreva cada frase e confira a resposta.</p>
+        <div class="tabela"><table>
+          <tr><th>Escreva</th><th>Tem de acontecer</th></tr>
+          <tr><td><code>Quero documentar a loja-acme-doc.</code></td><td>Pede o login no GitHub na primeira vez; lê o MASTER e responde com a sigla, o nome e a versão do Docqui, sem falar do perfil, perguntando "É este?"</td></tr>
+          <tr><td><code>Sim.</code></td><td>Apresenta os domínios e agrupamentos existentes e o menu</td></tr>
+          <tr><td><code>Que dia é hoje? Use o tópico Data de hoje.</code></td><td>A data de hoje no formato <code>AAAA-MM-DD</code></td></tr>
+          <tr><td><code>Grave isso direto na main.</code></td><td>Recusa</td></tr>
+          <tr><td><code>Cria um prompt novo para o framework.</code></td><td>Recusa e pergunta qual funcionalidade especificar</td></tr>
+          <tr><td><code>Como está o ticket STRY0000001?</code></td><td>A situação em português (em especificação, em revisão…), o que falta e o link da prévia, sem falar de branch, commit, PR ou check</td></tr>
+          <tr><td><code>Quero revisar o ticket STRY0000001.</code></td><td>O Revisão resume o que mudou em linguagem de negócio e diz se as conferências estão verdes</td></tr>
+        </table></div>
+        <p>O teste completo, com um ticket do começo ao fim, está no <code>roteiro-piloto.md</code>.</p>
+      </div></li>
+    <li data-passo="3.8"><label class="passo-titulo"><input type="checkbox"><span><span class="id">3.8</span><strong>Publicar para o grupo do piloto</strong><span class="quem">maker</span></span></label>
+      <div class="passo-corpo">
+        <ol>
+          <li>Clique em <span class="ui">Publicar</span> e confirme.</li>
+          <li>Em <span class="ui">Canais</span>, escolha <span class="ui">Teams e Microsoft 365 Copilot</span> → <span class="ui">Adicionar canal</span>.</li>
+          <li>Em <span class="ui">Disponibilidade</span>, compartilhe só com o grupo do piloto. Abrir para todos vem depois do piloto aprovado.</li>
+        </ol>
+      </div></li>
+  </ol>
+</section>
+
+<section id="conferencia">
+  <h2><span class="num">4.</span> Conferência final</h2>
+  <p class="sub">Um ticket de verdade, do começo ao fim, com um analista do piloto.</p>
+  <ol class="passos">
+    <li data-passo="4.1"><label class="passo-titulo"><input type="checkbox"><span><span class="id">4.1</span><strong>Abrir o atendimento de um ticket</strong></span></label>
+      <div class="passo-corpo"><p>O analista pede: <code>Inicie o atendimento do ticket STRY… — título. Os critérios de aceite são: …</code>. Confira no GitHub: a branch <code>historia/STRY…</code> existe, a AIMM está em <code>analise-impacto/</code>, o PR está em rascunho, e o <code>docqui-bot</code> gravou o HTML da AIMM logo depois.</p></div></li>
+    <li data-passo="4.2"><label class="passo-titulo"><input type="checkbox"><span><span class="id">4.2</span><strong>Especificar uma funcionalidade</strong></span></label>
+      <div class="passo-corpo"><p>O agente faz uma pergunta por mensagem. Ao terminar um artefato, ele o grava, avisa que está pronto para revisar e pergunta se pode especificar os demais; o analista revisa e aprova depois, e o artefato fica Validado na AIMM. Para concluir, basta dizer "está concluído": o agente confere que todos os artefatos estão Validado ou Não se aplica. O agente não é avisado quando as conferências terminam: depois de cada gravação, ele diz que estão rodando, e o analista pede para conferir em 1 ou 2 minutos. No PR, os checks terminam verdes depois do commit do <code>docqui-bot</code>.</p></div></li>
+    <li data-passo="4.3"><label class="passo-titulo"><input type="checkbox"><span><span class="id">4.3</span><strong>Ver a prévia no site</strong></span></label>
+      <div class="passo-corpo"><p>Em <span class="ui">Settings</span> → <span class="ui">Pages</span>, abra o endereço do site e escolha a branch do ticket no seletor <span class="ui">Branch</span>. A AIMM e o N3 aparecem formatados.</p></div></li>
+    <li data-passo="4.4"><label class="passo-titulo"><input type="checkbox"><span><span class="id">4.4</span><strong>Fazer uma retro</strong></span></label>
+      <div class="passo-corpo"><p>No fim da conversa, aceite a retro. O Retro lista o que aprendeu, diz para onde cada item vai e espera o "sim". Confira o PR em <code>retro/&lt;data&gt;</code> ou a issue com o rótulo <code>retro</code> no engine.</p></div></li>
+  </ol>
+</section>
+
+<section id="problemas">
+  <h2>Problemas comuns</h2>
+  <p class="sub">O que aparece na tela, o que costuma ser, e o que fazer.</p>
+  <div class="tabela"><table>
+    <tr><th>Sintoma</th><th>Causa provável</th><th>O que fazer</th></tr>
+    <tr><td>O PR mostra os checks como <span class="ui">Expected — Waiting for status to be reported</span> e não sai disso</td><td>O workflow <code>regenera-gerados</code> não conseguiu gravar com o App, ou gravou com o token padrão</td><td>Abra <span class="ui">Actions</span> → <span class="ui">Regenera arquivos gerados</span> e leia o erro. Confira os segredos (1.3) e se o App está instalado no repositório (1.2)</td></tr>
+    <tr><td>O workflow falha no passo <span class="ui">Token do GitHub App</span> com <code>401</code> e <code>A JSON web token could not be decoded</code></td><td>O App ID e a chave não são do mesmo GitHub App: o mais comum é o Client ID, ou o ID de um OAuth App, no lugar do App ID</td><td>Gere uma chave nova (passo 1.1, <span class="ui">Credentials</span> → <span class="ui">Key pairs</span>) e refaça os dois segredos do passo 1.3, com o App ID numérico e o <code>.pem</code> inteiro. Depois, <span class="ui">Re-run all jobs</span> na execução que falhou</td></tr>
+    <tr><td>O workflow falha no passo <span class="ui">Token do GitHub App</span> com outra mensagem</td><td>Segredo vazio, chave colada pela metade ou App não instalado no repositório</td><td>Refaça os passos 1.2 e 1.3, colando o <code>.pem</code> inteiro. No Mac, <code>pbcopy &lt; arquivo.pem</code> no Terminal copia o arquivo sem alterar nada</td></tr>
+    <tr><td>O <code>docqui-bot</code> grava um commit <code>[gerado]</code> a cada push, mesmo quando nada da especificação mudou</td><td>Algum arquivo derivado da instância muda a cada geração, como um painel que grava a hora e o commit em que foi gerado</td><td>Não atrapalha: é um commit do bot por push, e o push dele não dispara outra regeneração. Para evitar, faça esse gerador gravar só o que depende da especificação</td></tr>
+    <tr><td>O <span class="ui">Deploy GitHub Pages</span> falha numa branch <code>historia/</code> ou <code>sprint/</code> em cerca de 1 segundo, sem log, e passa na <code>main</code></td><td>O ambiente <code>github-pages</code> ainda não permite publicar dessas branches</td><td>Faça o segundo item do passo 2.6 e rode de novo a execução que falhou</td></tr>
+    <tr><td>O workflow falha com "HTML das AIMMs" e <code>marked.min.js não encontrado</code></td><td>O repositório não tem o site (<code>assets/vendor/</code>)</td><td>Peça o site a quem mantém o engine (2.1)</td></tr>
+    <tr><td>O workflow falha com "A regeneração alterou arquivos de spec que não são gerados"</td><td>Um gerador mexeu num arquivo de especificação que o commit <code>[gerado]</code> não pode levar</td><td>Nada foi gravado. Leve a lista de arquivos do erro a quem mantém o engine</td></tr>
+    <tr><td>Check <span class="ui">estrutura</span> vermelho em "diagrama ER está fresco"</td><td>O workflow não rodou nessa branch</td><td>Em <span class="ui">Actions</span>, rode o <span class="ui">Regenera arquivos gerados</span> na branch (<span class="ui">Run workflow</span>)</td></tr>
+    <tr><td>Check <span class="ui">entrega</span> vermelho em "um ticket por commit"</td><td>Um commit sem a chave do ticket no assunto</td><td>Mostre o erro ao agente. Se o commit já foi para o GitHub, corrigir exige reescrever o histórico da branch: peça ajuda a quem tem prática com Git</td></tr>
+    <tr><td>O agente diz que não encontra o repositório</td><td>O analista não tem acesso ao repositório, ou o OAuth App não foi aprovado na organização</td><td>Dê acesso ao analista; confira o aviso do passo 1.4</td></tr>
+    <tr><td>O agente diz que não consegue ler a skill ou o prompt</td><td>O analista não tem leitura no repositório do engine, ou <code>&lt;REPO_ENGINE&gt;</code> ficou sem trocar nas instruções</td><td>Refaça o passo 1.5 (acesso de leitura) ou o 3.1 (o nome do repositório nas instruções)</td></tr>
+    <tr><td>O agente não consegue mostrar as mudanças de um ticket ou registrar uma aprovação</td><td>A ferramenta do GitHub não expõe as funções de pull request (ler mudanças, registrar revisão)</td><td>Peça a quem administra o MCP para liberar o grupo de ferramentas de pull request para o agente</td></tr>
+    <tr><td>O agente fala de branch, commit ou PR com o analista</td><td>As instruções coladas são de uma versão anterior à 8.3.0</td><td>Cole de novo as instruções do passo 3.1</td></tr>
+    <tr><td>O agente responde sobre o método sem ler os arquivos</td><td>O conhecimento geral do modelo ficou ligado</td><td>Refaça o passo 3.2</td></tr>
+    <tr><td>Carimbo com a data errada</td><td>O tópico "Data de hoje" não foi usado ou a fórmula está diferente</td><td>Refaça o passo 3.4 e o teste da data</td></tr>
+  </table></div>
+</section>
+
+<section id="decisoes">
+  <h2>Por que é assim</h2>
+  <p class="sub">As escolhas deste desenho, para quem for manter ou questionar.</p>
+  <details open><summary>O HTML da AIMM é gerado pelo workflow e versionado na branch</summary>
+    <p>O HTML da AIMM sai do <code>.md</code> por um script, e o agente não roda scripts. Havia dois caminhos: gerar o HTML só na publicação do site, sem guardá-lo no repositório, ou gerá-lo no workflow e guardá-lo na branch.</p>
+    <p>A escolha foi guardá-lo, num commit por AIMM com a chave dela. Isso mantém o contrato atual do engine, que entrega o <code>.md</code> e o <code>.html</code> lado a lado, sem mudar nenhum script. O HTML aparece no PR e na prévia do site, e o link que a equipe de métricas usa não muda. Ele não pode ir no commit <code>[gerado]</code>: mora em <code>analise-impacto/</code>, que é especificação, e o check de commits reprovaria. Gerar só na publicação é mais limpo, porque não deixa arquivo derivado no repositório, mas exige mudar o engine; fica como evolução.</p></details>
+  <details><summary>Um agente para todos os repositórios</summary><p>O agente pergunta, no começo de cada conversa, qual sistema documentar. Um agente por repositório seria um agente para publicar e atualizar por sistema, a cada versão do engine. O acesso fica com o GitHub: cada analista só alcança os repositórios a que já tem acesso.</p></details>
+  <details><summary>O GitHub fica nos bastidores</summary><p>O analista e o revisor não precisam saber GitHub. O agente fala de ticket, documento e situação (em especificação, em revisão, ajuste pedido, aprovado, concluído), cuida sozinho das conferências automáticas e só chama a pessoa para decisões de negócio. O GitHub continua lá, com histórico, revisão e conferências, e quem quiser auditar ou revisar por ele continua podendo. Não é um "modo": é o comportamento normal do agente.</p></details>
+  <details><summary>A especificação num agente só, com o Retro e o Revisão à parte</summary><p>Um roteiro de especificação tem muitas mensagens, e trocar de agente no meio pode perder o estado da conversa. Por isso as duas skills ficam no mesmo agente, que lê a certa para cada pedido. O Retro e o Revisão são agentes filhos porque acontecem fora do roteiro — no fim da conversa e na revisão de um ticket de outra pessoa —, quando trocar de agente não interrompe nada. O desenho com dois agentes filhos de especificação está guardado em <code>agentes/alternativa-child-agents/</code>.</p></details>
+  <details><summary>O método vem da <code>main</code> do engine, não de cada repositório</summary><p>Os prompts, as skills e os templates ficam num lugar só: o agente os lê do repositório do engine, na <code>main</code>. Atualizar o método é uma release no engine, sem replicar nada nos repositórios dos sistemas. O preço é que toda instância anda junto com a <code>main</code>: uma release que exige migração só entra quando as instâncias estiverem migradas. Os scripts da CI continuam em cada repositório, levados pelo <code>sync-instance</code>, porque os workflows rodam a partir da instância; centralizá-los com workflows reutilizáveis fica para depois.</p></details>
+  <details><summary>Os prompts não vão como "conhecimento"</summary><p>O conhecimento do Copilot Studio busca trechos. Os prompts do método são roteiros com estados, e o agente que recebe só um pedaço pula etapas. Por isso o agente abre o arquivo inteiro pela ferramenta do GitHub.</p></details>
+  <details><summary>A retro não edita o engine</summary><p>No repositório do sistema, <code>engine/</code>, <code>scripts/</code> e <code>.claude/</code> são cópias do engine, que a próxima sincronização sobrescreve. O que vale para todos vira issue no engine, e quem o mantém aplica numa versão nova, com a <code>/retro</code> do Claude Code. O que vale só para um sistema vai para o <code>CLAUDE.md</code> dele, por PR, e o agente o lê no começo de toda conversa.</p></details>
+</section>
+
+<section id="glossario">
+  <h2>Glossário</h2>
+  <dl class="glossario">
+    <dt>Instância</dt><dd>O repositório de documentação de um sistema, como <code>loja-acme-doc</code>.</dd>
+    <dt>Engine</dt><dd>O repositório do método Docqui Caixa: prompts, templates, skills e scripts.</dd>
+    <dt>Branch</dt><dd>Uma linha de trabalho separada da versão oficial. Cada ticket tem a sua, <code>historia/&lt;CHAVE&gt;</code>.</dd>
+    <dt>Pull request (PR)</dt><dd>O pedido para levar uma branch para a <code>main</code>, com a revisão. "Rascunho" (draft) ainda não pede revisão.</dd>
+    <dt>Check</dt><dd>Uma conferência automática que roda a cada gravação; fica verde ou vermelha.</dd>
+    <dt>Workflow</dt><dd>Uma automação do GitHub Actions, descrita num arquivo <code>.yml</code> em <code>.github/workflows/</code>.</dd>
+    <dt>GitHub App</dt><dd>Uma conta de automação com permissões limitadas. Aqui, o <code>docqui-bot</code>, que grava os arquivos gerados.</dd>
+    <dt>OAuth</dt><dd>O login que deixa o agente agir com a conta de cada analista, sem guardar senha.</dd>
+    <dt>MCP</dt><dd>O protocolo pelo qual o agente usa ferramentas externas; aqui, o GitHub.</dd>
+    <dt>Segredo</dt><dd>Um valor sigiloso guardado no GitHub, que o workflow lê sem mostrar.</dd>
+    <dt>AIMM</dt><dd>A Análise de Impacto de Mudança para Manutenção: um arquivo por ticket, em <code>analise-impacto/</code>.</dd>
+    <dt>Retro</dt><dd>O registro, no fim de uma conversa, do que ela ensinou, no lugar em que o agente vai ler da próxima vez.</dd>
+  </dl>
+</section>
+
+<section id="pacote">
+  <h2>Arquivos do pacote</h2>
+  <div class="tabela"><table>
+    <tr><th>Arquivo</th><th>Para quê</th></tr>
+    <tr><td><code>LEIA-ME.html</code></td><td>Este guia</td></tr>
+    <tr><td><code>github/.github/workflows/regenera-gerados.yml</code></td><td>O workflow do passo 2.2</td></tr>
+    <tr><td><code>agentes/1-agente-docqui-caixa.md</code></td><td>Nome, descrição e instruções do agente (3.1)</td></tr>
+    <tr><td><code>agentes/2-topico-data-de-hoje.md</code></td><td>O tópico da data (3.4)</td></tr>
+    <tr><td><code>agentes/3-agente-retro.md</code></td><td>O agente filho Retro (3.5) e como a retro funciona no Copilot Studio</td></tr>
+    <tr><td><code>agentes/4-agente-revisao.md</code></td><td>O agente filho Revisão (3.6)</td></tr>
+    <tr><td><code>agentes/alternativa-child-agents/</code></td><td>O desenho alternativo, com um agente filho por skill</td></tr>
+    <tr><td><code>diagrama/docqui-copilot.html</code></td><td>O diagrama da arquitetura, interativo, gerado pelo archify (e a entrada dele, para gerar de novo)</td></tr>
+    <tr><td><code>fonte/</code></td><td>O gerador deste guia (<code>python3 fonte/monta.py</code>)</td></tr>
+    <tr><td><code>roteiro-piloto.md</code></td><td>O piloto: viabilidade, cenários, comparação com o Claude Code e critérios de decisão</td></tr>
+  </table></div>
+  <footer>Pacote de estudo do docqui-caixa-engine, em <code>engine/copilot-studio/</code>. O workflow foi testado localmente contra os scripts da 8.0.0; os passos do Copilot Studio ainda dependem do piloto. Este HTML é gerado por <code>fonte/monta.py</code> a partir dos arquivos de <code>agentes/</code> e do workflow: edite a fonte e gere de novo, nunca o HTML.</footer>
+</section>
+
+</main>
+</div>
+
+<script>
+(function(){
+  var CHAVE='docqui-copilot-guia-v1';
+  var marcados={};
+  try{ marcados=JSON.parse(localStorage.getItem(CHAVE)||'{}')||{}; }catch(e){ marcados={}; }
+  var itens=[].slice.call(document.querySelectorAll('li[data-passo]'));
+  function salvar(){ try{ localStorage.setItem(CHAVE, JSON.stringify(marcados)); }catch(e){} }
+  function atualizar(){
+    var feitos=0;
+    itens.forEach(function(li){ var cb=li.querySelector('input[type=checkbox]'); li.classList.toggle('feito', cb.checked); if(cb.checked) feitos++; });
+    document.getElementById('prog-texto').textContent=feitos+' de '+itens.length+' passos';
+    document.getElementById('prog-barra').style.width=(itens.length? (100*feitos/itens.length):0)+'%';
+  }
+  itens.forEach(function(li){
+    var id=li.getAttribute('data-passo'); var cb=li.querySelector('input[type=checkbox]');
+    cb.checked=!!marcados[id];
+    cb.addEventListener('change', function(){ marcados[id]=cb.checked; salvar(); atualizar(); });
+  });
+  atualizar();
+  [].forEach.call(document.querySelectorAll('button.copiar'), function(b){
+    b.addEventListener('click', function(){
+      var texto=b.closest('.bloco').querySelector('pre').textContent;
+      function ok(){ b.textContent='Copiado'; b.classList.add('ok'); setTimeout(function(){ b.textContent='Copiar'; b.classList.remove('ok'); },1600); }
+      function alternativo(){ var t=document.createElement('textarea'); t.value=texto; document.body.appendChild(t); t.select(); try{ document.execCommand('copy'); ok(); }catch(e){} document.body.removeChild(t); }
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(texto).then(ok, alternativo); } else { alternativo(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>

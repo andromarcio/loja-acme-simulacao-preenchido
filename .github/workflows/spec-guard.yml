@@ -1,0 +1,139 @@
+# spec-guard.yml — CI de integridade da especificação (template do docqui-caixa-engine).
+#
+# COMO USAR NA INSTÂNCIA: copie este arquivo para `.github/workflows/spec-guard.yml`
+# (a instância já carrega `scripts/` do engine). Com "branch protection" exigindo
+# estes checks, um elo unilateral ou um artefato fora do contrato NÃO entra na main —
+# o que era disciplina auditável vira enforcement.
+#
+# Jobs:
+#   estrutura      → validate-doc.mjs em todos os artefatos de nível (N0–N3, data-model)
+#                    + IDs imutáveis dos N3 e reservas da primeira jornada no N2
+#                    + diagrama ER (global/DIAGRAMA-ER.md) fresco + índice de repositórios
+#                    (repos/INDEX.md → Funcionalidades por repositório) fresco
+#   rastreabilidade→ audit-trace-links.mjs (elos nos 3 lugares) + suspect-links.mjs
+#                    (alvo mudou depois da verificação — carimbos trace-verified,
+#                    fingerprint de conteúdo: independe do histórico do git)
+#                    + validate-impact.mjs em toda analise-impacto/AIMM-*.md (a AIMM do
+#                    ticket e a da sprint, conferida com as dos tickets) + índice de
+#                    uso dos dicionários fresco
+#   aprovacao      → check-approval-trailers.mjs: commit que entra na main tocando
+#                    modules/|global/ precisa do trailer "Approved-by: Nome <email>"
+#   entrega        → no PR de uma branch de entrega (`sprint/<id>`, `historia/<CHAVE>`),
+#                    valida-commits-ticket.mjs (cada commit de spec é de UM ticket — o
+#                    que deixa o reverte-ticket tirar a história que ficou) e, quando o
+#                    PR é para a main, valida-entrega.mjs (o portão: só o que foi
+#                    entregue entra). Abra o PR da sprint como rascunho já no
+#                    planejamento: os checks rodam a sprint inteira, não só no fim.
+#
+# A lógica mora nos scripts (portáteis para qualquer forge); este YAML é só o invólucro.
+
+name: spec-guard
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  estrutura:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: validate-doc em todos os artefatos de nível
+        run: |
+          files=$(git ls-files \
+            'global/N0_PRODUCT_VISION.md' \
+            'global/DATA-MODEL.md' \
+            'global/data-models/*.md' \
+            'global/PATTERNS.md' \
+            'modules/*/README.md' \
+            'modules/*/*/README.md' \
+            'modules/*/*/f-*.md')
+          if [ -z "$files" ]; then echo "Nenhum artefato de nível ainda — ok."; exit 0; fi
+          # shellcheck disable=SC2086
+          node scripts/validate-doc.mjs $files
+      - name: toda regra do N3 tem ID e cenário (RN-NN × @RN-NN)
+        run: node scripts/valida-regras-cenarios.mjs
+      - name: contrato da API do N3 (front-matter × API × ERROR-DICTIONARY × Campos)
+        run: node scripts/valida-contrato-api.mjs
+      - name: IDs do N3 imutáveis e reservas da jornada
+        env:
+          ID_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ -n "$ID_BASE" ] && ! echo "$ID_BASE" | grep -q '^0\+$'; then
+            node scripts/ids-n3.mjs --check --base "$ID_BASE"
+          else
+            node scripts/ids-n3.mjs --check
+          fi
+      - name: diagrama ER está fresco
+        run: node scripts/gera-diagrama-er.mjs --check
+      - name: índice de repositórios está fresco
+        # repos/INDEX.md → "Funcionalidades por repositório", gerado do ## Implementação dos N3
+        run: node scripts/gera-indice-repos.mjs --check
+
+  rastreabilidade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: elos ticket↔funcionalidade consistentes nas três fontes
+        run: node scripts/audit-trace-links.mjs
+      - name: elos suspeitos (alvo mudou após a verificação)
+        run: node scripts/suspect-links.mjs
+      - name: AIMMs (incluindo AIMs legadas) bem-formadas
+        # A AIMM de cada ticket/sprint; os templates começam com `_`.
+        run: |
+          ris=$(git ls-files 'analise-impacto/AIMM-*.md' 'analise-impacto/AIM-*.md' || true)
+          if [ -z "$ris" ]; then echo "Nenhuma AIMM ainda — ok."; else
+            for ri in $ris; do node scripts/validate-impact.mjs "$ri" --root .; done
+          fi
+      - name: índice de uso dos dicionários está fresco
+        run: |
+          node scripts/generate-usage-index.mjs --root . --write
+          if ! git diff --quiet -- global/*-DICTIONARY.md; then
+            echo "::error::O índice 'Usado em' dos dicionários está desatualizado."
+            echo "Rode: node scripts/generate-usage-index.mjs --root . --write  e commite."
+            git --no-pager diff -- global/*-DICTIONARY.md
+            exit 1
+          fi
+
+  # PR da branch de entrega para a main, ou PR de checkpoint (branch de trabalho → sprint/…
+  # ou historia/…): nos dois, cada commit de spec cita a chave do ticket. O portão da
+  # entrega só roda no PR para a main.
+  entrega:
+    if: github.event_name == 'pull_request' && (startsWith(github.head_ref, 'sprint/') || startsWith(github.head_ref, 'historia/') || startsWith(github.base_ref, 'sprint/') || startsWith(github.base_ref, 'historia/'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: base do PR
+        run: git fetch --no-tags origin "+refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+      - name: um ticket por commit de spec
+        run: node scripts/valida-commits-ticket.mjs --base "origin/${{ github.base_ref }}"
+      - name: portão da entrega (só no PR para a main)
+        if: github.base_ref == 'main'
+        run: node scripts/valida-entrega.mjs --base origin/main
+
+  aprovacao:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: trailer Approved-by nos commits que entram na main
+        run: |
+          BEFORE="${{ github.event.before }}"
+          if echo "$BEFORE" | grep -q '^0\+$'; then
+            echo "Branch novo — sem intervalo para checar."; exit 0
+          fi
+          # Padrão: exige o trailer nos MERGE commits do intervalo. Se o repositório
+          # usa squash-merge (sem merge commit), acrescente --all.
+          node scripts/check-approval-trailers.mjs --range "$BEFORE..${{ github.sha }}"

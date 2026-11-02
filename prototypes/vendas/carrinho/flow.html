@@ -1,0 +1,352 @@
+<!-- docqui: 6.4.10 | prompt: PROMPT_PROTOTYPE_FLOW_FULL | atualizado: 2026-10-18 -->
+<!DOCTYPE html>
+<!--
+  ⚠️ PROTÓTIPO NAVEGÁVEL — treino, não jogo.
+  Fonte de verdade de LAYOUT, COMPORTAMENTO e ESTADOS — NUNCA de implementação.
+  Não copie este HTML/CSS/JS para o código de produção: aqui tudo é autocontido
+  e procedural DE PROPÓSITO (simulação). A implementação real segue outra
+  estratégia: componentes do design system do projeto (mapa de equivalência no
+  README do tema), catálogo global/PATTERNS.md e convenções do global/MASTER.md.
+  Classes .dsc-* são EXCLUSIVAS de protótipo — proibidas em código de produção.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo: Carrinho — Vendas</title>
+  <link rel="stylesheet" href="../../_biblioteca-ds/ds.css">
+</head>
+<body>
+
+  <div class="dsc-proto-badge">🎨 PROTÓTIPO — não é o sistema real</div>
+
+  <div class="dsc-app">
+
+    <aside class="dsc-sidebar">
+      <div class="dsc-sidebar-backdrop" onclick="dscToggleMenu()"></div>
+      <div class="dsc-sidebar-brand"><span class="dsc-brand-mark">L</span> Loja ACME</div>
+      <ul class="dsc-menu">
+        <li class="dsc-menu-section">Loja</li>
+        <li><a class="dsc-menu-item" id="menu-inicio" href="../../vitrine/navegacao/flow.html">Início</a></li>
+        <li class="dsc-menu-section">Vendas</li>
+        <li><a class="dsc-menu-item is-active" id="menu-carrinho" href="#" onclick="showScreen('screen-carrinho'); return false;">Carrinho</a></li>
+        <li><a class="dsc-menu-item" href="../checkout/flow.html">Checkout</a></li>
+      </ul>
+    </aside>
+
+    <div class="dsc-shell-main">
+      <header class="dsc-header">
+        <div class="dsc-header-start">
+          <button class="dsc-menu-toggle" aria-label="Recolher/expandir menu" onclick="dscToggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+          <span class="dsc-header-logo">Loja ACME · <strong>CAIXA</strong></span>
+        </div>
+        <div class="dsc-header-actions">
+          <button class="dsc-header-item">
+            <span class="dsc-avatar dsc-avatar--sm">AC</span>
+            <span class="dsc-hi-body"><span class="dsc-hi-title">Ana Costa</span><span class="dsc-hi-sub dsc-text-primary">Cliente</span></span>
+            <svg class="dsc-hi-caret" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="dsc-main">
+
+        <!-- Página do produto (/produtos/:id) — tela da Navegação (VIT-NAV-03); aqui só a ação VND-CAR-01 Adicionar Item ao Carrinho -->
+        <div id="screen-produto" class="dsc-screen">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Loja</span><span class="dsc-sep">›</span><span class="is-current" id="bc-produto">Garrafa térmica ACME 500 ml</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title" id="p-nome">Garrafa térmica ACME 500 ml</h1>
+            <p class="dsc-page-subtitle">Escolha a quantidade e adicione o produto ao carrinho.</p>
+          </div>
+
+          <div class="dsc-row">
+            <div class="dsc-col-7">
+              <section class="dsc-card">
+                <h2 class="dsc-card-title">Sobre o produto</h2>
+                <div class="dsc-row">
+                  <div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">Categoria</span><span class="dsc-lv-value" id="p-categoria">Cozinha</span></div></div>
+                  <div class="dsc-col-6"><div class="dsc-lv"><span class="dsc-lv-label">Disponibilidade</span><span class="dsc-lv-value" id="p-disp"><span class="dsc-tag dsc-tag--success">Em estoque</span></span></div></div>
+                  <div class="dsc-col-12"><div class="dsc-lv"><span class="dsc-lv-label">Descrição</span><span class="dsc-lv-value" id="p-desc">Mantém a bebida quente ou gelada por horas; tampa com trava.</span></div></div>
+                </div>
+              </section>
+            </div>
+            <div class="dsc-col-5">
+              <section class="dsc-card">
+                <h2 class="dsc-card-title">Comprar</h2>
+                <p class="dsc-title-sm" id="p-preco" style="margin-top:0">R$&nbsp;89,90</p>
+                <div id="area-compra">
+                  <div class="dsc-field" id="f-qtd">
+                    <label class="dsc-field-label" for="qtd">Quantidade <span class="dsc-req">*</span></label>
+                    <input class="dsc-input" id="qtd" type="number" inputmode="numeric" min="1" value="1" style="max-width:120px" onkeydown="if (event.key === 'Enter') adicionar()">
+                  </div>
+                  <button class="dsc-btn" id="btn-adicionar" onclick="adicionar()">Adicionar ao carrinho</button>
+                </div>
+                <div id="retorno-compra" aria-live="polite" style="margin-top:16px"></div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carrinho (/carrinho) — VND-CAR-02 Listar Itens · VND-CAR-03 Alterar Quantidade · VND-CAR-04 Remover Item -->
+        <div id="screen-carrinho" class="dsc-screen is-active">
+          <nav class="dsc-breadcrumb"><span>Início</span><span class="dsc-sep">›</span><span>Vendas</span><span class="dsc-sep">›</span><span class="is-current">Carrinho</span></nav>
+          <div class="dsc-page-header">
+            <h1 class="dsc-page-title">Carrinho</h1>
+            <p class="dsc-page-subtitle">Confira os itens, ajuste as quantidades e siga para o checkout.</p>
+          </div>
+
+          <section class="dsc-card">
+            <div class="dsc-flex dsc-justify-between dsc-items-center" style="margin-bottom:16px">
+              <span class="dsc-text-muted"><strong id="qtd-itens" style="color:var(--text-color)">5 itens</strong></span>
+              <button class="dsc-btn dsc-btn--sm dsc-btn--outline" onclick="showScreen('screen-produto')">Continuar comprando</button>
+            </div>
+            <div id="conteudo-carrinho"></div>
+          </section>
+        </div>
+
+        <div class="dsc-proto-notes">
+          <strong>📋 Notas do protótipo:</strong>
+          <ul>
+            <li>O carrinho é o pedido aberto 1007 de Ana Costa, da massa do modelo de entidades: R$ 339,20 em itens. O frete só aparece no checkout (VND-CHK-01 — Calcular Frete).</li>
+            <li>A Página do produto é tela da Navegação (VIT-NAV-03 — Visualizar Produto na Vitrine); aqui ela aparece simplificada, só para mostrar a ação VND-CAR-01 — Adicionar Item ao Carrinho. O protótipo completo dela está em <a href="../../vitrine/navegacao/flow.html">Navegação</a>.</li>
+            <li>Estoques da massa: Caneca 120, Camiseta 48, Garrafa 35, Bloco 200, Ecobag 60, Boné 0. A soma com o que já está no carrinho também respeita o estoque (tente 35 Garrafas).</li>
+            <li>A quantidade de cada item vale ao sair do campo ou ao confirmar com Enter. O preço unitário não muda ao alterar a quantidade.</li>
+            <li>Não aparecem na tela: a criação do pedido aberto no primeiro item (Ana Costa já tem o 1007) e o caso do item removido em outra janela ("Registro não encontrado.").</li>
+          </ul>
+          <div class="dsc-row" style="margin-top:12px">
+            <div class="dsc-col-6">
+              <div class="dsc-field">
+                <label class="dsc-field-label" for="simulacao">Simular estado <span class="dsc-text-muted" style="font-weight:400">(controle do protótipo, não faz parte da tela)</span></label>
+                <select class="dsc-select" id="simulacao" onchange="simular(this.value)">
+                  <option value="normal">Carrinho com itens</option>
+                  <option value="vazio">Carrinho vazio</option>
+                  <option value="estoque">Estoque reduzido do Bloco</option>
+                  <option value="sem-acesso">Visitante sem acesso</option>
+                  <option value="falha">Falha ao carregar ou gravar</option>
+                </select>
+              </div>
+            </div>
+            <div class="dsc-col-6">
+              <div class="dsc-field">
+                <label class="dsc-field-label" for="produto-sim">Produto da página <span class="dsc-text-muted" style="font-weight:400">(controle do protótipo, não faz parte da tela)</span></label>
+                <select class="dsc-select" id="produto-sim" onchange="trocarProduto(this.value)">
+                  <option value="garrafa">Garrafa térmica ACME 500 ml — 35 em estoque</option>
+                  <option value="caneca">Caneca de cerâmica ACME 300 ml — já no carrinho</option>
+                  <option value="bone">Boné ACME aba curva — esgotado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <div id="toast" class="dsc-toast dsc-toast--positive" role="status" style="display:none;position:fixed;top:24px;right:24px;z-index:200">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span id="toast-texto"></span>
+    <button class="dsc-btn dsc-btn--chromeless dsc-btn--sm" id="toast-acao" style="display:none" onclick="showScreen('screen-carrinho')">Ver carrinho</button>
+  </div>
+
+  <script>
+    // ☰: abre/fecha o drawer do menu (sidebar oculta por padrão); ESC também fecha
+    function dscToggleMenu() {
+      document.querySelector('.dsc-app').classList.toggle('is-menu-open');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') document.querySelector('.dsc-app').classList.remove('is-menu-open');
+    });
+    function showScreen(id) {
+      document.querySelectorAll('.dsc-screen').forEach(function (s) { s.classList.remove('is-active'); });
+      document.getElementById(id).classList.add('is-active');
+      document.getElementById('menu-carrinho').classList.toggle('is-active', id === 'screen-carrinho');
+      document.getElementById('menu-inicio').classList.toggle('is-active', id === 'screen-produto');
+      document.querySelector('.dsc-app').classList.remove('is-menu-open');
+      if (id === 'screen-carrinho') desenharCarrinho();
+    }
+
+    var ICONE_ERRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    var ICONE_ALERTA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+    var ICONE_FALHA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    var ICONE_LIXEIRA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+
+    // Massa do modelo de entidades (Catálogo e pedido aberto 1007 de Ana Costa)
+    var PRODUTOS = {
+      caneca:   { nome: 'Caneca de cerâmica ACME 300 ml', categoria: 'Cozinha', preco: 39.90, estoque: 120, desc: 'Cerâmica esmaltada, vai ao micro-ondas.' },
+      camiseta: { nome: 'Camiseta ACME algodão — tamanho M', categoria: 'Vestuário', preco: 59.90, estoque: 48, desc: 'Algodão penteado, estampa ACME no peito.' },
+      garrafa:  { nome: 'Garrafa térmica ACME 500 ml', categoria: 'Cozinha', preco: 89.90, estoque: 35, desc: 'Mantém a bebida quente ou gelada por horas; tampa com trava.' },
+      bloco:    { nome: 'Bloco de notas ACME A5', categoria: 'Papelaria', preco: 24.90, estoque: 200, desc: 'Cem folhas pautadas, capa dura.' },
+      ecobag:   { nome: 'Ecobag ACME de lona', categoria: 'Acessórios', preco: 34.90, estoque: 60, desc: 'Lona resistente, alça longa.' },
+      bone:     { nome: 'Boné ACME aba curva', categoria: 'Vestuário', preco: 49.90, estoque: 0, desc: 'Ajuste traseiro, bordado ACME.' }
+    };
+    function carrinhoInicial() {
+      return [
+        { id: 'caneca', qtd: 2, preco: 39.90 },
+        { id: 'camiseta', qtd: 1, preco: 59.90 },
+        { id: 'garrafa', qtd: 1, preco: 89.90 },
+        { id: 'bloco', qtd: 3, preco: 24.90 },
+        { id: 'ecobag', qtd: 1, preco: 34.90 }
+      ];
+    }
+    var carrinho = carrinhoInicial();
+    var estado = 'normal';
+    var produtoAtual = 'garrafa';
+    var ocupado = false;
+
+    function brl(v) { return 'R$&nbsp;' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+    function alerta(variante, icone, texto) { return '<div class="dsc-alert dsc-alert--' + variante + '" role="alert">' + icone + '<span>' + texto + '</span></div>'; }
+    function itemDe(id) { for (var i = 0; i < carrinho.length; i++) if (carrinho[i].id === id) return carrinho[i]; return null; }
+    function estoqueDe(id) { return (estado === 'estoque' && id === 'bloco') ? 2 : PRODUTOS[id].estoque; }
+
+    function showToast(texto, comAcao) {
+      var t = document.getElementById('toast');
+      document.getElementById('toast-texto').textContent = texto;
+      document.getElementById('toast-acao').style.display = comAcao ? '' : 'none';
+      t.style.display = 'flex';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function () { t.style.display = 'none'; }, 4000);
+    }
+
+    // ── Página do produto: VND-CAR-01 Adicionar Item ao Carrinho ─────────────────
+    function erroNoCampo(texto) {
+      var f = document.getElementById('f-qtd');
+      var e = f.querySelector('.dsc-field-error');
+      if (!texto) { f.classList.remove('is-invalid'); if (e) e.remove(); return; }
+      f.classList.add('is-invalid');
+      if (!e) { e = document.createElement('span'); e.className = 'dsc-field-error'; e.id = 'qtd-erro'; f.appendChild(e); }
+      e.innerHTML = ICONE_ERRO + ' ' + texto;
+      document.getElementById('qtd').setAttribute('aria-describedby', 'qtd-erro');
+    }
+    function retornoCompra(html) { document.getElementById('retorno-compra').innerHTML = html; }
+
+    function trocarProduto(id) {
+      produtoAtual = id;
+      var p = PRODUTOS[id];
+      document.getElementById('p-nome').textContent = p.nome;
+      document.getElementById('bc-produto').textContent = p.nome;
+      document.getElementById('p-categoria').textContent = p.categoria;
+      document.getElementById('p-desc').textContent = p.desc;
+      document.getElementById('p-preco').innerHTML = brl(p.preco);
+      document.getElementById('p-disp').innerHTML = p.estoque === 0
+        ? '<span class="dsc-tag dsc-tag--danger">Esgotado</span>'
+        : '<span class="dsc-tag dsc-tag--success">Em estoque</span>';
+      document.getElementById('qtd').value = '1';
+      erroNoCampo(''); retornoCompra('');
+      showScreen('screen-produto');
+    }
+
+    function adicionar() {
+      if (ocupado) return;
+      erroNoCampo(''); retornoCompra('');
+      // Restrições de acesso: o visitante não usa o carrinho
+      if (estado === 'sem-acesso') { retornoCompra(alerta('danger', ICONE_FALHA, 'Você não tem permissão para esta ação.')); return; }
+      var bruto = document.getElementById('qtd').value.trim();
+      if (bruto === '') { erroNoCampo('Campo obrigatório.'); return; }
+      var qtd = Number(bruto);
+      if (!Number.isInteger(qtd) || qtd < 1) { erroNoCampo('Informe uma quantidade válida.'); return; }
+      // RN-02: produto com estoque zero não entra
+      if (estoqueDe(produtoAtual) === 0) { retornoCompra(alerta('warning', ICONE_ALERTA, 'Este produto está esgotado.')); return; }
+      var existente = itemDe(produtoAtual);
+      var jaNoCarrinho = existente ? existente.qtd : 0;
+      // RN-01: a soma com o que já está no carrinho não passa do estoque
+      if (jaNoCarrinho + qtd > estoqueDe(produtoAtual)) { retornoCompra(alerta('warning', ICONE_ALERTA, 'Quantidade indisponível em estoque.')); return; }
+
+      ocupado = true;
+      var btn = document.getElementById('btn-adicionar');
+      btn.classList.add('is-loading'); btn.disabled = true;
+      setTimeout(function () {
+        ocupado = false;
+        btn.classList.remove('is-loading'); btn.disabled = false;
+        if (estado === 'falha') { retornoCompra(alerta('danger', ICONE_FALHA, 'Ocorreu um erro. Tente novamente.')); return; }
+        if (estado === 'vazio') { carrinho = []; estado = 'normal'; document.getElementById('simulacao').value = 'normal'; }
+        // RN-03: soma a quantidade; RN-05: preço do momento em que o item entra
+        if (existente && itemDe(produtoAtual)) existente.qtd += qtd;
+        else carrinho.push({ id: produtoAtual, qtd: qtd, preco: PRODUTOS[produtoAtual].preco });
+        document.getElementById('qtd').value = '1';
+        showToast('Produto adicionado ao carrinho.', true);
+      }, 700);
+    }
+
+    // ── Carrinho: VND-CAR-02 Listar · VND-CAR-03 Alterar Quantidade · VND-CAR-04 Remover ──
+    function total() { return carrinho.reduce(function (s, i) { return s + i.qtd * i.preco; }, 0); }
+    function botaoCheckout(ativo) {
+      return ativo
+        ? '<a class="dsc-btn" href="../checkout/flow.html">Ir para o checkout</a>'
+        : '<button class="dsc-btn" disabled>Ir para o checkout</button>';
+    }
+
+    function desenharCarrinho() {
+      var alvo = document.getElementById('conteudo-carrinho');
+      var n = carrinho.length;
+      document.getElementById('qtd-itens').textContent = n + (n === 1 ? ' item' : ' itens');
+      if (estado === 'sem-acesso') { alvo.innerHTML = alerta('danger', ICONE_FALHA, 'Você não tem permissão para esta ação.'); document.getElementById('qtd-itens').textContent = '—'; return; }
+      if (estado === 'falha') {
+        alvo.innerHTML = '<div class="dsc-state"><span class="dsc-state-icon">⚠️</span><span class="dsc-state-title">Carrinho indisponível</span><span class="dsc-state-text">Não foi possível carregar os dados.</span></div>';
+        document.getElementById('qtd-itens').textContent = '—';
+        return;
+      }
+      if (carrinho.length === 0) {
+        alvo.innerHTML = '<div class="dsc-state"><span class="dsc-state-icon">🛒</span><span class="dsc-state-title">Carrinho sem itens</span><span class="dsc-state-text">Seu carrinho está vazio.</span></div>' +
+          '<div class="dsc-flex dsc-justify-between dsc-items-center" style="margin-top:16px"><span class="dsc-title-sm">Total dos itens: ' + brl(0) + '</span>' + botaoCheckout(false) + '</div>';
+        return;
+      }
+      var linhas = carrinho.map(function (i, idx) {
+        var p = PRODUTOS[i.id];
+        var aviso = i.qtd > estoqueDe(i.id)
+          ? '<div style="margin-top:8px">' + alerta('warning', ICONE_ALERTA, 'O estoque deste produto é menor que a quantidade no carrinho.') + '</div>' : '';
+        return '<tr><td>' + p.nome + aviso + '</td>' +
+          '<td class="dsc-num">' + brl(i.preco) + '</td>' +
+          '<td class="dsc-num"><div class="dsc-field" id="f-q-' + i.id + '" style="margin:0"><label class="dsc-field-label" for="q-' + i.id + '" style="position:absolute;left:-9999px">Quantidade de ' + p.nome + '</label>' +
+          '<input class="dsc-input" id="q-' + i.id + '" type="number" inputmode="numeric" min="1" value="' + i.qtd + '" style="max-width:96px;margin-left:auto" onchange="alterar(\'' + i.id + '\', this)" onkeydown="if (event.key === \'Enter\') this.blur()"></div></td>' +
+          '<td class="dsc-num">' + brl(i.qtd * i.preco) + '</td>' +
+          '<td class="dsc-col-actions"><button class="dsc-icon-action" aria-label="Remover ' + p.nome + '" title="Remover" onclick="remover(\'' + i.id + '\')">' + ICONE_LIXEIRA + '</button></td></tr>';
+      }).join('');
+      alvo.innerHTML = '<div class="dsc-table-wrap"><table class="dsc-table">' +
+        '<thead><tr><th>Produto</th><th class="dsc-num">Preço unitário</th><th class="dsc-num">Quantidade</th><th class="dsc-num">Subtotal</th><th class="dsc-col-actions"><span style="position:absolute;left:-9999px">Ações</span></th></tr></thead>' +
+        '<tbody>' + linhas + '</tbody></table></div>' +
+        '<div class="dsc-flex dsc-justify-between dsc-items-center" style="margin-top:16px;flex-wrap:wrap;gap:12px"><span class="dsc-title-sm">Total dos itens: ' + brl(total()) + '</span>' + botaoCheckout(true) + '</div>';
+    }
+
+    function erroNaLinha(id, texto) {
+      var f = document.getElementById('f-q-' + id);
+      if (!f) return;
+      f.classList.add('is-invalid');
+      var e = document.createElement('span'); e.className = 'dsc-field-error'; e.innerHTML = ICONE_ERRO + ' ' + texto;
+      f.appendChild(e);
+    }
+
+    function alterar(id, campo) {
+      var item = itemDe(id);
+      if (!item) return;
+      var bruto = campo.value.trim();
+      if (bruto === '') { desenharCarrinho(); erroNaLinha(id, 'Campo obrigatório.'); return; }
+      var qtd = Number(bruto);
+      if (!Number.isInteger(qtd) || qtd < 1) { desenharCarrinho(); erroNaLinha(id, 'Informe uma quantidade válida.'); return; }
+      // RN-01: até a quantidade em estoque
+      if (qtd > estoqueDe(id)) { desenharCarrinho(); erroNaLinha(id, 'Quantidade indisponível em estoque.'); return; }
+      campo.disabled = true;
+      setTimeout(function () {
+        if (estado === 'falha') { desenharCarrinho(); erroNaLinha(id, 'Ocorreu um erro. Tente novamente.'); return; }
+        item.qtd = qtd; // RN-02: o preço unitário não muda
+        desenharCarrinho();
+        showToast('Quantidade atualizada.', false);
+      }, 500);
+    }
+
+    function remover(id) {
+      carrinho = carrinho.filter(function (i) { return i.id !== id; });
+      desenharCarrinho();
+      showToast('Item removido do carrinho.', false);
+    }
+
+    function simular(valor) {
+      estado = valor;
+      carrinho = valor === 'vazio' ? [] : carrinhoInicial();
+      erroNoCampo(''); retornoCompra('');
+      desenharCarrinho();
+    }
+
+    desenharCarrinho();
+  </script>
+</body>
+</html>

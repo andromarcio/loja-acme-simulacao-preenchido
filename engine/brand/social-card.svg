@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="docqui — especificação tintim por tintim">
+  <!-- social card 1200×630 · fundo Planta (heliográfica) -->
+  <defs>
+    <pattern id="grade" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0 H0 V44" fill="none" stroke="#7EBEDC" stroke-opacity=".10" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#0F1B33"/>
+  <rect width="1200" height="630" fill="url(#grade)"/>
+
+  <!-- símbolo -->
+  <g transform="translate(84 84) scale(1.35)">
+    <path fill="#EAE7DB" d="M30 4 H66 A16 16 0 0 1 82 20 V50 A16 16 0 0 1 66 66 H57 L48 79 L39 66 H30 A16 16 0 0 1 14 50 V20 A16 16 0 0 1 30 4 Z"/>
+    <rect x="28" y="16" width="34" height="6.5" rx="3.25" fill="#0F1B33"/>
+    <rect x="33" y="27" width="29" height="6.5" rx="3.25" fill="#0F1B33"/>
+    <rect x="38" y="38" width="24" height="6.5" rx="3.25" fill="#0F1B33"/>
+    <rect x="43" y="49" width="19" height="6.5" rx="3.25" fill="#FFD94A"/>
+  </g>
+
+  <!-- carimbo -->
+  <g transform="translate(1116 96) rotate(2)" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" text-anchor="end">
+    <text x="0" y="0" font-size="17" letter-spacing="2.5" fill="#8E99B8">V2.0.0 · MIT · PT-BR</text>
+  </g>
+
+  <!-- logotipo -->
+  <g transform="translate(84 268) scale(1.72)">
+    <g stroke="#EAE7DB" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="28" cy="50" r="21.5"/>
+      <line x1="49.5" y1="6.5" x2="49.5" y2="71.5"/>
+      <circle cx="97" cy="50" r="21.5"/>
+      <path d="M179.8 33.5 A21.5 21.5 0 1 0 179.8 66.5"/>
+      <circle cx="228" cy="50" r="21.5"/>
+      <path d="M275.5 28.5 V56.5 A21.5 21.5 0 0 0 318.5 56.5 V28.5"/>
+      <line x1="344.5" y1="28.5" x2="344.5" y2="71.5"/>
+    </g>
+    <path fill="#EAE7DB" d="M243 28.5 A6.5 6.5 0 0 1 256 28.5 V84 L249.5 106 L243 84 Z"/>
+    <circle cx="344.5" cy="6.5" r="7.5" fill="#FFD94A"/>
+  </g>
+
+  <!-- tagline com grifo -->
+  <g font-family="ui-rounded, 'SF Pro Rounded', 'Segoe UI', system-ui, sans-serif" font-weight="700" font-size="40">
+    <text x="86" y="536" fill="#EAE7DB">especificação</text>
+    <rect x="368" y="498" width="426" height="54" rx="12" fill="#FFD94A" transform="rotate(-1 581 525)"/>
+    <text x="388" y="536" fill="#14213D">tintim por tintim</text>
+  </g>
+
+  <text x="86" y="592" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="19" letter-spacing="1.5" fill="#8E99B8">docqui.dev</text>
+</svg>

@@ -1,0 +1,136 @@
+# regenera-gerados.yml — regenera os arquivos derivados na branch do ticket ou da sprint.
+#
+# COMO USAR NA INSTÂNCIA: copie para `.github/workflows/regenera-gerados.yml` e crie os
+# segredos DOCQUI_APP_ID e DOCQUI_APP_PRIVATE_KEY (o GitHub App descrito no guia).
+#
+# Para quê: quem grava a especificação pelo agente do Copilot Studio não roda scripts. Sem
+# este workflow, o espelho da esteira no modules/INDEX.md, o diagrama ER, o índice de uso
+# dos dicionários e o HTML das AIMMs ficam para trás, e o spec-guard e o gate-check
+# reprovam todo push. A cada push na branch, ele roda o mesmo comando que a pessoa rodaria
+# (`node scripts/atualiza-pages.mjs --com-dicionarios`) e grava o resultado na branch:
+#   • um commit por AIMM que a branch alterou, só com o HTML dela e com a chave da AIMM no
+#     assunto — o HTML mora em analise-impacto/, que é spec, e o valida-commits-ticket só
+#     aceita spec num commit que cite a chave;
+#   • um commit "[gerado]" com o resto (espelho da esteira, diagrama ER, dicionários,
+#     repos/INDEX.md e os arquivos do site). O assunto abre com a unidade de entrega da
+#     branch: a chave da história em historia/<CHAVE>, porque tudo o que muda nela decorre
+#     daquele ticket; o id da sprint em sprint/<id>, porque o diagrama da sprint é a soma
+#     dos tickets dela e não pode levar a chave de um só (o reverte-ticket reverte os commits
+#     que citam a chave do ticket). Em checkpoint/, sem chave. O valida-commits-ticket aceita
+#     o [gerado] com ou sem chave: dele, só confere que o commit toca apenas arquivo gerado.
+# O HTML das AIMMs que a branch não alterou não entra: o commit citaria a chave de outro
+# ticket. Arquivo de spec fora dessa lista que mudar faz o workflow parar sem gravar nada.
+#
+# O push usa o token do GitHub App, não o GITHUB_TOKEN: push feito com o GITHUB_TOKEN não
+# dispara os outros workflows, e o PR ficaria esperando para sempre os checks do commit
+# novo. O commit do App dispara este workflow de novo; a condição `if` do job pula essa
+# execução pelo autor do commit (`docqui-bot`), e não pela mensagem, que muda de um commit
+# para outro. A concorrência não cancela a execução em andamento: com `cancel-in-progress`,
+# a execução que o próprio commit do App dispara cancelava a que acabara de gravá-lo, e o
+# trabalho feito aparecia como cancelado. Push novo durante a regeneração espera a vez; o
+# laço de tentativas abaixo cobre o caso de a branch mudar no meio.
+
+name: Regenera arquivos gerados
+
+on:
+  push:
+    branches: ["historia/**", "sprint/**", "checkpoint/**"]
+    paths: ["modules/**", "global/**", "analise-impacto/**", "repos/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: regenera-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  regenera:
+    # só em branch de entrega (nunca na main, nem pelo botão Run workflow) e não no commit do próprio workflow
+    if: >-
+      (startsWith(github.ref_name, 'historia/') || startsWith(github.ref_name, 'sprint/') || startsWith(github.ref_name, 'checkpoint/')) &&
+      github.event.head_commit.author.name != 'docqui-bot'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Token do GitHub App
+        id: app
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.DOCQUI_APP_ID }}
+          private-key: ${{ secrets.DOCQUI_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app.outputs.token }}
+
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.x" }
+
+      - name: Dependências
+        run: pip install pyyaml
+
+      - name: Regenerar e gravar na branch
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          git config user.name "docqui-bot"
+          git config user.email "docqui-bot@users.noreply.github.com"
+          GERADO='^(modules/INDEX\.md|global/DIAGRAMA-ER\.md|global/[A-Z-]+-DICTIONARY\.md)$'
+          SPEC='^(modules|global|qa|prototypes|analise-impacto)/'
+          case "$BRANCH" in
+            historia/*) UNIDADE="${BRANCH#historia/}: " ;;
+            sprint/*) UNIDADE="${BRANCH#sprint/}: " ;;
+            *) UNIDADE="" ;;
+          esac
+
+          for tentativa in 1 2 3; do
+            git fetch -q origin "$BRANCH" main
+            git reset -q --hard "origin/$BRANCH"
+            git clean -qfd
+
+            node scripts/atualiza-pages.mjs --com-dicionarios
+
+            # 1. O HTML de cada AIMM que a branch alterou, com a chave da AIMM.
+            base=$(git merge-base origin/main HEAD)
+            for md in $(git diff --name-only --diff-filter=AMR "$base" HEAD -- 'analise-impacto/AIMM-*.md' 'analise-impacto/AIM-*.md'); do
+              html="${md%.md}.html"
+              [ -f "$html" ] || continue
+              git add -- "$html"
+              if ! git diff --cached --quiet; then
+                chave=$(basename "$md" .md); chave=${chave#AIMM-}; chave=${chave#AIM-}
+                git commit -q -m "$chave: HTML da AIMM regenerado pelo workflow"
+              fi
+            done
+
+            # O HTML das demais AIMMs fica como está na branch.
+            git checkout -q -- analise-impacto/
+            git clean -qf -- analise-impacto/
+
+            # 2. O resto num commit [gerado], desde que só toque o que o valida-commits-ticket aceita.
+            git add -A
+            fora=$(git diff --cached --name-only | grep -E "$SPEC" | grep -Ev "$GERADO" || true)
+            if [ -n "$fora" ]; then
+              echo "::error::A regeneração alterou arquivos de spec que não são gerados — nada foi gravado:"
+              echo "$fora"
+              exit 1
+            fi
+            if ! git diff --cached --quiet; then
+              git commit -q -m "${UNIDADE}[gerado] artefatos derivados regenerados pelo workflow"
+            fi
+
+            if [ "$(git rev-list --count "origin/$BRANCH..HEAD")" = 0 ]; then
+              echo "Nada a regenerar: os arquivos gerados já estão em dia."
+              exit 0
+            fi
+            git log --oneline "origin/$BRANCH..HEAD"
+            if git push -q origin "HEAD:$BRANCH"; then exit 0; fi
+            echo "A branch recebeu outro push durante a regeneração; refazendo ($tentativa/3)."
+          done
+          echo "::error::A branch mudou três vezes durante a regeneração. Rode o workflow de novo em Actions."
+          exit 1

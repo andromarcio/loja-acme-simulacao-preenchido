@@ -1,0 +1,48 @@
+# valida-artefatos-previstos.yml — CI de conformidade previsto↔implementado (template).
+#
+# ONDE VIVE: em cada repositório de CÓDIGO ([x]-backend, [x]-frontend ou cada um dos
+# microsserviços), não no de doc.
+# É o CP4 mecânico: quando um PR de código entra, confere que toda funcionalidade N3 marcada
+# `estado: implementado` na spec tem, no repositório declarado em "## Implementação",
+# ao menos um arquivo referenciando o ID da funcionalidade (convenção do mapa-codigo:
+# `@ExigeFuncionalidade("EST-APR-06")`, semente do catálogo, migração, cabeçalho).
+#
+# COMO USAR:
+#   1. Copie para `.github/workflows/valida-artefatos-previstos.yml` neste repo de código.
+#   2. Ajuste a linha marcada com  ⟵ AJUSTE:  o slug do repo de doc. Este repo se
+#      identifica pelo próprio nome (`--repo <nome>=code`), que precisa ser o mesmo do
+#      inventário `repos/INDEX.md` e da coluna Repositório da `## Implementação` — por
+#      isso o mesmo YAML serve a todos os microsserviços, sem ajuste por repositório.
+#   3. Torne o check obrigatório no branch protection para bloquear o merge.
+#
+# A lógica mora no script do engine (sincronizado no repo de doc); este YAML só o invoca
+# com o repo de código presente (checkout nativo) e o repo de doc ao lado.
+
+name: valida-artefatos-previstos
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  conformidade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código (este repo)
+        uses: actions/checkout@v4
+        with: { path: code }
+
+      - name: Checkout da especificação (repo de doc)
+        uses: actions/checkout@v4
+        with:
+          repository: andromarcio/siesa-doc      # ⟵ AJUSTE: owner/repo de doc desta instância
+          path: doc
+
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+
+      - name: previsto ↔ implementado
+        # este repositório pelo nome dele no GitHub; os demais não estão no checkout e só avisam
+        run: node doc/scripts/valida-artefatos-previstos.mjs --doc-root doc --repo "${{ github.event.repository.name }}=code"

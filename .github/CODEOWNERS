@@ -1,0 +1,24 @@
+# CODEOWNERS — roteamento dos checkpoints (gates) da esteira do docqui.
+#
+# Substitua os times @org/* pelos times reais da sua organização e ative, em
+# Settings → Branches → branch protection da `main`:
+#   • Require a pull request before merging
+#   • Require review from Code Owners
+#   • Require status checks to pass → "Esteira de gates — check"
+#
+# Cada checkpoint é autorizado pela pessoa/time dona do artefato correspondente.
+# A ORDEM (não pular etapas) é garantida pelo workflow gate-check.yml; o CODEOWNERS
+# garante QUEM aprova.
+
+# CP1 — Requisitos: N3/N2/N1 negociais → PO / Negócio
+/modules/                       @androlouredo
+
+# CP2 — Modelo físico de dados → DBA / Arquiteto de dados
+# (o PR que conclui o CP2 deve incluir as mudanças do DATA-MODEL para que o DBA
+#  seja revisor obrigatório, já que o flip do gate vive no front-matter do N3.)
+/global/DATA-MODEL.md           @androlouredo
+/global/data-models/            @androlouredo
+
+# Esteira/automação → Tech Lead / Plataforma
+/scripts/gates.py               @androlouredo
+/.github/                       @androlouredo
